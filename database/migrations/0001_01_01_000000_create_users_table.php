@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('name_provider')->nullable();
             $table->string('provider_id')->nullable();
+            $table->string('asu')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
