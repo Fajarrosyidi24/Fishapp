@@ -49,8 +49,7 @@
                     </a>
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="#">Tambahkan Akun Nelayan</a>
-                            <a class="nav-link" href="#">Lihat Data Para Nelayan</a>
+                            <a class="nav-link" href="{{route('viewdatanelayan')}}">Lihat Data Para Nelayan</a>
                             <a class="nav-link" href="#">Permintaan Penjualan Seafood</a>
                             <a class="nav-link" href="#">Data Seafood</a>
                         </nav>
