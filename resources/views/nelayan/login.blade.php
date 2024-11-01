@@ -14,7 +14,7 @@
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <form action="#" method="POST" class="shadow p-4 rounded bg-white">
+            <form action="{{route('nelayan.login')}}" method="POST" class="shadow p-4 rounded bg-white">
                 @csrf
                 <h1 class="text-center mb-4 custom-title">Login Nelayan</h1>
 

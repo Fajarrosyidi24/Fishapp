@@ -1,6 +1,6 @@
 {{-- start nav --}}
         
-<nav class="sb-topnav navbar navbar-expand navbar-light " style="background-color: #097ABA; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);  ">
+<nav class="sb-topnav navbar navbar-expand navbar-light " style="background-color: #097ABA; box-shadow: 0 -2px 8px rgba(0, 0, 0, 1);  ">
     <!-- Navbar Brand-->
     <a href="{{route('admin.dashboard')}}">
     <img src="{{asset('img/logo (1).svg')}}" alt="logo" style="width: 45%; margin-left:10%">

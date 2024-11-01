@@ -59,7 +59,7 @@ Route::prefix('nelayan')->group(function () {
     Route::get('form-registraton', [NelayanController::class, 'registration'])->name('form_registrasi_nelayan');
     Route::post('form-registraton/post', [NelayanController::class, 'store'])->name('post_form_pendaftaran_nelayan');
     Route::get('login', [NelayanController::class, 'login'])->name('login_nelayan');
-    // Route::post('login/post', [NelayanController::class, 'store'])->name('nelayan.login');
+    Route::post('login/post', [NelayanController::class, 'login'])->name('nelayan.login');
 });
 
 require __DIR__.'/auth.php';
