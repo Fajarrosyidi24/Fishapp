@@ -32,12 +32,13 @@
             <div class="sb-sidenav-menu" style="background-color: #097ABA">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">Core</div>
-                    <a class="nav-link" style="background: rgba(21, 76, 108, 0.368);" href="/admin/dashboard">
-                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                        Dashboard
-                    </a>
+                    <a class="nav-link" href="/admin/dashboard"
+                    style="{{ request()->is('admin/dashboard') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}">
+                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                     Dashboard
+                 </a>                 
                     <div class="sb-sidenav-menu-heading">Interface</div>
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                    <a class="nav-link collapsed" style="{{ request()->routeIs('viewdatanelayan') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}"  href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus-fill" viewBox="0 0 16 16">
                                 <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
