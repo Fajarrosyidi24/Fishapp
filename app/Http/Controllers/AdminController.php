@@ -37,4 +37,7 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         return redirect()->route('login_admin')->with('success', 'admin logout succesfully');
     }
+    public function viewdatanelayan(){
+        return view('admin.viewdatanelayan');
+    }
 }
