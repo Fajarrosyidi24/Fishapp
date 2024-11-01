@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\NelayanProfile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\NelayanRegistrationRequest;
 
@@ -29,4 +30,15 @@ class NelayanController extends Controller
         NelayanProfile::tambahProfil($request, $nelayan->id);
         return redirect()->back()->with('status', 'Terima kasih! Permintaan Anda akan segera diproses oleh admin. Harap tunggu 2x 24 jam, Anda akan mendapatkan email notifikasi.');
     }
+
+    public function login(){
+        // if (Auth::guard('nelayan')->check()) {
+        //     return redirect()->route('nelayan.dashboard');
+        // }
+        return view('nelayan.login');
+    }
+
+    // public function dashboard(){
+    //     return view('nelayan.dashboard');
+    // }
 }

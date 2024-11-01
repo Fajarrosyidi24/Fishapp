@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Nelayan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\LoginRequest;
@@ -25,8 +26,10 @@ class AdminController extends Controller
         }
     }
 
+
     public function dashboard(){
-        return view('admin.dashboard');
+        $dataNelayan = Nelayan::all();
+        return view('admin.dashboard', compact('dataNelayan'));
     }
 
     public function AdminLogout()

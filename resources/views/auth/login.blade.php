@@ -57,7 +57,7 @@
 
                 <div class="d-flex justify-content-between mb-3">
                     <a href="{{ route('password.request') }}" class="d-block" style="font-size: 0.675rem;">Lupa Kata Sandi?</a>
-                    <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.675rem;">Masuk sebagai Admin</a>
+                    <a href="{{ route('login_nelayan') }}" class="d-block" style="font-size: 0.675rem;">Masuk sebagai nelayan</a>
                     {{-- <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.675rem;">Login sebagai Admin</a> --}}
                 </div>            
             </form>

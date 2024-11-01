@@ -37,6 +37,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/pdatefoto', [ProfileController::class, 'updatefoto'])->name('update.profile.photo');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/about2', function () {
+        return view('about2');
+    })->name('about2');
+    Route::get('/about-information2/fishapp', function () {
+        return view('about_information2');
+    })->name('about_information2');
 });
 
 Route::prefix('admin')->group(function () {
@@ -52,7 +58,8 @@ Route::get('/api/villages', [NelayanController::class, 'villages']);
 Route::prefix('nelayan')->group(function () {
     Route::get('form-registraton', [NelayanController::class, 'registration'])->name('form_registrasi_nelayan');
     Route::post('form-registraton/post', [NelayanController::class, 'store'])->name('post_form_pendaftaran_nelayan');
-    // Route::post('login/post', [AdminController::class, 'store'])->name('admin.login');
+    Route::get('login', [NelayanController::class, 'login'])->name('login_nelayan');
+    // Route::post('login/post', [NelayanController::class, 'store'])->name('nelayan.login');
 });
 
 require __DIR__.'/auth.php';

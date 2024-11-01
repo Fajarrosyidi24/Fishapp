@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-<title>Login Admin Page - Fishapp</title>
+<title>Login Nelayan Page - Fishapp</title>
 
 <style>
     .custom-title {
@@ -14,9 +14,9 @@
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <form action="{{ route('admin.login') }}" method="POST" class="shadow p-4 rounded bg-white">
+            <form action="#" method="POST" class="shadow p-4 rounded bg-white">
                 @csrf
-                <h1 class="text-center mb-4 custom-title">Login Admin</h1>
+                <h1 class="text-center mb-4 custom-title">Login Nelayan</h1>
 
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
@@ -49,7 +49,6 @@
                 <div class="d-flex justify-content-between mb-3">
                     <a href="{{ route('password.request') }}" class="d-block" style="font-size: 0.575rem;">Lupa Kata Sandi?</a>
                     <a href="{{ route('login') }}" class="d-block" style="font-size: 0.575rem;">Masuk Sebagai Pembeli</a>
-                    <a href="{{ route('login_nelayan') }}" class="d-block" style="font-size: 0.575rem;">Masuk Sebagai Nelayan</a>
                 </div>            
                 
             </form>

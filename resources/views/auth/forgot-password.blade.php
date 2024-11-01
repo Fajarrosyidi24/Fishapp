@@ -1,25 +1,37 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+@extends('layouts.app')
+@section('title')
+<title>Forgot Password - Fishapp</title>
+
+<style>
+    .custom-title {
+        font-size: 2rem; /* Sesuaikan ukuran font sesuai kebutuhan */
+        font-weight: bold; /* Opsional: membuat font menjadi tebal */
+    }
+</style>
+@endsection
+
+@section('content')
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <form action="{{ route('password.email') }}" method="POST" class="shadow p-4 rounded bg-white">
+                <h1 class="text-center mb-4">Forgot Password</h1>
+                @csrf
+
+                <div class="form-group mb-3">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required placeholder="Enter your email address">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 mb-3">Send Password Reset Link</button>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <a href="{{ route('login') }}" class="d-block" style="font-size: 0.675rem;">Back to Login</a>
+                </div>
+            </form>
+        </div>
     </div>
+</div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@include('components.foot')
+@endsection
