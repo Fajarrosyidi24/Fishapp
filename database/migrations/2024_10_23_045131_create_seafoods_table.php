@@ -12,8 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('seafoods', function (Blueprint $table) {
-            $table->id();
+            $table->string('kode_seafood')->primary();
+            $table->tinyText('nama');
+            $table->tinyText('jenis_seafood');
+            $table->integer('jumlah');
+            $table->string('foto');
+            $table->unsignedBigInteger('nelayan_id');
+            $table->tinyText('status')->nullable();
             $table->timestamps();
+            $table->foreign('nelayan_id')->references('id')->on('nelayans')->onDelete('cascade');
         });
     }
 

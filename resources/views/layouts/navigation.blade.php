@@ -41,7 +41,7 @@
                     <a href="{{ route('dashboard') }}" class="nav-item nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}  {{ request()->routeIs('index') ? 'active' : '' }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('about') }}" class="nav-item nav-link {{ request()->routeIs('about_information') ? 'active' : '' }} {{ request()->routeIs('about') ? 'active' : '' }}">About</a>
+                    <a href="{{ route('about2') }}" class="nav-item nav-link {{ request()->routeIs('about_information2') ? 'active' : '' }} {{ request()->routeIs('about2') ? 'active' : '' }}">About</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
