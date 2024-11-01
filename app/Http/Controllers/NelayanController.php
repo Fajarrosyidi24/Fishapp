@@ -32,13 +32,13 @@ class NelayanController extends Controller
     }
 
     public function login(){
-        // if (Auth::guard('nelayan')->check()) {
-        //     return redirect()->route('nelayan.dashboard');
-        // }
+        if (Auth::guard('nelayan')->check()) {
+            return redirect()->route('nelayan.dashboard');
+        }
         return view('nelayan.login');
     }
 
-    // public function dashboard(){
-    //     return view('nelayan.dashboard');
-    // }
+    public function dashboard(){
+        return view('nelayan.dashboard');
+    }
 }
