@@ -1,2 +1,4 @@
-<h1>ebvejb</h1>
-<a href="{{route('nelayan.logout')}}">Logout</a>
+@extends('layouts.app_nelayan')
+@section('title')
+<title>Nelayan Dashboard Page - Fishapp</title>
+@endsection
