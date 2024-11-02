@@ -4,7 +4,9 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\FacebookAuthController;
 use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\NelayanController;
+use App\Http\Controllers\NelayanSettingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileNelayanController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 
@@ -79,6 +81,16 @@ Route::prefix('nelayan')->group(function () {
     Route::middleware('nelayan')->group(function () {
         Route::get('dashboard', [NelayanController::class, 'dashboard'])->name('nelayan.dashboard');
         Route::get('/logout', [NelayanController::class, 'NelayanLogout'])->name('nelayan.logout');
+        Route::get('/profile', [ProfileNelayanController::class, 'index'])->name('nelayan.profile');
+        Route::post('/update-profile-photo-nelayan', [ProfileNelayanController::class, 'uploadpotouser'])->name('update.profile.photo.nelayan');
+        Route::delete('/delete-profile-photo-nelayan', [ProfileNelayanController::class, 'deletepotouser'])->name('delete.profile.photo.nelayan');
+        Route::post('/nelayan-profile', [ProfileNelayanController::class, 'update'])->name('nelayan.profile.update');
+        Route::post('/nelayan-profile/createbank', [ProfileNelayanController::class, 'createbank'])->name('nelayan.profile.create.bank');
+        Route::post('/nelayan-profile/updatebank/{id}', [ProfileNelayanController::class, 'updatebank'])->name('nelayan.profile.update.bank');
+        Route::post('/nelayan-profile/deletebank/{id}', [ProfileNelayanController::class, 'deletebank'])->name('nelayan.profile.delete.bank');
+        Route::get('/pengaturan', [NelayanSettingController::class, 'index'])->name('nelayan.pengaturan');
+        route::post('/pengaturan/updatename', [NelayanSettingController::class, 'updatenamenelayan'])->name('nelayan.updatename');
+    route::post('/pengaturan/updatepassword', [NelayanSettingController::class, 'newpasswordnelayan'])->name('nelayan.newpassword');
     });
 });
 

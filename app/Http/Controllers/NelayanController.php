@@ -98,7 +98,7 @@ class NelayanController extends Controller
         $email = Nelayan::emailnelayan($request);
         if (!$email) {
             return redirect()->back()->with('status', 'Email tidak terdaftar');
-        }else{
+        } else {
             $token = Str::random(15);
             $Url = url("nelayan/forgot-password/{$token}");
             Nelayan::where('email', $email)->update(['remember_token' => $token]);
@@ -109,7 +109,7 @@ class NelayanController extends Controller
 
     public function reseturl(Request $request, $email)
     {
-        $token =$email;
+        $token = $email;
         $email = Nelayan::where('remember_token', $token)->first();
         return view('nelayan.formresetpassword', [
             'request' => $request,
@@ -118,17 +118,17 @@ class NelayanController extends Controller
         ]);
     }
 
-    public function processResetPassword(PasswordRequest $request,$email,$token)
-   {
-    $validatedData = $request->validated();
-    $nelayan = Nelayan::where('email', $token)->first();
-    if($nelayan){
-        $nelayan->remember_token = null;
-        $nelayan->password =  bcrypt($validatedData['password']);
-        $nelayan->save();
-        return redirect()->route('login_nelayan')->with('success', 'silahkan login menggunakan email dan password yang baru');
-    }else{
-        return redirect()->back()->with('error', 'Gagal');
+    public function processResetPassword(PasswordRequest $request, $email, $token)
+    {
+        $validatedData = $request->validated();
+        $nelayan = Nelayan::where('email', $token)->first();
+        if ($nelayan) {
+            $nelayan->remember_token = null;
+            $nelayan->password =  bcrypt($validatedData['password']);
+            $nelayan->save();
+            return redirect()->route('login_nelayan')->with('success', 'silahkan login menggunakan email dan password yang baru');
+        } else {
+            return redirect()->back()->with('error', 'Gagal');
+        }
     }
-}
 }
