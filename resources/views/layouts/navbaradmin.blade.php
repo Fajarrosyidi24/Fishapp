@@ -50,8 +50,8 @@
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{route('viewdatanelayan')}}">Lihat Data Para Nelayan</a>
-                            <a class="nav-link" href="#">Permintaan Penjualan Seafood</a>
-                            <a class="nav-link" href="#">Data Seafood</a>
+                            <a class="nav-link" href="{{route('checkpenjualan')}}">Permintaan Penjualan Seafood</a>
+                            <a class="nav-link" href="{{route('dataseafood')}}">Data Seafood</a>
                         </nav>
                     </div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts1" aria-expanded="false" aria-controls="collapseLayouts">
