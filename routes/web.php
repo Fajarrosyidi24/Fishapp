@@ -52,6 +52,8 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
         Route::get('/viewdatanelayan', [AdminController::class, 'viewdatanelayan'])->name('viewdatanelayan');
+        Route::get('/checkpenjualan', [AdminController::class, 'checkpenjualan'])->name('checkpenjualan');
+        Route::get('/dataseafood',[AdminController::class, 'dataseafood'])->name('dataseafood');
     });
 });
 
