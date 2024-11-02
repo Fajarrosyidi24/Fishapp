@@ -81,4 +81,18 @@ class Nelayan extends Authenticatable
     {
         return $this->hasOne(NelayanProfile::class);
     }
+
+    public static function emailnelayan($request)
+{
+    $request->validate([
+        'email' => 'required|email',
+    ], [
+        'email.required' => 'Email wajib diisi',
+        'email.email' => 'Format email tidak valid',
+    ]);
+
+    $email = $request->input('email');
+    $exists = self::where('email', $email)->exists();
+    return $exists ? $email : false;
+}
 }
