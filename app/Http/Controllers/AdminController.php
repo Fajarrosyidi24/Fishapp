@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Nelayan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\SendNelayanEmail;
+use App\Mail\NelayanVerifyAccount;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\sendResetLinkEmailAdmin;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Mail\NelayanVerifyAccount;
+use App\Http\Requests\PasswordRequest;
 
 class AdminController extends Controller
 {
@@ -81,4 +85,47 @@ class AdminController extends Controller
         Mail::to($email)->send(new NelayanVerifyAccount($Url));
         return redirect()->route('admin.dashboard')->with('success', 'Akun berhasil diverifikasi, link aktivasi telah dikirim ke email nelayan.');
     }
+
+    public function adminresetpassword(){
+        return view('admin.forgot-password');
+    }
+
+    public function sendResetLinkEmail(Request $request)
+    {
+        $email = Admin::emailadmin($request);
+        if (!$email) {
+            return redirect()->back()->with('status', 'Email tidak terdaftar');
+        }else{
+            $token = Str::random(15);
+            $resetUrl = url("admin/forgot-password/{$token}");
+            Admin::where('email', $email)->update(['remember_token' => $token]);
+            Mail::to($email)->send(new sendResetLinkEmailAdmin($resetUrl));
+            return redirect()->route('admin.password.request')->with('status', 'Tautan pengaturan ulang kata sandi berhasil dikirim ke email Anda.');
+        }
+    }
+
+    public function reseturl(Request $request, $email)
+    {
+        $token =$email;
+        $email = Admin::where('remember_token', $token)->first();
+        return view('admin.formresetpassword', [
+            'request' => $request,
+            'token' => $token,
+            'email' => $email->email,
+        ]);
+    }
+
+    public function processResetPassword(PasswordRequest $request,$email,$token)
+   {
+    $validatedData = $request->validated();
+    $admin = Admin::where('email', $token)->first();
+    if($admin){
+        $admin->remember_token = null;
+        $admin->password =  bcrypt($validatedData['password']);
+        $admin->save();
+        return redirect()->route('login_admin')->with('success', 'silahkan login menggunakan email dan password yang baru');
+    }else{
+        return redirect()->back()->with('error', 'Gagal');
+    }
+}
 }

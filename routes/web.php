@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
 Route::prefix('admin')->group(function () {
     Route::get('login', [AdminController::class, 'login'])->name('login_admin');
     Route::post('login/post', [AdminController::class, 'store'])->name('admin.login');
+    Route::get('/forgot-password', [AdminController::class, 'adminresetpassword'])->name('admin.password.request');
+    Route::post('/forgot-password/post', [AdminController::class, 'sendResetLinkEmail'])->name('admin.password.email');
+    Route::get('/forgot-password/{token}', [AdminController::class, 'reseturl'])->name('admin.password.reseturl');
+    Route::post('/forgot-password/{token}/{email}', [AdminController::class, 'processResetPassword'])->name('admin.password.update');
     Route::middleware('is_admin')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
@@ -68,6 +72,10 @@ Route::prefix('nelayan')->group(function () {
     Route::post('login/post', [NelayanController::class, 'loginpost'])->name('nelayan.login');
     Route::get('/registered/{email}/{token}', [NelayanController::class, 'regnel'])->name('nelayan.regnel');
     Route::post('registered-process/{token}', [NelayanController::class, 'processregistrasi'])->name('nelayan.registereduser');
+    Route::get('/forgot-password', [NelayanController::class, 'nelayanresetpassword'])->name('nelayan.password.request');
+    Route::post('/forgot-password/post', [NelayanController::class, 'sendResetLinkEmail'])->name('nelayan.password.email');
+    Route::get('/forgot-password/{token}', [NelayanController::class, 'reseturl'])->name('nelayan.password.reseturl');
+    Route::post('/forgot-password/{token}/{email}', [NelayanController::class, 'processResetPassword'])->name('nelayan.password.update');
     Route::middleware('nelayan')->group(function () {
         Route::get('dashboard', [NelayanController::class, 'dashboard'])->name('nelayan.dashboard');
         Route::get('/logout', [NelayanController::class, 'NelayanLogout'])->name('nelayan.logout');
