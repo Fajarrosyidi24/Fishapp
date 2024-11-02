@@ -40,4 +40,10 @@ class AdminController extends Controller
     public function viewdatanelayan(){
         return view('admin.viewdatanelayan');
     }
+    public function checkpenjualan(){
+        return view('admin.checkpenjualan');
+    }
+    public function dataseafood(){
+        return view('admin.dataseafood');
+    }
 }
