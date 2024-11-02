@@ -1,12 +1,12 @@
 @extends('layouts.app')
 @section('title')
-<title>Perbarui Kata Sandi - Fishapp</title>
+<title>Reset Password Admin Page - Fishapp</title>
 
 <style>
     .custom-title {
-        font-size: 2rem; /* Sesuaikan ukuran font sesuai kebutuhan */
-        font-weight: bold; /* Opsional: membuat font menjadi tebal */
-    }
+    font-size: 2rem; /* Sesuaikan ukuran font sesuai kebutuhan */
+    font-weight: bold; /* Opsional: membuat font menjadi tebal */
+}
 </style>
 @endsection
 
@@ -14,18 +14,17 @@
 <div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <form action="{{ route('password.store') }}" method="POST" class="shadow p-4 rounded bg-white">
-                <h1 class="text-center mb-4">Perbarui Kata Sandi</h1>
+            <form action="{{route('admin.password.update', ['token' => $token, 'email' => $email])}}" method="POST" class="shadow p-4 rounded bg-white">
                 @csrf
-                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                <h1 class="text-center mb-4 custom-title">Reset Password Admin</h1>
 
                 <div class="form-group mb-3">
                     <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required placeholder="Masukkan email Anda" value="{{ $request->email }}" readonly>
+                    <input type="email" class="form-control" id="email" name="email" required value="{{$email}}" readonly>
                 </div>
-
+                
                 <div class="form-group mb-3">
-                    <label for="password">Kata Sandi Baru</label>
+                    <label for="password">Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi Anda">
                         <div class="input-group-append" id="toggle-password" style="cursor: pointer;">
@@ -37,7 +36,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="password_confirmation">Konfirmasi Kata Sandi Baru</label>
+                    <label for="confirm_password">Konfirmasi Password</label>
                     <div class="input-group">
                         <input type="password" class="form-control" id="confirm_password" name="password_confirmation" required placeholder="Masukkan kata sandi Anda">
                         <div class="input-group-append" id="toggle-password-confirmation" style="cursor: pointer;">
@@ -47,8 +46,13 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="form-group form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Ingat Saya</label>
+                </div>
 
-                <button type="submit" class="btn btn-primary w-100 mb-3">Perbarui Kata Sandi</button>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Submit</button>           
             </form>
         </div>
     </div>
