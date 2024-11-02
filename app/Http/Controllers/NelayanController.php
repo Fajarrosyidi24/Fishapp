@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\NelayanRegistrationRequest;
+use App\Http\Requests\PasswordRequest;
 
 class NelayanController extends Controller
 {
@@ -35,10 +36,46 @@ class NelayanController extends Controller
         if (Auth::guard('nelayan')->check()) {
             return redirect()->route('nelayan.dashboard');
         }
-        return view('nelayan.login');
+        return view('nelayan.login')->with('error', 'harap login terlebih dahulu');
+    }
+
+    public function loginpost(Request $request){
+        $check = $request->all();
+        if (Auth::guard('nelayan')->attempt(['email' => $check['email'], 'password' =>  $check['password']])) {
+            return redirect()->route('nelayan.dashboard')->with('success', 'nelayan login succesfully');
+        } else {
+            return back()->with('gagal', 'email atau password salah');
+        }
     }
 
     public function dashboard(){
         return view('nelayan.dashboard');
+    }
+
+    public function regnel(Request $request, $token, $email){
+        $token = $email;
+        $email = DB::table('nelayans')
+            ->where('remember_token', $token)
+            ->value('email');
+        return view('nelayan.formregistered', [
+            'request' => $request,
+            'token' => $token,
+            'email' => $email,
+        ]);
+    }
+
+    public function processregistrasi(PasswordRequest $request, $email)
+    {
+        $token = $email;
+        $nelayan = Nelayan::where('remember_token', $token)->first();
+        $email = $nelayan->email;
+        $nelayan = Nelayan::createpassword($request, $email);
+        return redirect()->route('login_nelayan')->with('success', 'silahkan login menggunakan email dan password yang baru saja di daftarkan');
+    }
+
+    public function NelayanLogout()
+    {
+        Auth::guard('nelayan')->logout();
+        return redirect()->route('login_nelayan')->with('success', 'nelayan logout succesfully');
     }
 }

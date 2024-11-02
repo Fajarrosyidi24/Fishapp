@@ -53,7 +53,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
         Route::get('/viewdatanelayan', [AdminController::class, 'viewdatanelayan'])->name('viewdatanelayan');
         Route::get('/checkpenjualan', [AdminController::class, 'checkpenjualan'])->name('checkpenjualan');
-        Route::get('/dataseafood',[AdminController::class, 'dataseafood'])->name('dataseafood');
+        Route::get('/dataseafood', [AdminController::class, 'dataseafood'])->name('dataseafood');
+        Route::get('/detail-permintaan/pendaftaran/akun/{id}', [AdminController::class, 'detailpermintaan'])->name('detailpermintaanakunnelayan');
+        Route::post('/tolakakunnelayan/{id}', [AdminController::class, 'tolakakunnelayan'])->name('tolakakunnelayan');
+        Route::post('/verifikasinelayan/{id}', [AdminController::class, 'verifikasinelayan'])->name('verifikasi.nelayan');
     });
 });
 
@@ -62,7 +65,13 @@ Route::prefix('nelayan')->group(function () {
     Route::get('form-registraton', [NelayanController::class, 'registration'])->name('form_registrasi_nelayan');
     Route::post('form-registraton/post', [NelayanController::class, 'store'])->name('post_form_pendaftaran_nelayan');
     Route::get('login', [NelayanController::class, 'login'])->name('login_nelayan');
-    Route::post('login/post', [NelayanController::class, 'login'])->name('nelayan.login');
+    Route::post('login/post', [NelayanController::class, 'loginpost'])->name('nelayan.login');
+    Route::get('/registered/{email}/{token}', [NelayanController::class, 'regnel'])->name('nelayan.regnel');
+    Route::post('registered-process/{token}', [NelayanController::class, 'processregistrasi'])->name('nelayan.registereduser');
+    Route::middleware('nelayan')->group(function () {
+        Route::get('dashboard', [NelayanController::class, 'dashboard'])->name('nelayan.dashboard');
+        Route::get('/logout', [NelayanController::class, 'NelayanLogout'])->name('nelayan.logout');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
