@@ -2,14 +2,17 @@
 @section('title')
 <title>Admin Dashboard Page - Fishapp</title>
 <style>
-    .img-crop {
-    width: 80px; /* Atur lebar sesuai kebutuhan */
-    height: 80px; /* Atur tinggi sesuai kebutuhan */
-    object-fit: cover; /* Memastikan gambar mengisi kotak tanpa merusak proporsi */
-    align-items: center; /* Memusatkan secara vertikal */
-    display: flex; /* Menggunakan flexbox untuk memudahkan pemusatan */
-    justify-content: center; /* Memusatkan secara horizontal */
+    .text-center {
+    text-align: center;
 }
+
+#datatablesSimple th,
+#datatablesSimple td {
+    text-align: center;
+    vertical-align: middle; /* Menjadikan teks vertikal di tengah */
+    border: 1px solid #cccaca; /* Menambahkan border */
+}
+
 </style>
 @endsection
 
@@ -99,33 +102,52 @@
         Permintaan Pendaftaran Akun Nelayan
     </div>
     <div class="card-body">
-        <table id="datatablesSimple">
-            <thead>
+        <table id="datatablesSimple" class="table table-striped table-hover table-bordered">
+            <thead class="table-dark">
                 <tr>
+                    <th>No</th> <!-- Kolom nomor -->
                     <th>Name</th>
-                    <th>email</th>
-                    <th>foto</th>
+                    <th>Email</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Detail</th>
+                    <th class="text-center">Foto</th>
                 </tr>
             </thead>
-            <tfoot>
+            <tfoot class="table-dark">
                 <tr>
+                    <th>No</th> <!-- Kolom nomor -->
                     <th>Name</th>
-                    <th>email</th>
-                    <th>foto</th>
+                    <th>Email</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Detail</th>
+                    <th class="text-center">Foto</th>
                 </tr>
             </tfoot>
             <tbody>
-                @foreach($dataNelayan as $nelayan)
+                @foreach($dataNelayan as $index => $nelayan)
                 <tr>
+                    <td class="text-center">{{ $index + 1 }}</td> <!-- Menampilkan nomor urut -->
                     <td>{{ $nelayan->name }}</td>
                     <td>{{ $nelayan->email }}</td>
-                    <td>
-                        <img src="{{ asset('storage/fotonelayan/' . $nelayan->detailProfile->foto) }}" alt="Foto Kapal" class="img-crop">
+                    <td class="text-center">
+                        <span class="badge {{ $nelayan->status == 'Aktif' ? 'bg-success' : ($nelayan->status == 'Tidak Aktif' ? 'bg-danger' : 'bg-warning') }}">
+                            {{ $nelayan->status }}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a href="{{ route('detailpermintaanakunnelayan', ['id' => $nelayan->id]) }}">
+                            <button class="btn btn-sm btn-warning">
+                                <i class="fa-solid fa-circle-info"></i> Detail
+                            </button>
+                        </a>                        
+                    </td>
+                    <td class="text-center">
+                        <img src="{{ asset('storage/fotonelayan/' . $nelayan->detailProfile->foto) }}" alt="Foto Nelayan" class="rounded img-thumbnail" style="width: 80px; height: 80px; object-fit: cover;">
                     </td>
                 </tr>
                 @endforeach
             </tbody>
-        </table>
+        </table>        
     </div>
 </div>
 

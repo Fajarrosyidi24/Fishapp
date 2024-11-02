@@ -17,7 +17,7 @@ class Nelayan
     public function handle(Request $request, Closure $next): Response
     {
         if (!Auth::guard('nelayan')->check()) {
-            return redirect()->route('nelayan.login')->with('error', 'mohon login terlebih dahulu');
+            return redirect()->route('login_nelayan')->with('error', 'mohon login terlebih dahulu');
         }
         return $next($request);
     }

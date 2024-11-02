@@ -37,7 +37,7 @@ class NelayanRegistrationRequest extends FormRequest
             'no_telepon' => 'required|string|regex:/^[0-9]+$/|min:10|max:15',
             'nama_kapal' => 'required|string|max:255',
             'jenis_kapal' => 'required|string|max:255',
-            'jumlah_abk' => 'required|integer|min:0',
+            'jumlah_abk' => 'required|integer|min:1',
             'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ];
     }

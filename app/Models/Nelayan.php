@@ -6,8 +6,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use App\Http\Requests\NelayanRegistrationRequest;
+use App\Http\Requests\PasswordRequest;
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 class Nelayan extends Authenticatable
 {
@@ -55,6 +58,23 @@ class Nelayan extends Authenticatable
             'status' => 'pending',
         ]);
 
+     }
+
+     public static function createpassword(PasswordRequest $request, $email)
+     {
+        $validatedData = $request->validated();
+        $nelayan = Nelayan::where('email', $email)->first();
+        if ($nelayan) {
+            $nelayan->update([
+                'password' => bcrypt($validatedData['password']),
+                'remember_token' => null,
+                'status' => 'terdaftar',
+            ]);
+    
+            return $nelayan; // Kembalikan nelayan yang telah diperbarui
+        }
+    
+        return null;
      }
 
      public function detailProfile()
