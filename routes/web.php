@@ -7,6 +7,7 @@ use App\Http\Controllers\NelayanController;
 use App\Http\Controllers\NelayanSettingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileNelayanController;
+use App\Http\Controllers\SeafoodController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 
@@ -67,6 +68,8 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::get('/api/villages', [NelayanController::class, 'villages']);
+Route::get('/produk/seafoods', [SeafoodController::class, 'seafoodguest'])->name('seafood.guest');
+
 Route::prefix('nelayan')->group(function () {
     Route::get('form-registraton', [NelayanController::class, 'registration'])->name('form_registrasi_nelayan');
     Route::post('form-registraton/post', [NelayanController::class, 'store'])->name('post_form_pendaftaran_nelayan');
@@ -90,7 +93,16 @@ Route::prefix('nelayan')->group(function () {
         Route::post('/nelayan-profile/deletebank/{id}', [ProfileNelayanController::class, 'deletebank'])->name('nelayan.profile.delete.bank');
         Route::get('/pengaturan', [NelayanSettingController::class, 'index'])->name('nelayan.pengaturan');
         route::post('/pengaturan/updatename', [NelayanSettingController::class, 'updatenamenelayan'])->name('nelayan.updatename');
-    route::post('/pengaturan/updatepassword', [NelayanSettingController::class, 'newpasswordnelayan'])->name('nelayan.newpassword');
+        route::post('/pengaturan/updatepassword', [NelayanSettingController::class, 'newpasswordnelayan'])->name('nelayan.newpassword');
+        Route::prefix('seafood')->group(function(){
+            Route::get('/', [SeafoodController::class, 'index'])->name('sefood.index');
+            Route::get('/create-seafood', [SeafoodController::class, 'create'])->name('create.seafood');
+            Route::post('/create-seafood/post', [SeafoodController::class, 'store'])->name('sefood.store');
+            Route::get('/detail-seafood/{kode_seafood}', [SeafoodController::class, 'detail'])->name('seafood.detail.nelayan');
+            Route::get('/edit-seafood/{kode_seafood}', [SeafoodController::class, 'edit'])->name('seafood.edit.nelayan');
+            Route::post('/edit-seafood/{id}/post', [SeafoodController::class, 'editseafood'])->name('edit.seafood');
+            Route::post('/edit-seafood/{kode_seafood}/delete', [SeafoodController::class, 'deleteseafood'])->name('nealayan.deleteseafood');
+        });
     });
 });
 
