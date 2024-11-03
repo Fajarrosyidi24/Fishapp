@@ -47,7 +47,6 @@ class NelayanProfile extends Model
         $fotoPath = $foto->storeAs('public/fotonelayan', $namaFileUnik);
         $fotoPath;
 
-        // Simpan data ke dalam tabel nelayan_detail_profile
         return self::create([
             'nelayan_id' => $nelayanId,
             'tempat_lahir' => $validatedData['tempat_lahir'],
