@@ -59,11 +59,14 @@ Route::prefix('admin')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
         Route::get('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
         Route::get('/viewdatanelayan', [AdminController::class, 'viewdatanelayan'])->name('viewdatanelayan');
+        Route::get('/viewdata-pendaftaran', [AdminController::class, 'permintaannelayanakun'])->name('viewdatapermintaannelayan');
         Route::get('/checkpenjualan', [AdminController::class, 'checkpenjualan'])->name('checkpenjualan');
         Route::get('/dataseafood', [AdminController::class, 'dataseafood'])->name('dataseafood');
         Route::get('/detail-permintaan/pendaftaran/akun/{id}', [AdminController::class, 'detailpermintaan'])->name('detailpermintaanakunnelayan');
         Route::post('/tolakakunnelayan/{id}', [AdminController::class, 'tolakakunnelayan'])->name('tolakakunnelayan');
         Route::post('/verifikasinelayan/{id}', [AdminController::class, 'verifikasinelayan'])->name('verifikasi.nelayan');
+        Route::post('/verifikasi/seafood/{id}', [AdminController::class, 'verifikasiseafood'])->name('admin.verifikasi.seafood');
+        Route::get('/detail-seafood/{id}', [AdminController::class, 'detailpermintaanseafood'])->name('admin.view.detail.seafood');
     });
 });
 
