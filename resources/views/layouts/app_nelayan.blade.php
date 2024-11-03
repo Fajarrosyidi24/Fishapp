@@ -78,7 +78,20 @@
         @endif
     </script>
 
+<script>
+    function searchSeafood() {
+        // Ambil nilai input pencarian
+        const query = document.getElementById('searchInput').value;
 
+        // Cek apakah query tidak kosong
+        if (query.trim() !== '') {
+            // Redirect ke route sefood.index dengan parameter pencarian
+            window.location.href = '{{ route("sefood.index") }}?search=' + encodeURIComponent(query);
+        } else {
+            alert('Silakan masukkan kata kunci pencarian.');
+        }
+    }
+</script>
 </body>
 
 </html>
