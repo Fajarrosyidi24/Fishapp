@@ -4,29 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Nelayan;
+use App\Models\Seafood;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\SendNelayanEmail;
+use App\Mail\SeafoodVerification;
 use App\Mail\NelayanVerifyAccount;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\sendResetLinkEmailAdmin;
+use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Requests\PasswordRequest;
 
 class AdminController extends Controller
 {
-    public function login(){
+    public function login()
+    {
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
         }
-        
+
         return view('admin.login');
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $check = $request->all();
         if (Auth::guard('admin')->attempt(['email' => $check['email'], 'password' =>  $check['password']])) {
             return redirect()->route('admin.dashboard')->with('success', 'admin login succesfully');
@@ -36,9 +40,10 @@ class AdminController extends Controller
     }
 
 
-    public function dashboard(){
-        $dataNelayan = Nelayan::all();
-        return view('admin.dashboard', compact('dataNelayan'));
+    public function dashboard()
+    {
+        $dataNelayan2 = Nelayan::all();
+        return view('admin.dashboard', compact('dataNelayan2'));
     }
 
     public function AdminLogout()
@@ -46,23 +51,35 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         return redirect()->route('login_admin')->with('success', 'admin logout succesfully');
     }
-    public function viewdatanelayan(){
-        return view('admin.viewdatanelayan');
+    public function viewdatanelayan()
+    {
+        $dataNelayan = Nelayan::where('status', 'terdaftar')->get();
+        return view('admin.viewdatanelayan', compact('dataNelayan'));
     }
-    public function checkpenjualan(){
-        return view('admin.checkpenjualan');
+    public function permintaannelayanakun()
+    {
+        $dataNelayan = Nelayan::where('status', 'pending')->get();
+        return view('admin.permintaanakunnelayanpendaftaran', compact('dataNelayan'));
     }
-    public function dataseafood(){
+    public function checkpenjualan()
+    {
+        $seafood = Seafood::where('status', 'menunggu di verifikasi admin')->get();
+        return view('admin.checkpenjualan', compact('seafood'));
+    }
+    public function dataseafood()
+    {
         return view('admin.dataseafood');
     }
 
-    public function detailpermintaan($id){
-        $nelayan = Nelayan::where('id', $id)-> first();
+    public function detailpermintaan($id)
+    {
+        $nelayan = Nelayan::where('id', $id)->first();
         return view('admin.detailpermintaan', compact('nelayan'));
     }
 
-    public function tolakakunnelayan(Request $request, $id){
-        $nelayan = Nelayan::where('id', $id)-> first();
+    public function tolakakunnelayan(Request $request, $id)
+    {
+        $nelayan = Nelayan::where('id', $id)->first();
         $respon = $request->all();
         Mail::to($nelayan->email)->send(new SendNelayanEmail($respon));
 
@@ -74,8 +91,9 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('status', 'Pesan Penolakan Telah dikirimkan');
     }
 
-    public function verifikasinelayan($id){
-        $nelayan = Nelayan::where('id', $id)-> first();
+    public function verifikasinelayan($id)
+    {
+        $nelayan = Nelayan::where('id', $id)->first();
         $email = $nelayan->email;
         $token = Str::random(15);
         $Url = url("nelayan/registered/{$email}/{$token}");
@@ -86,7 +104,8 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Akun berhasil diverifikasi, link aktivasi telah dikirim ke email nelayan.');
     }
 
-    public function adminresetpassword(){
+    public function adminresetpassword()
+    {
         return view('admin.forgot-password');
     }
 
@@ -95,7 +114,7 @@ class AdminController extends Controller
         $email = Admin::emailadmin($request);
         if (!$email) {
             return redirect()->back()->with('status', 'Email tidak terdaftar');
-        }else{
+        } else {
             $token = Str::random(15);
             $resetUrl = url("admin/forgot-password/{$token}");
             Admin::where('email', $email)->update(['remember_token' => $token]);
@@ -106,7 +125,7 @@ class AdminController extends Controller
 
     public function reseturl(Request $request, $email)
     {
-        $token =$email;
+        $token = $email;
         $email = Admin::where('remember_token', $token)->first();
         return view('admin.formresetpassword', [
             'request' => $request,
@@ -115,17 +134,29 @@ class AdminController extends Controller
         ]);
     }
 
-    public function processResetPassword(PasswordRequest $request,$email,$token)
-   {
-    $validatedData = $request->validated();
-    $admin = Admin::where('email', $token)->first();
-    if($admin){
-        $admin->remember_token = null;
-        $admin->password =  bcrypt($validatedData['password']);
-        $admin->save();
-        return redirect()->route('login_admin')->with('success', 'silahkan login menggunakan email dan password yang baru');
-    }else{
-        return redirect()->back()->with('error', 'Gagal');
+    public function processResetPassword(PasswordRequest $request, $email, $token)
+    {
+        $validatedData = $request->validated();
+        $admin = Admin::where('email', $token)->first();
+        if ($admin) {
+            $admin->remember_token = null;
+            $admin->password =  bcrypt($validatedData['password']);
+            $admin->save();
+            return redirect()->route('login_admin')->with('success', 'silahkan login menggunakan email dan password yang baru');
+        } else {
+            return redirect()->back()->with('error', 'Gagal');
+        }
     }
-}
+
+    public function verifikasiseafood($id) {
+        $seafood = Seafood::where('kode_seafood', $id)->first();
+        $email = $seafood->nelayan->email;
+        Mail::to($email)->send(new SeafoodVerification($Url));
+        dd($email);
+    }
+
+    public function detailpermintaanseafood($id) {
+        $seafood = Seafood::where('kode_seafood', $id)->first();
+        return view('admin.detailseafood', compact('seafood'));
+    }
 }
