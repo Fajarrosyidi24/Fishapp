@@ -99,11 +99,11 @@
 <div class="card mb-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
-        Permintaan Pendaftaran Akun Nelayan
+        Daftar Nelayan
     </div>
     <div class="card-body">
         <table id="datatablesSimple" class="table table-striped table-hover table-bordered">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th>No</th> <!-- Kolom nomor -->
                     <th>Name</th>
@@ -113,7 +113,7 @@
                     <th class="text-center">Foto</th>
                 </tr>
             </thead>
-            <tfoot class="table-dark">
+            <tfoot>
                 <tr>
                     <th>No</th> <!-- Kolom nomor -->
                     <th>Name</th>
@@ -124,13 +124,13 @@
                 </tr>
             </tfoot>
             <tbody>
-                @foreach($dataNelayan as $index => $nelayan)
+                @foreach($dataNelayan2 as $index => $nelayan)
                 <tr>
                     <td class="text-center">{{ $index + 1 }}</td> <!-- Menampilkan nomor urut -->
                     <td>{{ $nelayan->name }}</td>
                     <td>{{ $nelayan->email }}</td>
                     <td class="text-center">
-                        <span class="badge {{ $nelayan->status == 'Aktif' ? 'bg-success' : ($nelayan->status == 'Tidak Aktif' ? 'bg-danger' : 'bg-warning') }}">
+                        <span class="badge {{ $nelayan->status == 'terdaftar' ? 'bg-success' : ($nelayan->status == 'Tidak Aktif' ? 'bg-danger' : 'bg-warning') }}">
                             {{ $nelayan->status }}
                         </span>
                     </td>
@@ -150,5 +150,4 @@
         </table>        
     </div>
 </div>
-
 @endsection

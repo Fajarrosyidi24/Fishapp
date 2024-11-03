@@ -1,6 +1,6 @@
 @extends('layouts.app_admin')
 @section('title')
-<title>Data Nelayan Page - Fishapp</title>
+<title>Permintaan Pendaftaran Akun Page - Fishapp</title>
 <style>
     .text-center {
     text-align: center;

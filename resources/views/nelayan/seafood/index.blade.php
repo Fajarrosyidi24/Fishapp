@@ -45,7 +45,12 @@
                         </div>
                     </div>
                     <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
-                    <p class="card-text mb-3">Tersedia {{$se->jumlah}} KG</p>
+                    <p class="card-text mb-0">Tersedia {{$se->jumlah}} KG</p>
+                    @if ($se->status === 'menunggu di verifikasi admin')
+                    <p class="card-text mb-3" style="color: red">belum bisa dijual {{$se->status}}, tunggu hingga 2x/24jam</p>
+                    @else
+                    <p class="card-text mb-3">status {{$se->status}}</p>
+                    @endif
                     <!-- Rating Bintang -->
                     <p class="card-text fw-bold mb-0">Rating Penjualan :</p>
                     <div class="mb-1">

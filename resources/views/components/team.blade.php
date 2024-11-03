@@ -9,11 +9,11 @@
             <div class="col-lg-2 col-md-4 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="team-item bg-light text-center">
                     <div class="overflow-hidden">
-                        <img class="img-fluid" src="{{asset('img/WhatsApp Image 2023-12-24 at 16.39.06_a9f8a9d6.jpg')}}" alt="">
+                        <img class="img-fluid" src="{{asset('img/Desain tanpa judul.png')}}" alt="">
                     </div>
                     <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
                         <div class="bg-light d-flex justify-content-center pt-2 px-1">
-                            <a class="btn btn-sm-square btn-primary mx-1" href="https://github.com/pajargaul"><i class="bi bi-github"></i></a>
+                            <a class="btn btn-sm-square btn-primary mx-1" href="https://github.com/Fajarrosyidi24"><i class="bi bi-github"></i></a>
                             <a class="btn btn-sm-square btn-primary mx-1" href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=fajarrosyidi80@gmail.com"><i class="bi bi-google"></i></a>
                             <a class="btn btn-sm-square btn-primary mx-1" href="https://www.instagram.com/jarwis_24/"><i class="fab fa-instagram"></i></a>
                         </div>
