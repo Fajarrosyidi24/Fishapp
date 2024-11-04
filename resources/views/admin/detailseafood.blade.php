@@ -88,15 +88,25 @@
                             </tr>
                         </tbody>
                     </table>
+                    @if($seafood->status === 'siap dijual')
+                    <a href="{{route('dataseafood')}}">
+                        <button class="btn btn-sm btn-secondary">Kembali</button>
+                    </a>
+                    @else
                     <a href="{{route('checkpenjualan')}}">
                         <button class="btn btn-sm btn-secondary">Kembali</button>
                     </a>
+                    @endif
+
+                    @if($seafood->status === 'siap dijual')
+                    @else
                     <a href="#">
                         <button class="btn btn-sm btn-success">Verifikasi Permintaan</button>
                     </a>
                     <a href="#">
                         <button class="btn btn-sm btn-danger">Tolak Permintaan</button>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
