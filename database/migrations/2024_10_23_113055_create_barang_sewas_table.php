@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('kode_barang')->primary();
             $table->string('nama_barang');
             $table->string('kondisi');
+            $table->string('status');
             $table->integer('jumlah');
             $table->string('foto_barang');
             $table->unsignedBigInteger('nelayan_id');
