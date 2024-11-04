@@ -51,11 +51,11 @@ public static function createFromRequest(Request $request)
     }
 
     // Membuat kode unik untuk barang
-    $newKodeSeafood = 'BR' . str_pad((BarangSewa::max('kode_barang') ? intval(substr(BarangSewa::max('kode_barang'), 2)) + 1 : 1), 3, '0', STR_PAD_LEFT);
+    $newKodeBarang = 'BR' . str_pad((BarangSewa::max('kode_barang') ? intval(substr(BarangSewa::max('kode_barang'), 2)) + 1 : 1), 3, '0', STR_PAD_LEFT);
 
     // Menyimpan data seafood
-    $seafood = self::create([
-        'kode_barang' => $newKodeSeafood,
+    $barangsewa = self::create([
+        'kode_barang' => $newKodeBarang,
         'nama_barang' => $request->input('name'),
         'kondisi' => $request->input('type'),
         'jumlah' => $request->input('quantity'),
@@ -69,10 +69,10 @@ public static function createFromRequest(Request $request)
     HargaBarangSewa::create([
         'kode_harga' => $newKodeHarga,
         'harga' => $request->input('price'),
-        'barang_id' => $newKodeSeafood,
+        'barang_id' => $newKodeBarang,
     ]);
 
-    return $seafood;
+    return $barangsewa;
 }
 
 }
