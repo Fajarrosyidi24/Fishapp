@@ -26,7 +26,7 @@ class AdminController extends Controller
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
         }
-
+        
         return view('admin.login');
     }
 
@@ -150,17 +150,19 @@ class AdminController extends Controller
         }
     }
 
-    public function verifikasiseafood($id) {
+    public function verifikasiseafood($id)
+    {
         $seafood = Seafood::where('kode_seafood', $id)->first();
         $email = $seafood->nelayan->email;
-        $Url = 'Selamat Seafood yan anda ajukan denngan nama '. $seafood->nama .' Telah memenuhi persyaratan dan berhasil diverifikasi untuk dijual';
+        $Url = 'Selamat Seafood yan anda ajukan denngan nama ' . $seafood->nama . ' Telah memenuhi persyaratan dan berhasil diverifikasi untuk dijual';
         Mail::to($email)->send(new SeafoodVerification($Url));
         $seafood->status = 'siap dijual';
         $seafood->save();
         return redirect()->back()->with('success', 'seafood telah diverifikasi');
     }
 
-    public function detailpermintaanseafood($id) {
+    public function detailpermintaanseafood($id)
+    {
         $seafood = Seafood::where('kode_seafood', $id)->first();
         return view('admin.detailseafood', compact('seafood'));
     }
