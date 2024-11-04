@@ -49,6 +49,12 @@
                         $nelayan1 = \App\Models\Nelayan::where(
                             'status', 'pending',
                         )->count();
+
+                        $nelayan2 = \App\Models\Seafood::where(
+                            'status', 'menunggu di verifikasi admin',
+                        )->count();
+
+                        $jumlah = $nelayan1+$nelayan2;
                     @endphp
 
 
@@ -71,27 +77,35 @@
                                     d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
                             </svg>
                         </div>
-                        Manajemen Akun Nelayan <span class="badge badge-pill badge-danger">
-                            @if ($nelayan1 === 0)
+                        Manajemen Akun Nelayan
+                            @if ($jumlah === 0)
                             @else
-                            {{$nelayan1}}
-                            @endif
+                            <span class="badge badge-pill badge-danger">
+                            {{$jumlah}}
                         </span>
+                            @endif
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{ route('viewdatapermintaannelayan') }}">Permintaan Pendaftaran Akun
-                                <span class="badge badge-pill badge-danger">
                                     @if ($nelayan1 === 0)
                                     @else
+                                    <span class="badge badge-pill badge-danger">
                                     {{$nelayan1}}
-                                    @endif
                                 </span>
+                                    @endif
                             </a>
                             <a class="nav-link" href="{{ route('viewdatanelayan') }}">Data Akun Nelayan</a>
-                            <a class="nav-link" href="{{ route('checkpenjualan') }}">Permintaan Penjualan Seafood</a>
+                            <a class="nav-link" href="{{ route('checkpenjualan') }}">Permintaan Penjualan Seafood
+                                @if ($nelayan2 === 0)
+                                    @else
+                                    <span class="badge badge-pill badge-danger">
+                                    {{$nelayan2}}
+                                </span>
+                                    @endif
+                            </a>
                             <a class="nav-link" href="{{ route('dataseafood') }}">Data Seafood</a>
                         </nav>
                     </div>

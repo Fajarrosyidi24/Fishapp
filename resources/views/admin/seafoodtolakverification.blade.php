@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="id_id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verisikasi Seafood</title>
+    <title>Status Aktivasi AKun</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -47,11 +48,23 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Halo!</h2>
-        <p>Anda menerima email ini karena kami menerima permintaan menjual seafood.</p>
-        <p style="color: green">{{$Url}}</p>
+        <p>Anda menerima email ini karena kami menerima permintaan penjualan Seafood</p>
+        <p>Mohon Maaf untuk saat ini, seafood anda belum bisa kami verifikasi untuk dijual dengan beberapa alasan
+            dibawah ini : </p>
+        <ol>
+            @php
+                unset($respon['_token']);
+            @endphp
+
+            @foreach ($respon as $index => $res)
+                <li>{{ $res }}</li>
+            @endforeach
+        </ol>
     </div>
 </body>
+
 </html>

@@ -49,7 +49,7 @@
                     @if ($se->status === 'menunggu di verifikasi admin')
                     <p class="card-text mb-3" style="color: red">belum bisa dijual {{$se->status}}, tunggu hingga 2x/24jam</p>
                     @else
-                    <p class="card-text mb-3">status {{$se->status}}</p>
+                    <p class="card-text mb-3" style="color: green">status {{$se->status}} <br><br><br><br></p>
                     @endif
                     <!-- Rating Bintang -->
                     <p class="card-text fw-bold mb-0">Rating Penjualan :</p>

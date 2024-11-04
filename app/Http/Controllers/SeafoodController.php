@@ -71,7 +71,7 @@ class SeafoodController extends Controller
 
     public function seafoodguest()
     {
-        $seafood = Seafood::all();
+        $seafood = Seafood::where('status', 'siap dijual')->get();
         return view('produkseafood', compact('seafood'));
     }
 }
