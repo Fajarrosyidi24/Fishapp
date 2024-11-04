@@ -56,8 +56,8 @@
                     <div class="sb-sidenav-menu-heading">Management</div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                         style="{{ request()->routeIs('sefood.index') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}
-                        {{ request()->routeIs('seafood.detail.nelayan') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}"
-                        
+                        {{ request()->routeIs('seafood.detail.nelayan') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}
+                         {{ request()->routeIs('barangsewa.index') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}"
                         data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-box-open"></i></div>
                         Produk
@@ -67,7 +67,7 @@
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
                             <a class="nav-link" href="{{ route('sefood.index') }}">Seafood</a>
-                            <a class="nav-link" href="#">Barangsewa</a>
+                            <a class="nav-link" href="{{ route('barangsewa.index') }}">Barangsewa</a>
                         </nav>
                     </div>
 
