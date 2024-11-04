@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\FacebookAuthController;
-use App\Http\Controllers\GoogleAuthController;
-use App\Http\Controllers\NelayanController;
-use App\Http\Controllers\NelayanSettingController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProfileNelayanController;
-use App\Http\Controllers\SeafoodController;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\NelayanController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SeafoodController;
+use App\Http\Controllers\GoogleAuthController;
+use App\Http\Controllers\FacebookAuthController;
+use App\Http\Controllers\NelayanSettingController;
+use App\Http\Controllers\ProfileNelayanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -73,6 +74,7 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/api/villages', [NelayanController::class, 'villages']);
 Route::get('/produk/seafoods', [SeafoodController::class, 'seafoodguest'])->name('seafood.guest');
+Route::get('/article', [ArticleController::class, 'index'])->name('guestarticle');
 
 Route::prefix('nelayan')->group(function () {
     Route::get('form-registraton', [NelayanController::class, 'registration'])->name('form_registrasi_nelayan');
