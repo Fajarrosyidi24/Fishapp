@@ -11,6 +11,7 @@ use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\FacebookAuthController;
 use App\Http\Controllers\NelayanSettingController;
 use App\Http\Controllers\ProfileNelayanController;
+use App\Http\Controllers\BarangsewaController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -74,6 +75,7 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/api/villages', [NelayanController::class, 'villages']);
 Route::get('/produk/seafoods', [SeafoodController::class, 'seafoodguest'])->name('seafood.guest');
+Route::get('/produk/barangsewas', [BarangsewaController::class, 'barangsewaguest'])->name('barangsewa.guest');
 Route::get('/article', [ArticleController::class, 'index'])->name('guestarticle');
 
 Route::prefix('nelayan')->group(function () {
@@ -100,6 +102,11 @@ Route::prefix('nelayan')->group(function () {
         Route::get('/pengaturan', [NelayanSettingController::class, 'index'])->name('nelayan.pengaturan');
         route::post('/pengaturan/updatename', [NelayanSettingController::class, 'updatenamenelayan'])->name('nelayan.updatename');
         route::post('/pengaturan/updatepassword', [NelayanSettingController::class, 'newpasswordnelayan'])->name('nelayan.newpassword');
+        Route::prefix('barangsewa')->group(function(){
+            Route::get('/', [BarangsewaController::class, 'index'])->name('barangsewa.index');
+            Route::get('/create-barangsewa', [BarangsewaController::class, 'create'])->name('create.barangsewa');
+            Route::post('/create-barangsewa/post', [BarangsewaController::class, 'store'])->name('barang.store');
+        });
         Route::prefix('seafood')->group(function(){
             Route::get('/', [SeafoodController::class, 'index'])->name('sefood.index');
             Route::get('/create-seafood', [SeafoodController::class, 'create'])->name('create.seafood');

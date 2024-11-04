@@ -45,12 +45,13 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle
+                    {{ request()->routeIs('barangsewa.guest') ? 'active' : '' }}
                     {{ request()->routeIs('seafood.guest') ? 'active' : '' }}
                     " data-bs-toggle="dropdown">
                         Produk
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="dropdown-item">Barang Sewa</a></li>
+                        <li><a href="{{route('barangsewa.guest')}}" class="dropdown-item">Barang Sewa</a></li>
                         <li><a href="{{route('seafood.guest')}}" class="dropdown-item">Seafoods</a></li>
                     </ul>
                 </li>
