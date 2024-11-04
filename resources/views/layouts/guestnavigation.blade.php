@@ -56,7 +56,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-item nav-link" class="nav-link">Article</a>
+                    <a href="{{route('guestarticle')}}" class="nav-item nav-link" class="nav-link">Article</a>
                 </li>
                
             </ul>
