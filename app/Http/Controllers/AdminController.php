@@ -11,6 +11,7 @@ use App\Mail\SendNelayanEmail;
 use App\Mail\SeafoodVerification;
 use App\Mail\NelayanVerifyAccount;
 use Illuminate\Support\Facades\DB;
+use App\Mail\SendSeafoodDeleteEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\sendResetLinkEmailAdmin;
@@ -68,7 +69,8 @@ class AdminController extends Controller
     }
     public function dataseafood()
     {
-        return view('admin.dataseafood');
+        $seafood = Seafood::where('status', 'siap dijual')->get();
+        return view('admin.dataseafood', compact('seafood'));
     }
 
     public function detailpermintaan($id)
@@ -151,12 +153,25 @@ class AdminController extends Controller
     public function verifikasiseafood($id) {
         $seafood = Seafood::where('kode_seafood', $id)->first();
         $email = $seafood->nelayan->email;
+        $Url = 'Selamat Seafood yan anda ajukan denngan nama '. $seafood->nama .' Telah memenuhi persyaratan dan berhasil diverifikasi untuk dijual';
         Mail::to($email)->send(new SeafoodVerification($Url));
-        dd($email);
+        $seafood->status = 'siap dijual';
+        $seafood->save();
+        return redirect()->back()->with('success', 'seafood telah diverifikasi');
     }
 
     public function detailpermintaanseafood($id) {
         $seafood = Seafood::where('kode_seafood', $id)->first();
         return view('admin.detailseafood', compact('seafood'));
+    }
+
+    public function tolakseafood(Request $request, $id)
+    {
+        $seafood = Seafood::where('kode_seafood', $id)->first();
+        $respon = $request->all();
+        $email = $seafood->nelayan->email;
+        Mail::to($email)->send(new SendSeafoodDeleteEmail($respon));
+        $seafood->delete();
+        return redirect()->back()->with('success', 'Pesan Penolakan Telah dikirimkan');
     }
 }
