@@ -67,6 +67,7 @@ Route::prefix('admin')->group(function () {
         Route::post('/verifikasinelayan/{id}', [AdminController::class, 'verifikasinelayan'])->name('verifikasi.nelayan');
         Route::post('/verifikasi/seafood/{id}', [AdminController::class, 'verifikasiseafood'])->name('admin.verifikasi.seafood');
         Route::get('/detail-seafood/{id}', [AdminController::class, 'detailpermintaanseafood'])->name('admin.view.detail.seafood');
+        Route::post('/tolakseafood/{id}', [AdminController::class, 'tolakseafood'])->name('tolakseafood.admin');
     });
 });
 

@@ -46,7 +46,7 @@
                             <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#confirmModal{{$se->kode_seafood}}">verifikasi</button> 
                         </a>
                         <a href="#">
-                            <button class="btn btn-sm btn-danger">Tolak</button> 
+                            <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal2{{$se->kode_seafood}}">Tolak</button> 
                         </a>
                     </div>
                 </div>
@@ -78,6 +78,94 @@
                 </div>
             </div>
         </div>
-        @endforeach
 
+        <!-- Modal -->
+        <div class="modal fade" id="confirmModal2{{$se->kode_seafood}}" tabindex="-1" aria-labelledby="confirmModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Tolak Permintaan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{-- Apakah Anda yakin ingin memverifikasi Seafood ini? --}}
+
+                        <form id="rejectionForm" class="mt-4" class="mb-3 my-4"
+                    action="{{route('tolakseafood.admin', ['id' => $se->kode_seafood])}}" method="POST">
+                    @csrf
+                    <h5>Alasan Penolakan Seafood</h5>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="reason1"
+                            value="Dokumen identitas tidak valid atau tidak lengkap.">
+                        <label class="form-check-label" for="reason1">Tidak Memenuhi Syarat Untuk Dijual</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" name="reason2"
+                            value="Data pribadi yang disediakan tidak sesuai">
+                        <label class="form-check-label" for="reason2">Gambar Bukan Merupakan Seafood</label>
+                    </div>
+                    <button type="submit" class="btn btn-danger" id="submitButton2" disabled>Tolak Permintaan</button>
+                </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        {{-- <form action="{{ route('admin.verifikasi.seafood', $se->kode_seafood) }}" method="POST"
+                            style="display: inline;">
+                            @csrf
+                            <button type="submit" class="btn btn-success">Verifikasi</button>
+                        </form> --}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</div>
+@endsection
+
+@section('foot')
+    <script>
+        document.getElementById('rejectButton').addEventListener('click', function() {
+            document.getElementById('rejectionForm').style.display = 'block';
+        });
+
+        document.getElementById('reasonOther').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('otherReasonInput').style.display = 'block';
+            } else {
+                document.getElementById('otherReasonInput').style.display = 'none';
+            }
+        });
+    </script>
+
+    <script>
+        // JavaScript to enable or disable the submit button based on checkbox selection
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('rejectionForm');
+            const checkboxes = form.querySelectorAll('.form-check-input');
+            const submitButton = document.getElementById('submitButton2');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // Enable the button if at least one checkbox is checked
+                    submitButton.disabled = !Array.from(checkboxes).some(cb => cb.checked);
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // Optional: Enable/disable the submit button based on checkbox selection
+        const checkboxes = document.querySelectorAll('#rejectionForm .form-check-input');
+        const submitBtn = document.getElementById('submitBtn');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                submitBtn.disabled = !Array.from(checkboxes).some(cb => cb.checked);
+            });
+        });
+    </script>
 @endsection
