@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('title')
 <title>About-Information - Fishapp</title>
 @endsection
@@ -114,3 +115,5 @@
 
 @include('components.foot')
 @endsection
+
+
