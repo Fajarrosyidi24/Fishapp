@@ -37,4 +37,8 @@ class BarangsewaController extends Controller
         BarangSewa::createFromRequest($request);
        return redirect()->route('barangsewa.index')->with('success', 'data barang berhasil ditambahkan');
     }
+
+    public function pesananbarangsewanelayan(){
+        return view('nelayan.pesanan.barangsewa');
+    }
 }
