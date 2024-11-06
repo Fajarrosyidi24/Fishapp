@@ -72,7 +72,11 @@
                     </div>
 
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                        data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
+                        data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages"
+                        style="{{ request()->routeIs('nelayan.pesanan.seafood') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}
+                        {{ request()->routeIs('nelayan.pesanan.barangsewa') ? 'background: rgba(21, 76, 108, 0.368);' : '' }}
+                        "
+                        >
                         <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
                         Daftar Pesanan
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
@@ -80,8 +84,8 @@
                     <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                            <a class="nav-link" href="#">Seafood</a>
-                            <a class="nav-link" href="#">Barang Sewa</a>
+                            <a class="nav-link" href="{{route('nelayan.pesanan.seafood')}}">Seafood</a>
+                            <a class="nav-link" href="{{route('nelayan.pesanan.barangsewa')}}">Barang Sewa</a>
                         </nav>
                     </div>
 
