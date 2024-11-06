@@ -22,6 +22,7 @@
 </head>
 
 <body class="sb-nav-fixed" style="{{ asset('img/bg.svg') }}">
+    
     @include('layouts.navbarnelayan')
 
     <!-- Main Content -->
