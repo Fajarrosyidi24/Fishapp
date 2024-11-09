@@ -44,12 +44,14 @@
                     <a href="{{ route('about2') }}" class="nav-item nav-link {{ request()->routeIs('about_information2') ? 'active' : '' }} {{ request()->routeIs('about2') ? 'active' : '' }}">About</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <a href="#" class="nav-link 
+                    {{ request()->routeIs('pembeli.produk.seafood') ? 'active' : '' }}
+                     dropdown-toggle" data-bs-toggle="dropdown">
                         Produk
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="#" class="dropdown-item">Barang Sewa</a></li>
-                        <li><a href="#" class="dropdown-item">Seafoods</a></li>
+                        <li><a href="{{route('pembeli.produk.seafood')}}" class="dropdown-item">Seafoods</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">

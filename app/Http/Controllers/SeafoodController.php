@@ -80,4 +80,9 @@ class SeafoodController extends Controller
        return view('nelayan.pesanan.seafood');
     }
 
+    public function seafooduser()
+    {
+        $seafood = Seafood::where('status', 'siap dijual')->get();
+        return view('pembeli.produk.seafood', compact('seafood'));
+    }
 }
