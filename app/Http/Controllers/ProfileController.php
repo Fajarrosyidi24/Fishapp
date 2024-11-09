@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\NelayanRegistrationRequest;
+use App\Http\Requests\UserProfileRequest;
 
 class ProfileController extends Controller
 {
@@ -33,17 +34,14 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(UserProfileRequest $request)
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $updateprofile = UserProfile::updateprofileuser($request);
+        if ($updateprofile) {
+            return Redirect::route('profile.edit')->with('success', 'profile-updated');
+        }else{
+            return Redirect::route('profile.edit')->with('error', 'Gagal Harap Coba Lagi');
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
     /**
