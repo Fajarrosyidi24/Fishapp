@@ -118,7 +118,9 @@ Route::prefix('nelayan')->group(function () {
         });
         Route::prefix('pesanan')->group(function(){
             Route::get('/seafood', [SeafoodController::class, 'pesananseafoodnelayan'])->name('nelayan.pesanan.seafood');
+            Route::get('/detailpesananseafood', [SeafoodController::class, 'detailpesananseafood'])->name('detailpesananseafood');
             Route::get('/barangsewa', [BarangsewaController::class, 'pesananbarangsewanelayan'])->name('nelayan.pesanan.barangsewa');
+            Route::get('/detailpesananbarangsewa', [BarangsewaController::class,'detailpesananbarangsewa'])->name('detailpesananbarangsewa.nelayan');
         });
     });
 });
