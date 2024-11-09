@@ -115,4 +115,81 @@ class Seafood extends Model
         }
         $seafood->delete();
     }
+
+    public static function filterkode($keranjangs3){
+        $kodeSeafoods = [];
+        foreach ($keranjangs3 as $keranjang) {
+            $seafood = Seafood::where('kode_seafood', $keranjang->seafood_id)->first();
+            if ($seafood) {
+                $kodeSeafoods[] = $seafood->kode_seafood;
+            }
+        }
+
+        return $kodeSeafoods;
+    }
+
+    public static function jumlah($keranjangs1){
+        $jumlahSeafood = [];
+        foreach ($keranjangs1 as $keranjang) {
+            $seafood_id = $keranjang['seafood_id'];
+            $seafood = Seafood::where('kode_seafood', $seafood_id)->first();
+            if ($seafood) {
+                $nelayan_id = $seafood->nelayan_id;
+                if (isset($jumlahSeafood[$seafood_id])) {
+                    $jumlahSeafood[$seafood_id]['jumlah'] += $keranjang['jumlah'];
+                } else {
+                    $jumlahSeafood[$seafood_id] = [
+                        'nelayan_id' => $nelayan_id,
+                        'jumlah' => $keranjang['jumlah'],
+                    ];
+                }
+            }
+        }
+
+        return $jumlahSeafood;
+    }
+
+    public static function combinedData($jumlahSeafood, $cityids){
+        $combinedData = [];
+        foreach ($cityids as $city) {
+            $nelayanId = $city['nelayan_id'];
+            foreach ($jumlahSeafood as $seafoodId => $seafood) {
+                if ($seafood['nelayan_id'] == $nelayanId) {
+                    $combinedData[] = [
+                        'nelayan_id' => $nelayanId,
+                        'cityid' => $city['cityid'],
+                        'seafood_id' => $seafoodId,
+                        'jumlah' => $seafood['jumlah']
+                    ];
+                }
+            }
+        }  
+        
+        return $combinedData;
+    }
+
+    public static function aggregatedData($combinedData, $destination){
+        $aggregatedData = [];
+
+        foreach ($combinedData as $data) {
+            $nelayanId = $data['nelayan_id'];
+            $cityId = $data['cityid'];
+            $seafoodId = $data['seafood_id'];
+
+            if (!isset($aggregatedData[$nelayanId])) {
+                $aggregatedData[$nelayanId] = [
+                    'nelayan_id' => $nelayanId,
+                    'origin' => $cityId,
+                    'destination' => $destination->cityid,
+                    'jumlah' => 0,
+                    'seafood_id' => [],
+                ];
+            }
+
+            $aggregatedData[$nelayanId]['jumlah'] += $data['jumlah'];
+            $aggregatedData[$nelayanId]['seafood_id'][] = $seafoodId;
+        }
+
+        return $aggregatedData;
+    }
 }
