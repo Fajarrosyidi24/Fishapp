@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use app\models\Seafood;
 use App\Models\Nelayan;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -130,5 +130,6 @@ class NelayanController extends Controller
         } else {
             return redirect()->back()->with('error', 'Gagal');
         }
-    }
+    }        
+    
 }
