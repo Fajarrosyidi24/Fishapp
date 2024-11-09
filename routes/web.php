@@ -3,6 +3,7 @@
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AlamatTransaksiController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\NelayanController;
 use App\Http\Controllers\ProfileController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\FacebookAuthController;
 use App\Http\Controllers\NelayanSettingController;
 use App\Http\Controllers\ProfileNelayanController;
 use App\Http\Controllers\BarangsewaController;
+use App\Http\Controllers\KeranjangController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -49,8 +51,23 @@ Route::middleware('auth')->group(function () {
         return view('about_information2');
     })->name('about_information2');
 
+    Route::prefix('keranjang')->group(function () {
+        Route::get('/index', [KeranjangController::class, 'index'])->name('keranjang.pembeli');
+        Route::post('/deleteitemkeranjang/{kodeBarangString}', [KeranjangController::class, 'deleteItems'])->name('deleteitemkeranjang');
+    });
+
+    Route::prefix('alamat/user/pengiriman/seafood')->group(function (){
+        Route::get('/index', [AlamatTransaksiController::class, 'alamatpembeli'])->name('alamat.pengiriman.pembeli');
+        Route::post('/create/alamat/tujuan/seafood', [AlamatTransaksiController::class, 'createalamattujuan'])->name('createalamat.pembeli.seafood');
+        Route::delete('/alamat-seafood/{id}', [AlamatTransaksiController::class, 'destroy'])->name('delete.alamat.seafood');
+    });
+
     Route::prefix('user/produk')->group(function () {
         Route::get('/seafood', [SeafoodController::class, 'seafooduser'])->name('pembeli.produk.seafood');
+        Route::get('/hubungi/penjual/{id}', [SeafoodController::class, 'chatwa'])->name('hubungi.penjual.seafood');
+        Route::get('/beli/seafood/{kode_seafood}', [SeafoodController::class, 'beli'])->name('beliseafood');
+        Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
+        Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
     });
 });
 

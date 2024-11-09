@@ -1,5 +1,5 @@
 <!-- Footer Start -->
-<footer class="text-center text-lg-start text-white" style="background-color: #097ABA;">
+<footer class="text-center text-lg-start text-white" style="background-color: #097ABA; margin-top:100px">
     <div class="container p-4">
   
       <!-- Grid row -->
