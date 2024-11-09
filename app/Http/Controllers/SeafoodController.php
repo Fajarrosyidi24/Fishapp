@@ -6,6 +6,8 @@ use App\Models\Seafood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
+use App\Models\Keranjang;
+use App\Models\PesananSeafood;
 
 class SeafoodController extends Controller
 {
@@ -90,5 +92,24 @@ class SeafoodController extends Controller
     public function detailpesananseafood()
     {
         return view('nelayan.pesanan.detailpesananseafood');
+    }
+
+    public function chatwa($id)
+    {
+        $whatsappNumber = '62' . ltrim($id, '0');
+        $whatsappUrl = "https://wa.me/{$whatsappNumber}";
+        return redirect($whatsappUrl);
+    }
+
+    public function beli($kode_seafood)
+    {
+        $seafood = Seafood::where('kode_seafood', $kode_seafood)->first();
+        $produklainnya = Seafood::where('status', 'siap dijual')->get();
+        return view('pembeli.produk.formpembelianseafood', compact('seafood', 'produklainnya'));
+    }
+
+    public function addchart($productId, $jumlah, $subtotal){
+        Keranjang::createkeranjangseafood($productId, $jumlah, $subtotal);
+        return redirect()->back()->with('success', 'Barang Telah dimasukan Kedalam Keranjang');
     }
 }
