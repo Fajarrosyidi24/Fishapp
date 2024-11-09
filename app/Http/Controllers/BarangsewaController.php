@@ -41,4 +41,9 @@ class BarangsewaController extends Controller
     public function pesananbarangsewanelayan(){
         return view('nelayan.pesanan.barangsewa');
     }
+
+    public function detailpesananbarangsewa()
+    {
+        return view('nelayan.pesanan.detailpesananbarangsewa');
+    }
 }
