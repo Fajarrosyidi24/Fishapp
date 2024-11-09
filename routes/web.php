@@ -40,7 +40,7 @@ Route::get('/dashboard', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/pdatefoto', [ProfileController::class, 'updatefoto'])->name('update.profile.photo');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/about2', function () {
         return view('about2');
@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/about-information2/fishapp', function () {
         return view('about_information2');
     })->name('about_information2');
+
+    Route::prefix('user/produk')->group(function () {
+        Route::get('/seafood', [SeafoodController::class, 'seafooduser'])->name('pembeli.produk.seafood');
+    });
 });
 
 Route::prefix('admin')->group(function () {
