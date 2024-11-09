@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,11 @@ class GoogleAuthController extends Controller
                 ]);
 
                 $new_user = User::where('email', $google_user->getEmail())->first();
+
+                UserProfile::create([
+                    'user_id' => $new_user->id,
+                ]);
+                
     
                 Auth::login($new_user);
                 return redirect()->intended('dashboard');

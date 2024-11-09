@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\NelayanRegistrationRequest;
+use GuzzleHttp\Psr7\Request;
 
 class UserProfile extends Model
 {
@@ -62,8 +63,29 @@ class UserProfile extends Model
         $fotoPath = $foto->storeAs('public/fotouser', $namaFileUnik);
         $fotoPath;
 
-        return self::update([
-            'foto' => $namaFileUnik,
-        ]);
+        $profile->foto = $namaFileUnik;
+        $profile->save();        
+    }
+
+    public static function updateprofileuser($request){
+         $user = UserProfile::where('user_id', Auth::guard()->user()->id)->first();
+         $user2 = User::where('id', Auth::guard()->user()->id)->first();
+
+         $user2->name = $request->input('name');
+         $user2->save();
+         $user->tempat_lahir = $request->input('tempat_lahir');
+         $user->tanggal_lahir = $request->input('tanggal_lahir');
+         $user->alamat_lengkap = 'Dusun '. $request->input('dusun').', RT/RW.'.$request->input('rt').'/'.$request->input('rw').', Desa '.$request->input('sub_district').',Kecamatan '.$request->input('district').',Kabupaten '.$request->input('district').', Jawa Timur';
+         $user->provinsi = 'Jawa Timur';
+         $user->kabupaten = $request->input('district');
+         $user->kecamatan = $request->input('sub_district');
+         $user->desa = $request->input('desa');
+         $user->dusun = $request->input('dusun');
+         $user->rt = $request->input('rt');
+         $user->rw = $request->input('rw');
+         $user->code_pos = $request->input('kode_pos');
+         $user->jenis_kelamin = $request->input('jenis_kelamin');
+         $user->no_telepon = $request->input('nomer_telepon');
+         $user->save();
     }
 }
