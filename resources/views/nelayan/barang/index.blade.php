@@ -22,7 +22,7 @@
 
 @section('content')
 <ol class="breadcrumb mt-4">
-    <li class="breadcrumb-item active">Seafood</li>
+    <li class="breadcrumb-item active">Barang Sewa</li>
 </ol>
 <div class="d-flex justify-content-end mb-4">
     <a href="{{route('create.barangsewa')}}" class="btn btn-success">+ Tambah Data Barangsewa</a>
