@@ -38,7 +38,7 @@ class NelayanRegistrationRequest extends FormRequest
             'nama_kapal' => 'required|string|max:255',
             'jenis_kapal' => 'required|string|max:255',
             'jumlah_abk' => 'required|integer|min:1',
-            'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+            'pas_foto' => 'required|image|mimes:jpg,jpeg,png|max:10240',
         ];
     }
 
@@ -80,7 +80,7 @@ class NelayanRegistrationRequest extends FormRequest
             'pas_foto.required' => 'Pas foto wajib diunggah.',
             'pas_foto.image' => 'Pas foto harus berupa gambar.',
             'pas_foto.mimes' => 'Pas foto harus berformat JPG, JPEG, atau PNG.',
-            'pas_foto.max' => 'Ukuran pas foto tidak boleh lebih dari 2MB.',
+            'pas_foto.max' => 'Ukuran pas foto tidak boleh lebih dari 10MB.',
         ];
     }
 }
