@@ -73,6 +73,7 @@ class ProfileNelayanController extends Controller
             'jenis_kapal' => 'nullable|string|max:255',
             'jumlah_abk' => 'nullable|integer|min:1',
         ]);
+        
         $userId = Auth::guard('nelayan')->user()->id;
         Nelayan::updateprofile($validatedData, $userId);
         return redirect()->route('nelayan.profile')->with('success', 'Profil berhasil diperbarui!');
