@@ -39,11 +39,6 @@ class GoogleAuthController extends Controller
                 ]);
 
                 $new_user = User::where('email', $google_user->getEmail())->first();
-
-                UserProfile::create([
-                    'user_id' => $new_user->id,
-                ]);
-                
     
                 Auth::login($new_user);
                 return redirect()->intended('dashboard');
