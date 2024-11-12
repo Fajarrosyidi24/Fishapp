@@ -91,6 +91,10 @@ Route::prefix('admin')->group(function () {
         Route::post('/verifikasi/seafood/{id}', [AdminController::class, 'verifikasiseafood'])->name('admin.verifikasi.seafood');
         Route::get('/detail-seafood/{id}', [AdminController::class, 'detailpermintaanseafood'])->name('admin.view.detail.seafood');
         Route::post('/tolakseafood/{id}', [AdminController::class, 'tolakseafood'])->name('tolakseafood.admin');
+        Route::get('/daftar-permintaan/alat/barang-sewa', [AdminController::class, 'permintaanbarangsewa'])->name('checkpenyewaanalat.nelayan');
+        Route::get('/detail-barang/{id}', [AdminController::class, 'detailpermintaanbarang'])->name('admin.view.detail.permintaan.barang');
+        Route::post('/verifikasi/alat/{id}', [AdminController::class, 'verifikasibarang'])->name('admin.verifikasi.barang');
+        Route::post('/tolakbarang/{id}', [AdminController::class, 'tolakbarang'])->name('tolakbarang.admin');
     });
 });
 

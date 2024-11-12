@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rekening;
 use App\Models\BarangSewa;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\BarangRequest;
+use Illuminate\Support\Facades\Auth;
 
 class BarangsewaController extends Controller
 {
     public function barangsewaguest()
     {
-        $barang = BarangSewa::all();
+        $barang = BarangSewa::where('status', 'siap dijual')->get();
         return view('produkbarangsewa', compact('barang'));
     }
 
@@ -23,6 +24,10 @@ class BarangsewaController extends Controller
 
     public function create()
     {
+        $bank = Rekening::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
+        if (is_null($bank)) {
+            return redirect()->route('nelayan.profile')->with('status', 'harap melengkapi profile serta informasi akun bank yang anda miliki');
+        }
         return view('nelayan.barang.create');
     }
 
