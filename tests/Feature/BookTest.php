@@ -76,24 +76,6 @@ class BookTest extends TestCase
             'foto' => $pasFoto,
             'nelayan_id' => 1,
             'status' => 'available'
-
-            // 'name' => 'John Doe',
-            // 'jenis_kelamin' => 'Laki-laki',
-            // 'tempat_lahir' => 'Surabaya',
-            // 'tanggal_lahir' => '1990-01-01',
-            // 'district' => 'Kabupaten ABC',
-            // 'sub_district' => 'Kecamatan XYZ',
-            // 'desa' => 'Desa PQR',
-            // 'dusun' => 'Dusun S',
-            // 'rt' => '01',
-            // 'rw' => '02',
-            // 'kode_pos' => '12345',
-            // 'email' => 'fajarrosyidi80@gmail.com',
-            // 'no_telepon' => '081234567890',
-            // 'nama_kapal' => 'Kapal Indah',
-            // 'jenis_kapal' => 'Jenis Kapal A',
-            // 'jumlah_abk' => 15,
-            // 'pas_foto' => $pasFoto,
         ];
         $response = $this->post(route('sefood.store'), $request);
         $response->assertRedirect()->assertSessionHas('success', 'Data seafood berhasil ditambahkan.');
