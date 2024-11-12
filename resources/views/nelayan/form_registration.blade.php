@@ -166,8 +166,6 @@ php artisan laravolt:indonesia:seed --}}
             selectKecamatan.addEventListener('change', function() {
                 const selectedOption = selectKecamatan.options[selectKecamatan.selectedIndex];
                 const selectedCode = selectedOption.getAttribute('data-code');
-
-                // Kosongkan pilihan desa sebelumnya
                 selectDesa.innerHTML = '<option selected disabled>Pilih Desa</option>';
 
                 if (selectedCode) {
