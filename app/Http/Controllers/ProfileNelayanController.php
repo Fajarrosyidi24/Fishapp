@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlamatPengirimanSeafood;
 use App\Models\Nelayan;
 use App\Models\Rekening;
 use Illuminate\Support\Str;
@@ -19,7 +20,10 @@ class ProfileNelayanController extends Controller
         $kecamatan = DB::table('indonesia_districts')->where('city_code', $kabupaten->code)->get();
         $nelayan = Auth::guard('nelayan')->user();
         $bank = Rekening::where('nelayan_id', Auth::guard('nelayan')->user()->id)->get();
-        return view('nelayan.profile.edit', compact('nelayan','kecamatan', 'bank'));
+        $alamat = AlamatPengirimanSeafood::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
+        $api = AlamatTransaksiController::api();
+        $shownProvinces = [];
+        return view('nelayan.profile.edit', compact('nelayan','kecamatan', 'bank', 'alamat', 'api', 'shownProvinces'));
     }
 
     public function deletepotouser(Request $request)

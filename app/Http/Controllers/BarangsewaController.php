@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rekening;
 use App\Models\BarangSewa;
 use App\Http\Requests\BarangRequest;
+use App\Models\AlamatPengirimanSeafood;
 use Illuminate\Support\Facades\Auth;
 
 class BarangsewaController extends Controller
@@ -25,8 +26,12 @@ class BarangsewaController extends Controller
     public function create()
     {
         $bank = Rekening::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
+        $alamat = AlamatPengirimanSeafood::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
         if (is_null($bank)) {
             return redirect()->route('nelayan.profile')->with('status', 'harap melengkapi profile serta informasi akun bank yang anda miliki');
+        }
+        elseif(is_null($alamat)){
+            return redirect()->route('nelayan.profile')->with('status', 'anda belum menambahkan alamat pengiriman');
         }
         return view('nelayan.barang.create');
     }
