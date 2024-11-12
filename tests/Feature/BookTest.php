@@ -39,8 +39,26 @@ class BookTest extends TestCase
 
     public function test_user_masuk_tanpa_login()
     {
+
+        $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
+        $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
+
+        $request = [
+
+            'kode_seafood' => '4543',
+            'nama' => 'yono',
+            'jenis_seafood' => 'tuna',
+            'jumlah' => 20,
+            'foto' => $pasFoto,
+            'nelayan_id' => 1,
+            'status' => 'available'
+        ];
+        $response = $this->post(route('sefood.store'), $request);
+        $response->assertRedirect()->assertSessionHas('success', 'Data seafood berhasil ditambahkan.');
+
         $response = $this->get(route('create.seafood'));
         $response ->assertStatus(302);
+
     }
 
     // public function penjualanikan()  {
