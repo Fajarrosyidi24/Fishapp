@@ -51,7 +51,7 @@
                         Produk
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" class="dropdown-item">Barang Sewa</a></li>
+                        <li><a href="{{route('pembeli.produk.barangsewa')}}" class="dropdown-item">Barang Sewa</a></li>
                         <li><a href="{{route('pembeli.produk.seafood')}}" class="dropdown-item">Seafoods</a></li>
                     </ul>
                 </li>
