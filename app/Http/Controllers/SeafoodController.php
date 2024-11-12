@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seafood;
+use App\Models\Rekening;
+use App\Models\Keranjang;
 use Illuminate\Http\Request;
+use App\Models\PesananSeafood;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
-use App\Models\Keranjang;
-use App\Models\PesananSeafood;
 
 class SeafoodController extends Controller
 {
@@ -15,11 +16,7 @@ class SeafoodController extends Controller
 {
     $query = $request->input('search');
     $nelayanId = Auth::guard('nelayan')->user()->id;
-
-    // query untuk mengambil seafood
     $seafood = Seafood::where('nelayan_id', $nelayanId);
-
-    // pencarian berdasarkan nama atau jenis_seafood jika ada input pencarian
     if ($query) {
         $seafood->where(function ($queryBuilder) use ($query) {
             $queryBuilder->where('nama', 'LIKE', "%{$query}%")
@@ -32,6 +29,10 @@ class SeafoodController extends Controller
 
     public function create()
     {
+        $bank = Rekening::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
+        if (is_null($bank)) {
+            return redirect()->route('nelayan.profile')->with('status', 'mohon lengkapi profile serta informasi akun bank yang anda miliki');
+        }
         return view('nelayan.seafood.create');
     }
 

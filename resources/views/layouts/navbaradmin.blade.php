@@ -54,7 +54,11 @@
                             'status', 'menunggu di verifikasi admin',
                         )->count();
 
-                        $jumlah = $nelayan1+$nelayan2;
+                        $barang = \App\Models\BarangSewa::where(
+                            'status', 'menunggu di verifikasi admin',
+                        )->count();
+
+                        $jumlah = $nelayan1+$nelayan2+$barang;
                     @endphp
 
 
@@ -107,6 +111,16 @@
                                     @endif
                             </a>
                             <a class="nav-link" href="{{ route('dataseafood') }}">Data Seafood</a>
+
+                            <a class="nav-link" href="{{ route('checkpenyewaanalat.nelayan') }}">Permintaan Penyewaan Alat
+                                @if ($barang=== 0)
+                                    @else
+                                    <span class="badge badge-pill badge-danger">
+                                    {{$barang}}
+                                </span>
+                                    @endif
+                            </a>
+                            <a class="nav-link" href="{{ route('dataseafood') }}">Data Alat</a>
                         </nav>
                     </div>
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
