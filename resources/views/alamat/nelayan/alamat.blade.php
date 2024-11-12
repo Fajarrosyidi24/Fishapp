@@ -1,11 +1,3 @@
-@extends('layouts.app')
-
-@section('title')
-    <title>Alamat Pengiriman Page - Fishapp</title>
-@endsection
-
-@section('content')
-
 <div class="container mb-4">
 
     <!-- Menampilkan alamat jika ada -->
@@ -20,7 +12,7 @@
             <div class="list-group">
                 <div class="list-group-item list-group-item-action mb-3 p-3 shadow-sm rounded">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill"></i> {{ $alamat->user->name }}</h5>
+                        <h5 class="mb-0"><i class="bi bi-geo-alt-fill"></i> {{ $alamat->nelayan->name }}</h5>
                         <span class="badge bg-primary">{{ $alamat->provinsi }}</span>
                     </div>
                     <p class="mt-2">
@@ -49,12 +41,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('createalamat.pembeli.seafood') }}" method="POST">
+                <form action="{{ route('createalamat.nelayan.seafood') }}" method="POST">
                     @csrf
                     <div class="mb-3">
                         <label class="form-label" style="color: black">Provinsi :</label>
                         <div class="col-sm-10">
-                            <select class="form-select" id="provinsi" aria-label="provinsi" name="provinsi" required>
+                            <select class="form-select" id="provinsiseafood" aria-label="provinsi" name="provinsi" required>
                                 <option selected disabled>Pilih</option>
                                 @php
                                     $shownProvinces = [];
@@ -77,7 +69,7 @@
                         <div class="mb-3">
                             <label class="form-label" style="color: black">Kabupaten :</label>
                             <div class="col-sm-10">
-                                <select class="form-select" id="city" aria-label="city" name="city" required>
+                                <select class="form-select" id="cityseafood" aria-label="city" name="city" required>
                                     <option selected disabled>Pilih</option>
                                 </select>
                             </div>
@@ -135,7 +127,7 @@
             </div>
             <div class="modal-body">
                 @if ($alamat)
-                    <form action="{{ route('update.data.alamat.tujuan', ['id' => $alamat->id]) }}"method="POST">
+                    <form action="{{ route('update.data.alamat.pengiriman', ['id' => $alamat->id]) }}"method="POST">
                     @else
                         <p>Alamat tidak ditemukan.</p>
                 @endif
@@ -228,65 +220,3 @@
         </div>
     </div>
 </div>
-
-    @include('components.foot')
-@endsection
-
-
-@section('foot')
-<script>
-    document.getElementById('provinsi').addEventListener('change', function() {
-        var selectedProvinsi = this.value;
-        var citySelect = document.getElementById('city');
-        var cityData = @json($api);
-
-        citySelect.innerHTML = '';
-
-        var defaultOption = document.createElement('option');
-        defaultOption.text = 'Pilih';
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        citySelect.appendChild(defaultOption);
-
-        var shownCities = new Set();
-
-        cityData.forEach(function(ci) {
-            if (ci['province_id'] === selectedProvinsi && !shownCities.has(ci['city_name'])) {
-                var option = document.createElement('option');
-                option.value = ci['city_id'];
-                option.text = ci['city_name'];
-                citySelect.appendChild(option);
-                shownCities.add(ci['city_name']);
-            }
-        });
-    });
-</script>
-
-<script>
-    document.getElementById('provinsiseafood2').addEventListener('change', function() {
-        var selectedProvinsi = this.value;
-        var citySelect = document.getElementById('cityseafood2');
-        var cityData = @json($api);
-
-        citySelect.innerHTML = '';
-
-        var defaultOption = document.createElement('option');
-        defaultOption.text = 'Pilih';
-        defaultOption.disabled = true;
-        defaultOption.selected = true;
-        citySelect.appendChild(defaultOption);
-
-        var shownCities = new Set();
-
-        cityData.forEach(function(ci) {
-            if (ci['province_id'] === selectedProvinsi && !shownCities.has(ci['city_name'])) {
-                var option = document.createElement('option');
-                option.value = ci['city_id'];
-                option.text = ci['city_name'];
-                citySelect.appendChild(option);
-                shownCities.add(ci['city_name']);
-            }
-        });
-    });
-</script>
-@endsection
