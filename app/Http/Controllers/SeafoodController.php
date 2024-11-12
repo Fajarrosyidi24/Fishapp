@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\PesananSeafood;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
+use App\Models\AlamatPengirimanSeafood;
 
 class SeafoodController extends Controller
 {
@@ -30,8 +31,11 @@ class SeafoodController extends Controller
     public function create()
     {
         $bank = Rekening::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
+        $alamat = AlamatPengirimanSeafood::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
         if (is_null($bank)) {
             return redirect()->route('nelayan.profile')->with('status', 'mohon lengkapi profile serta informasi akun bank yang anda miliki');
+        }elseif(is_null($alamat)){
+            return redirect()->route('nelayan.profile')->with('status', 'anda belum menambahkan alamat pengiriman');
         }
         return view('nelayan.seafood.create');
     }

@@ -48,4 +48,18 @@ class AlamatTujuanSeafood extends Model
         'user_id'=> $iduser,
         ]);
     }
+
+    public static function updatedataalamat($request,$CityName, $provinceName,$idcity, $idProvince, $alamat){
+        $alamat->provid = $idProvince;
+        $alamat->cityid = $idcity;
+        $alamat->provinsi = $provinceName;
+        $alamat->kabupaten = $CityName;
+        $alamat->kecamatan = $request->input('kecamatan');
+        $alamat->desa = $request->input('desa');
+        $alamat->dusun = $request->input('dusun');
+        $alamat->rt = $request->input('rt');
+        $alamat->rw = $request->input('rw');
+        $alamat->code_pos = $request->input('code_pos');
+        $alamat->save();
+    }
 }

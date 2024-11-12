@@ -12,7 +12,7 @@
             <div class="card p-4 shadow-sm">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h6>Alamat Pengiriman</h6>
-                    <a href="{{ route('alamat.pengiriman.pembeli') }}" class="text-danger">Ubah/tambahkan alamat pengiriman</a>
+                    <a href="{{ route('alamat.pengiriman.pembeli') }}" class="text-danger">Ubah alamat pengiriman</a>
                 </div>
                 @foreach ($alamat as $index => $item)
                     <div class="form-check mb-3">

@@ -373,6 +373,7 @@
         </div>
     </div>
 </div>
+@include('alamat.nelayan.alamat')
 @endsection
 
 @section('foot')
@@ -429,6 +430,62 @@
                     alert('Terjadi kesalahan saat menghapus foto profil.'); // Pesan error
                 });
         }
+    });
+</script>
+
+<script>
+    document.getElementById('provinsiseafood').addEventListener('change', function() {
+        var selectedProvinsi = this.value;
+        var citySelect = document.getElementById('cityseafood');
+        var cityData = @json($api);
+
+        citySelect.innerHTML = '';
+
+        var defaultOption = document.createElement('option');
+        defaultOption.text = 'Pilih';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        citySelect.appendChild(defaultOption);
+
+        var shownCities = new Set();
+
+        cityData.forEach(function(ci) {
+            if (ci['province_id'] === selectedProvinsi && !shownCities.has(ci['city_name'])) {
+                var option = document.createElement('option');
+                option.value = ci['city_id'];
+                option.text = ci['city_name'];
+                citySelect.appendChild(option);
+                shownCities.add(ci['city_name']);
+            }
+        });
+    });
+</script>
+
+<script>
+    document.getElementById('provinsiseafood2').addEventListener('change', function() {
+        var selectedProvinsi = this.value;
+        var citySelect = document.getElementById('cityseafood2');
+        var cityData = @json($api);
+
+        citySelect.innerHTML = '';
+
+        var defaultOption = document.createElement('option');
+        defaultOption.text = 'Pilih';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        citySelect.appendChild(defaultOption);
+
+        var shownCities = new Set();
+
+        cityData.forEach(function(ci) {
+            if (ci['province_id'] === selectedProvinsi && !shownCities.has(ci['city_name'])) {
+                var option = document.createElement('option');
+                option.value = ci['city_id'];
+                option.text = ci['city_name'];
+                citySelect.appendChild(option);
+                shownCities.add(ci['city_name']);
+            }
+        });
     });
 </script>
 @endsection

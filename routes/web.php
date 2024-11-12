@@ -59,13 +59,15 @@ Route::middleware('auth')->group(function () {
     Route::prefix('alamat/user/pengiriman/seafood')->group(function (){
         Route::get('/index', [AlamatTransaksiController::class, 'alamatpembeli'])->name('alamat.pengiriman.pembeli');
         Route::post('/create/alamat/tujuan/seafood', [AlamatTransaksiController::class, 'createalamattujuan'])->name('createalamat.pembeli.seafood');
-        Route::delete('/alamat-seafood/{id}', [AlamatTransaksiController::class, 'destroy'])->name('delete.alamat.seafood');
+        Route::put('/update/alamat/pengiriman/seafood/{id}', [AlamatTransaksiController::class, 'updatealamattujuan'])->name('update.data.alamat.tujuan');
     });
 
     Route::prefix('user/produk')->group(function () {
         Route::get('/seafood', [SeafoodController::class, 'seafooduser'])->name('pembeli.produk.seafood');
+        Route::get('/barangsewa', [BarangsewaController::class, 'barangsewauser'])->name('pembeli.produk.barangsewa');
         Route::get('/hubungi/penjual/{id}', [SeafoodController::class, 'chatwa'])->name('hubungi.penjual.seafood');
         Route::get('/beli/seafood/{kode_seafood}', [SeafoodController::class, 'beli'])->name('beliseafood');
+        Route::get('/sewa/barangsewa/{kode_barang}', [BarangsewaController::class, 'sewa'])->name('sewabarang');
         Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
     });
@@ -115,6 +117,11 @@ Route::prefix('nelayan')->group(function () {
     Route::get('/forgot-password/{token}', [NelayanController::class, 'reseturl'])->name('nelayan.password.reseturl');
     Route::post('/forgot-password/{token}/{email}', [NelayanController::class, 'processResetPassword'])->name('nelayan.password.update');
     Route::middleware('nelayan')->group(function () {
+        Route::prefix('nelayan/alamat/nelayan/pengiriman/seafood')->group(function (){
+            Route::post('/create/alamat/pengiriman/seafood', [AlamatTransaksiController::class, 'createalamatpengiriman'])->name('createalamat.nelayan.seafood');
+            Route::delete('/alamat/pengiman/seafood/{id}', [AlamatTransaksiController::class, 'destroyalamatnelayan'])->name('delete.alamat.nelayan.seafood');
+            Route::put('/update/alamat/pengiriman/seafood/{id}', [AlamatTransaksiController::class, 'updatealamatpengiriman'])->name('update.data.alamat.pengiriman');
+        });
         Route::get('dashboard', [NelayanController::class, 'dashboard'])->name('nelayan.dashboard');
         Route::get('/logout', [NelayanController::class, 'NelayanLogout'])->name('nelayan.logout');
         Route::get('/profile', [ProfileNelayanController::class, 'index'])->name('nelayan.profile');

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -69,5 +70,37 @@ class AlamatPengirimanSeafood extends Model
     }
 
     return $cityids;
+    }
+
+    public static function createdataalamat($request,$CityName, $provinceName,$idcity, $idProvince){
+        $iduser = Auth::guard('nelayan')->user()->id;
+
+        self::create([
+        'provid' => $idProvince,
+        'cityid' => $idcity,
+        'provinsi' => $provinceName,
+        'kabupaten' => $CityName,
+        'kecamatan'=> $request->input('kecamatan'),
+        'desa' => $request->input('desa'),
+        'dusun' =>  $request->input('dusun'),
+        'rt' => $request->input('rt'),
+        'rw' => $request->input('rw'),
+        'code_pos' => $request->input('code_pos'),
+        'nelayan_id'=> $iduser,
+        ]);
+    }
+
+    public static function updatedataalamat($request,$CityName, $provinceName,$idcity, $idProvince, $alamat){
+        $alamat->provid = $idProvince;
+        $alamat->cityid = $idcity;
+        $alamat->provinsi = $provinceName;
+        $alamat->kabupaten = $CityName;
+        $alamat->kecamatan = $request->input('kecamatan');
+        $alamat->desa = $request->input('desa');
+        $alamat->dusun = $request->input('dusun');
+        $alamat->rt = $request->input('rt');
+        $alamat->rw = $request->input('rw');
+        $alamat->code_pos = $request->input('code_pos');
+        $alamat->save();
     }
 }
