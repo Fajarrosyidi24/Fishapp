@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/barangsewa', [BarangsewaController::class, 'barangsewauser'])->name('pembeli.produk.barangsewa');
         Route::get('/hubungi/penjual/{id}', [SeafoodController::class, 'chatwa'])->name('hubungi.penjual.seafood');
         Route::get('/beli/seafood/{kode_seafood}', [SeafoodController::class, 'beli'])->name('beliseafood');
+        Route::get('/sewa/barangsewa/{kode_barang}', [BarangsewaController::class, 'sewa'])->name('sewabarang');
         Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
     });

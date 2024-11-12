@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('title')
-    <title>barangsewa page - Fishapp</title>
+    <title>BarangSewa page - Fishapp</title>
 @endsection
 
 @section('content')
@@ -34,7 +34,7 @@
                             <div class="mb-2">
                                 <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
                                 <div class="progress" style="height: 5px;">
-                                    <div class="progrss-bar bg-succes" role="progressbar" style="width: 20%;"
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
                                     aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
                                 </div>
                             </div>
@@ -55,7 +55,7 @@
                                     class="btn btn-sm btn-primary text-white">
                                     <i class="bi bi-eye"></i> Detail
                                 </a>
-                                <a href="{{ route('beliseafood', ['kode_seafood' => $br->kode_barang]) }}" class="btn btn-sm btn-success text-white">
+                                <a href="{{ route('sewabarang', ['kode_barang' => $br->kode_barang]) }}" class="btn btn-sm btn-success text-white">
                                     <i class="bi bi-cart-plus"></i> Sewa
                                 </a>
                             </div>
@@ -63,9 +63,74 @@
                     </div>
                 </div>
 
+                <div class="modal fade" id="productModal{{ $br->kode_barang }}" tabindex="-1"
+                    aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="productModalLabel" style="color: black">
+                                    Detail
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                @csrf
+                                    <div class="mb-3">
+                                        <label for="namaSeafood" class="form-label">Nama Barang</label>
+                                        <input type="text" class="form-control" id="namaBarang"
+                                            value="{{ $br->nama_barang }}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="hargaSeafood" class="form-label">Harga Sewa</label>
+                                        <input type="text" class="form-control" id="hargaBarang"
+                                            value="{{ $br->harga->harga }}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="jenis_seafood" class="form-label">Kondisi Barang</label>
+                                        <input type="text" class="form-control" id="kondisi"
+                                            value="{{ $br->kondisi }}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="jumlah" class="form-label">Jumlah barang</label>
+                                        <input type="number" class="form-control" id="jumlah"
+                                            value="{{ $br->jumlah }}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="penjual" class="form-label">Nama Pemilik</label>
+                                        <input type="text" class="form-control" id="pemilik"
+                                            value="{{ $br->nelayan->name }}" readonly>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="alamat" class="form-label">Alamat Pemilik</label>
+                                        <textarea class="form-control" id="alamat" rows="3" readonly>{{ $br->nelayan->detailProfile->alamat_lengkap }}</textarea>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="tel" class="form-label">No. Telpon Pemilik</label>
+                                        <input type="tel" class="form-control" id="tel"
+                                            value="{{ $br->nelayan->detailProfile->no_telepon }}" readonly>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-sm btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
+                                <a href="{{route('hubungi.penjual.seafood', ['id' =>$br->nelayan->detailProfile->no_telepon ])}}" class="btn btn-sm btn-primary text-white">
+                                    <i class="bi bi-telephone"></i> Hubungi Penjual
+                                </a>
+
+                                <a href="{{ route('sewabarang', ['kode_barang' => $br->kode_barang]) }}" class="btn btn-sm btn-success text-white">
+                                    <i class="bi bi-cart-plus"></i> Sewa
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 @endforeach
                 
         </div>
     </div>
 
+    @include('components.foot')
 @endsection
