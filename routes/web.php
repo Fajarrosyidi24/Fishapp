@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user/produk')->group(function () {
         Route::get('/seafood', [SeafoodController::class, 'seafooduser'])->name('pembeli.produk.seafood');
+        Route::get('/barangsewa', [BarangsewaController::class, 'barangsewauser'])->name('pembeli.produk.barangsewa');
         Route::get('/hubungi/penjual/{id}', [SeafoodController::class, 'chatwa'])->name('hubungi.penjual.seafood');
         Route::get('/beli/seafood/{kode_seafood}', [SeafoodController::class, 'beli'])->name('beliseafood');
         Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
