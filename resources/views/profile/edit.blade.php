@@ -60,107 +60,135 @@
             <div class="col-md-5 col-sm-12 border-right">
                 <div class="p-3 py-5">
                     <h4 class="text-right">Profile</h4>
-                    <form action="#" method="post">
+                    <form action="{{ route('profile.update') }}" method="post">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label" style="color: black">Nama :</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                value="{{ Auth::user()->name }}" required>
+                                value="{{ Auth::user()->name }}">
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="tempat_lahir">Tempat Lahir</label>
-                            <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir" required
+                            <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir"
+                                value="{{ optional(Auth::user()->updateProfile)->tempat_lahir }}"
                                 placeholder="Masukkan tempat lahir Anda">
                         </div>
                         <div class="form-group mb-3">
                             <label for="tanggal_lahir">Tanggal Lahir</label>
-                            <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required>
+                            <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir"
+                                value="{{ optional(Auth::user()->updateProfile)->tanggal_lahir }}">
                         </div>
 
                         <!-- Jenis Kelamin -->
                         <div class="form-group mb-3">
                             <label for="jenis_kelamin">Jenis Kelamin</label>
-                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
-                                <option value="" disabled selected>Pilih Jenis Kelamin</option>
-                                <option value="Laki-laki">Laki-laki</option>
-                                <option value="Perempuan">Perempuan</option>
+                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                                <option value="" disabled
+                                    {{ optional(Auth::user()->updateProfile)->jenis_kelamin ? '' : 'selected' }}>Pilih Jenis
+                                    Kelamin
+                                </option>
+                                <option value="Laki-laki"
+                                    {{ optional(Auth::user()->updateProfile)->jenis_kelamin === 'Laki-laki' ? 'selected' : '' }}>
+                                    Laki-laki
+                                </option>
+                                <option value="Perempuan"
+                                    {{ optional(Auth::user()->updateProfile)->jenis_kelamin === 'Perempuan' ? 'selected' : '' }}>
+                                    Perempuan
+                                </option>
                             </select>
                         </div>
 
+
                         <div class="form-group mb-3">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required
+                            <input type="email" class="form-control" id="email" name="email"
                                 value="{{ Auth::user()->email }}" readonly>
                         </div>
 
                         <div class="mb-3">
                             <label for="nomer_telepon" class="form-label" style="color: black">Nomor Telepon :</label>
                             <input type="tel" class="form-control" id="nomer_telepon" name="nomer_telepon"
-                                value="{{ auth()->user()->updateProfile->nomer_telepon ?? '' }}"
+                                 value="{{ optional(Auth::user()->updateProfile)->no_telepon }}"
                                 placeholder="Masukkan Nomor Telepon Anda" pattern="[0-9]{10,14}"
-                                title="Masukkan nomor telepon yang valid (minimal 10 digit, maksimal 14 digit)" required>
+                                title="Masukkan nomor telepon yang valid (minimal 10 digit, maksimal 14 digit)">
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="alamat">Alamat Lengkap : </label>
                             <div class="row gx-2">
                                 <div class="col-md-6 mb-2">
-                                    <select class="form-control" id="district" name="district" required>
-                                        <option value="" disabled selected>Pilih Kabupaten</option>
-                                        <option value="Banyuwangi">Banyuwangi</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="provinsi" name="provinsi"
+                                    @if (optional(Auth::user()->updateProfile)->provinsi)
+                                    value="{{ optional(Auth::user()->updateProfile)->provinsi }}"
+                                    @else
+                                    value="Jawa Timur"
+                                    @endif
+                                     readonly>
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <select class="form-control" id="sub_district" name="sub_district" required>
-                                        <option value="" disabled selected>Pilih Kecamatan</option>
+                                    <select class="form-control" id="district" name="district">
+                                        <option value="" disabled {{ optional(Auth::user()->updateProfile)->kabupaten ? '' : 'selected' }}>
+                                            Pilih Kabupaten
+                                        </option>
+                                        @if (optional(Auth::user()->updateProfile)->kabupaten)
+                                            <option value="{{ optional(Auth::user()->updateProfile)->kabupaten }}">
+                                                {{ optional(Auth::user()->updateProfile)->kabupaten }}
+                                            </option>
+                                        @else
+                                            <option value="KABUPATEN BANYUWANGI">
+                                                Kabupaten Banyuwangi
+                                            </option>
+                                        @endif
+                                    </select>
+                                </div>                                
+                                
+                                <div class="col-md-6 mb-2">
+                                    <select class="form-control" id="sub_district" name="sub_district">
+                                        <option value=""
+                                            {{ optional(Auth::user()->updateProfile)->kecamatan ? '' : 'selected' }} disabled>Pilih Kecamatan
+                                        </option>
                                         @foreach ($kecamatan as $kec)
-                                            <option value="{{ $kec->name }}" data-code="{{ $kec->code }}">
+                                            <option value="{{ $kec->name }}" data-code="{{ $kec->code }}"
+                                                {{ $kec->name === optional(Auth::user()->updateProfile)->kecamatan ? 'selected' : '' }}>
                                                 {{ $kec->name }}
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <select name="desa" id="desa" class="form-control" required>
-                                        <option value="" disabled selected>Pilih Desa</option>
+                                    <select name="desa" id="desa" class="form-control">
+                                        <option value="" disabled
+                                            {{ empty(optional(Auth::user()->updateProfile)->desa) ? 'selected' : '' }}>Pilih Desa
+                                        </option>
+                                        <option value="{{ optional(Auth::user()->updateProfile)->desa }}" selected>
+                                            {{ optional(Auth::user()->updateProfile)->desa }}
+                                        </option>
                                     </select>
                                 </div>
+                                
                                 <div class="col-md-6 mb-2">
                                     <input type="text" class="form-control" id="dusun" name="dusun"
-                                        placeholder="Dusun" required>
+                                        value="{{ optional(Auth::user()->updateProfile)->dusun }}" placeholder="Dusun">
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <input type="text" class="form-control" id="rt" name="rt"
-                                        placeholder="RT" required>
+                                        value="{{ optional(Auth::user()->updateProfile)->rt }}" placeholder="RT">
                                 </div>
                                 <div class="col-md-6 mb-2">
                                     <input type="text" class="form-control" id="rw" name="rw"
-                                        placeholder="RW" required>
+                                        value="{{ optional(Auth::user()->updateProfile)->rw }}" placeholder="RW">
                                 </div>
-                                <div class="col-md-12 mb-2">
+                                <div class="col-md-6 mb-2">
                                     <input type="text" class="form-control" id="kode_pos" name="kode_pos"
-                                        placeholder="Kode Pos" required>
+                                        value="{{ optional(Auth::user()->updateProfile)->code_pos }}" placeholder="Kode Pos">
                                 </div>
+                                
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Profil</button>
                     </form>
-                </div>
-            </div>
-
-            <!-- Section Baru Responsive -->
-            <div class="col-md-4 col-sm-12">
-                <div class="p-3 py-5">
-                    <h4 class="text-right">Informasi Lainnya</h4>
-                    <p class="text-black-50">Tambahkan informasi yang relevan di sini.</p>
-                    <div class="mb-3">
-                        <label for="extra_info" class="form-label" style="color: black">Keterangan Tambahan :</label>
-                        <input type="text" class="form-control" id="extra_info" name="extra_info"
-                            placeholder="Isi informasi tambahan...">
-                    </div>
-                    <button type="submit" class="btn btn-success">Simpan Informasi</button>
                 </div>
             </div>
         </div>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seafood;
+use App\Models\Rekening;
+use App\Models\Keranjang;
 use Illuminate\Http\Request;
+use App\Models\PesananSeafood;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
 
@@ -13,11 +16,7 @@ class SeafoodController extends Controller
 {
     $query = $request->input('search');
     $nelayanId = Auth::guard('nelayan')->user()->id;
-
-    // query untuk mengambil seafood
     $seafood = Seafood::where('nelayan_id', $nelayanId);
-
-    // pencarian berdasarkan nama atau jenis_seafood jika ada input pencarian
     if ($query) {
         $seafood->where(function ($queryBuilder) use ($query) {
             $queryBuilder->where('nama', 'LIKE', "%{$query}%")
@@ -30,6 +29,10 @@ class SeafoodController extends Controller
 
     public function create()
     {
+        $bank = Rekening::where('nelayan_id', Auth::guard('nelayan')->user()->id)->first();
+        if (is_null($bank)) {
+            return redirect()->route('nelayan.profile')->with('status', 'mohon lengkapi profile serta informasi akun bank yang anda miliki');
+        }
         return view('nelayan.seafood.create');
     }
 
@@ -73,5 +76,41 @@ class SeafoodController extends Controller
     {
         $seafood = Seafood::where('status', 'siap dijual')->get();
         return view('produkseafood', compact('seafood'));
+    }
+
+    public function pesananseafoodnelayan()
+    {
+       return view('nelayan.pesanan.seafood');
+    }
+
+
+    public function seafooduser()
+    {
+        $seafood = Seafood::where('status', 'siap dijual')->get();
+        return view('pembeli.produk.seafood', compact('seafood'));
+    }
+
+    public function detailpesananseafood()
+    {
+        return view('nelayan.pesanan.detailpesananseafood');
+    }
+
+    public function chatwa($id)
+    {
+        $whatsappNumber = '62' . ltrim($id, '0');
+        $whatsappUrl = "https://wa.me/{$whatsappNumber}";
+        return redirect($whatsappUrl);
+    }
+
+    public function beli($kode_seafood)
+    {
+        $seafood = Seafood::where('kode_seafood', $kode_seafood)->first();
+        $produklainnya = Seafood::where('status', 'siap dijual')->get();
+        return view('pembeli.produk.formpembelianseafood', compact('seafood', 'produklainnya'));
+    }
+
+    public function addchart($productId, $jumlah, $subtotal){
+        Keranjang::createkeranjangseafood($productId, $jumlah, $subtotal);
+        return redirect()->back()->with('success', 'Barang Telah dimasukan Kedalam Keranjang');
     }
 }

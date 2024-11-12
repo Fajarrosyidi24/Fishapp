@@ -44,12 +44,15 @@
                     <a href="{{ route('about2') }}" class="nav-item nav-link {{ request()->routeIs('about_information2') ? 'active' : '' }} {{ request()->routeIs('about2') ? 'active' : '' }}">About</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    <a href="#" class="nav-link 
+                    {{ request()->routeIs('pembeli.produk.seafood') ? 'active' : '' }}
+                     {{ request()->routeIs('beliseafood') ? 'active' : '' }}
+                     dropdown-toggle" data-bs-toggle="dropdown">
                         Produk
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="#" class="dropdown-item">Barang Sewa</a></li>
-                        <li><a href="#" class="dropdown-item">Seafoods</a></li>
+                        <li><a href="{{route('pembeli.produk.seafood')}}" class="dropdown-item">Seafoods</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -58,15 +61,27 @@
 
                 <!-- Ikon Keranjang -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link position-relative">
+                    <a href="{{route('keranjang.pembeli')}}" class="nav-link 
+                    {{ request()->routeIs('keranjang.pembeli') ? 'active' : '' }}
+                     {{ request()->routeIs('checkout.route') ? 'active' : '' }}
+                    position-relative">
+
+                        @php
+                        $jumlahseafood =\App\Models\Keranjang::where('user_id', Auth::user()->id)->where('status', 'dimasukan dalam keranjang')->count();
+                        $jumlahTabel = $jumlahseafood;
+                    @endphp
+
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
                         class="bi bi-cart4" viewBox="0 0 16 16">
                         <path
                             d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0" />
                     </svg>
-                        <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
-                            3
-                        </span>
+                    @if ($jumlahTabel === 0)
+                    @else
+                    <span class="position-absolute start-100 translate-middle badge rounded-pill bg-danger">
+                        {{$jumlahTabel}}
+                    </span>
+                    @endif
                     </a>
                 </li>
                 
@@ -76,7 +91,10 @@
             <div class="ms-auto d-flex align-items-center">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link {{ request()->routeIs('profile.edit') ? 'active' : '' }} dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                            <a href="#" class="nav-link 
+                            {{ request()->routeIs('profile.edit') ? 'active' : '' }}
+                             {{ request()->routeIs('alamat.pengiriman.pembeli') ? 'active' : '' }}  
+                             dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
                                 @if (optional(Auth::user()->updateProfile)->foto)
                                 <img class="border rounded-circle p-2"
                             src="{{ asset('storage/fotouser/' . Auth::user()->updateProfile->foto) }}"
@@ -92,6 +110,7 @@
                                 <li><a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a></li>
                                 <li><a href="#" class="dropdown-item">Pesanan Saya</a></li>
                                 <li><a href="#" class="dropdown-item">Penyewaan Alat</a></li>
+                                <li><a href="{{route('alamat.pengiriman.pembeli')}}" class="dropdown-item">Alamat Pengiriman</a></li>
                                 <li><a href="#" class="dropdown-item">Settings</a></li>
                                 <li class="mt-1">
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">

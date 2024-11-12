@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Nelayan;
 use App\Models\Seafood;
+use App\Models\BarangSewa;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Mail\SendNelayanEmail;
 use App\Mail\SeafoodVerification;
 use App\Mail\NelayanVerifyAccount;
 use Illuminate\Support\Facades\DB;
+use App\Mail\BarangSewaVerification;
 use App\Mail\SendSeafoodDeleteEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -26,7 +28,7 @@ class AdminController extends Controller
         if (Auth::guard('admin')->check()) {
             return redirect()->route('admin.dashboard');
         }
-
+        
         return view('admin.login');
     }
 
@@ -150,17 +152,30 @@ class AdminController extends Controller
         }
     }
 
-    public function verifikasiseafood($id) {
+    public function verifikasiseafood($id)
+    {
         $seafood = Seafood::where('kode_seafood', $id)->first();
         $email = $seafood->nelayan->email;
-        $Url = 'Selamat Seafood yan anda ajukan denngan nama '. $seafood->nama .' Telah memenuhi persyaratan dan berhasil diverifikasi untuk dijual';
+        $Url = 'Selamat Seafood yan anda ajukan denngan nama ' . $seafood->nama . ' Telah memenuhi persyaratan dan berhasil diverifikasi untuk dijual';
         Mail::to($email)->send(new SeafoodVerification($Url));
         $seafood->status = 'siap dijual';
         $seafood->save();
         return redirect()->back()->with('success', 'seafood telah diverifikasi');
     }
 
-    public function detailpermintaanseafood($id) {
+    public function verifikasibarang($id)
+    {
+        $barang = BarangSewa::where('kode_barang', $id)->first();
+        $email = $barang->nelayan->email;
+        $Url = 'Selamat Barang yan anda ajukan dengan nama ' . $barang->nama_barang . ' Telah memenuhi persyaratan dan berhasil diverifikasi untuk dijual';
+        Mail::to($email)->send(new BarangSewaVerification($Url));
+        $barang->status = 'siap dijual';
+        $barang->save();
+        return redirect()->back()->with('success', 'seafood telah diverifikasi');
+    }
+
+    public function detailpermintaanseafood($id)
+    {
         $seafood = Seafood::where('kode_seafood', $id)->first();
         return view('admin.detailseafood', compact('seafood'));
     }
@@ -173,5 +188,25 @@ class AdminController extends Controller
         Mail::to($email)->send(new SendSeafoodDeleteEmail($respon));
         $seafood->delete();
         return redirect()->back()->with('success', 'Pesan Penolakan Telah dikirimkan');
+    }
+
+    public function tolakbarang(Request $request, $id)
+    {
+        $barang = BarangSewa::where('kode_barang', $id)->first();
+        $respon = $request->all();
+        $email = $barang->nelayan->email;
+        Mail::to($email)->send(new SendSeafoodDeleteEmail($respon));
+        $barang->delete();
+        return redirect()->back()->with('success', 'Pesan Penolakan Telah dikirimkan');
+    }
+
+    public function permintaanbarangsewa(){
+        $barang = BarangSewa::where('status', 'menunggu di verifikasi admin')->get();
+        return view('admin.data-permintaan-barangsewa', compact('barang'));
+    }
+
+    public function detailpermintaanbarang($id){
+        $barang = BarangSewa::where('kode_barang', $id)->first();
+        return view('admin.detailpermintaanbarang', compact('barang'));
     }
 }

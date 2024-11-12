@@ -121,5 +121,20 @@ class Nelayan extends Authenticatable
             $nelayan->detailprofile->save();
         }
         return $nelayan;
-    }    
+    }
+
+    public static function filterkode($kode_seafood){
+    $idnelayan = [];
+    foreach ($kode_seafood as $kods) {
+        $seafood = Seafood::where('kode_seafood', $kods)->first();
+        if ($seafood) {
+            $nelayan = Nelayan::find($seafood->nelayan_id);
+            if ($nelayan) {
+                $idnelayan[] = $nelayan->id;
+            }
+        }
+    }
+
+    return $idnelayan;
+    }
 }

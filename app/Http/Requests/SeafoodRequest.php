@@ -38,7 +38,7 @@ class SeafoodRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama seafood harus diisi.',
+        'name.required' => 'Nama seafood harus diisi.',
         'name.string' => 'Nama seafood harus berupa teks.',
         'name.max' => 'Nama seafood maksimal 255 karakter.',
         
