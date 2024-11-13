@@ -209,4 +209,6 @@ class AdminController extends Controller
         $barang = BarangSewa::where('kode_barang', $id)->first();
         return view('admin.detailpermintaanbarang', compact('barang'));
     }
+
+    //njajal
 }
