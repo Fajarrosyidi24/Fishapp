@@ -14,7 +14,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class BelajarTest extends TestCase
 {
     use RefreshDatabase;
-
     /**
      * A basic feature test example.
      */
@@ -34,9 +33,9 @@ class BelajarTest extends TestCase
     public function nelayan_create()
     {
         $nelayan = Nelayan::create([
-            'name' => 'mohammad fajar rosyidi',
+            'name' => 'mohamad rizki dwi ramadhan',
             'status' => 'terdaftar',
-            'email' => 'fajarrosyidi80@gmail.com',
+            'email' => 'rizkidwi1140@gmail.com',
             'password' => bcrypt('12345678'),
         ]);
 
@@ -59,8 +58,8 @@ class BelajarTest extends TestCase
             'kabupaten' => 'banyuwangi',
             'kecamatan' => 'glenmore',
             'desa' => 'karangharjo',
-            'dusun' => 'sidodadi',
-            'rt' => '002',
+            'dusun'=> 'sidodadi',
+            'rt'=> '002',
             'rw' => '001',
             'code_pos' => '68466',
             'jenis_kelamin' => 'laki-laki',
@@ -73,12 +72,11 @@ class BelajarTest extends TestCase
 
         return $profile;
     }
-
-    public function test_login_nelayan()
-    {
+  
+    public function test_login_nelayan(){
         BelajarTest::nelayan_create_profile();
         $request = [
-            'email' => 'fajarrosyidi80@gmail.com',
+            'email' => 'rizkidwi1140@gmail.com',
             'password' => '12345678'
         ];
 
@@ -148,8 +146,36 @@ class BelajarTest extends TestCase
             'price' => 30000,
             'photo' => $pasFotoS,
         ];
+    }
+
+    public function test_edit_data_seafood()
+    {
+        $seafood = $this->test_input_data_seafood();
+        $kode_seafood = $seafood->kode_seafood;
+
+        $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
+        $pasFotoS = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
+
+        $request = [
+            'name' => 'Tuna',
+            'type' => 'ikan',
+            'quantity' => 100,
+            'price' => 30000,
+            'photo' => $pasFotoS,
+        ];
 
         $response = $this->post(route('edit.seafood', ['id' => $kode_seafood]), $request);
         $response->assertRedirect(route('sefood.index'))->assertSessionHas('success', 'Data seafood berhasil diedit.');
     }
+
+    public function test_hapus_data_seafood() {
+        $seafood = $this->test_input_data_seafood();
+        $kode_seafood = $seafood->kode_seafood;
+
+        $response = $this->post(route('nealayan.deleteseafood', ['kode_seafood' => $kode_seafood]));
+
+        // Perbarui assertRedirect ke halaman index atau halaman lain yang sesuai
+        $response->assertRedirect(route('sefood.index'))->assertSessionHas('success', 'Seafood berhasil dihapus.');
+    }
+
 }

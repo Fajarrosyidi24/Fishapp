@@ -41,18 +41,18 @@ class SeafoodRequest extends FormRequest
         'name.required' => 'Nama seafood harus diisi.',
         'name.string' => 'Nama seafood harus berupa teks.',
         'name.max' => 'Nama seafood maksimal 255 karakter.',
-        
+
         'type.required' => 'Jenis seafood harus dipilih.',
         'type.string' => 'Jenis seafood harus berupa teks.',
-        
+
         'quantity.required' => 'Jumlah seafood harus diisi.',
         'quantity.numeric' => 'Jumlah seafood harus berupa angka.',
         'quantity.min' => 'Jumlah seafood minimal 1 kg.',
-        
+
         'price.required' => 'Harga seafood harus diisi.',
         'price.numeric' => 'Harga seafood harus berupa angka.',
         'price.min' => 'Harga seafood tidak boleh negatif. dan minimal Rp. 1000',
-        
+
         'photo.image' => 'File yang diunggah harus berupa gambar.',
         'photo.mimes' => 'Gambar harus berformat: jpeg, png, jpg, gif.',
         'photo.max' => 'Ukuran gambar maksimal 10MB.',

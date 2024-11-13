@@ -72,7 +72,7 @@ class SeafoodController extends Controller
     public function deleteseafood($kode_seafood)
     {
         Seafood::deleteFromRequest($kode_seafood);
-        return redirect()->back()->with('success', 'Seafood berhasil dihapus.');
+        return redirect()->route('sefood.index')->with('success', 'Seafood berhasil dihapus.');
     }
 
     public function seafoodguest()
