@@ -2,145 +2,187 @@
 
 namespace Tests\Feature;
 
-use App\Models\Nelayan;
-use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Nelayan;
+use App\Models\Seafood;
+use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Foundation\Testing\WithFaker;
 
 class BookTest extends TestCase
 {
-    use RefreshDatabase;
+    // use RefreshDatabase;
+
     /**
      * A basic feature test example.
      */
-//Fungsi ini adalah tes sederhana yang mengirimkan permintaan GET ke beranda (/) 
-//dan memeriksa apakah status responsnya adalah 200, yang menunjukkan bahwa halaman berhasil dimuat.
+    //Fungsi ini adalah tes sederhana yang mengirimkan permintaan GET ke beranda (/) 
+    //dan memeriksa apakah status responsnya adalah 200, yang menunjukkan bahwa halaman berhasil dimuat.
     public function test_example(): void
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
     }
-//tes akses ke halaman login untuk nelayan dengan rute login_nelayan
-//dan memastikan respons status adalah 200, artinya halaman tersebut dapat diakses.
-    public function test_akses_halaman_login_nelayan() : void {
-        $response = $this->get(route('login_nelayan'));
-        $response ->assertStatus(200);
-    }
-//Fungsi ini membuat contoh data Nelayan menggunakan model Nelayan.
-//Data yang dimasukkan meliputi name, status, email, dan password.
-//Fungsi ini akan digunakan untuk membuat akun nelayan di beberapa tes.
-    public function nelayan_create(){
-        $nelayan = Nelayan::create([
-            'name' => 'yassar',
-            'status' => 'terdaftar',
-            'email' => 'kikioryassar.2003@gmail.com',
-            'password' => bcrypt('gakngerti180703'),
-        ]);
-
-        return $nelayan;
-    }
-//Fungsi ini pertama-tama memanggil nelayan_create() untuk membuat data nelayan yang terdaftar.
-//Kemudian, fungsi ini melakukan POST request ke rute nelayan.login dengan data email dan password untuk mencoba login.
-//Fungsi ini mengharapkan redirect ke halaman dashboard nelayan (nelayan.dashboard) dan menampilkan pesan sukses login di sesi.
-    public function test_login_nelayan(){
-        BookTest::nelayan_create();
-        $request = [
-            'email' => 'kikioryassar.2003@gmail.com',
-            'password' =>  'gakngerti180703',
-        ];
-
-        $response = $this->post(route('nelayan.login'), $request);
-        $response->assertRedirect(route('nelayan.dashboard'))
-            ->assertSessionHas('success', 'nelayan login succesfully');
-    }
-
-    public function test_create_data_seafood_success()
+    //tes akses ke halaman login untuk nelayan dengan rute login_nelayan
+    //dan memastikan respons status adalah 200, artinya halaman tersebut dapat diakses.
+    public function test_akses_halaman_login_nelayan(): void
     {
-        $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg'); //menentukan path atau lokasi file gambar yang akan diunggah sebagai photo untuk data seafood
+        $response = $this->get(route('login_nelayan'));
+        $response->assertStatus(200);
+    }
+    //Fungsi ini membuat contoh data Nelayan menggunakan model Nelayan.
+    //Data yang dimasukkan meliputi name, status, email, dan password.
+    //Fungsi ini akan digunakan untuk membuat akun nelayan di beberapa tes.
+
+    public function test_nelayan_create()
+    {
+
+        $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
         $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
 
         $request = [
-            'name' => 'yono',
-            'type' => 'tuna',
-            'quantity' => 20,
-            'photo' => $pasFoto,
-            'price' => 10000,
+            'name' => fake()->name(),
+            'jenis_kelamin' => 'Laki-laki',
+            'tempat_lahir' => fake()->word(),
+            'tanggal_lahir' => fake()->date(),
+            'district' => fake()->word(),
+            'sub_district' => fake()->word(),
+            'desa' => fake()->word(),
+            'dusun' => fake()->word(),
+            'rt' => '002',
+            'rw' => '001',
+            'kode_pos' => '68466',
+            'email' => fake()->email(),
+            'no_telepon' => '082542534754',
+            'nama_kapal' => fake()->name(),
+            'jenis_kapal' => fake()->word(),
+            'jumlah_abk' => 200,
+            'pas_foto' => $pasFoto,
         ];
-        $response = $this->post(route('sefood.store'), $request);
+
+        $response = $this->post(route('post_form_pendaftaran_nelayan'), $request);
         $response->assertStatus(302);
-        //$response->assertRedirect()->assertSessionHas('success', 'Data seafood berhasil ditambahkan.');
+
+        return Nelayan::latest()->first();
+
     }
 
-    // public function test_update_data_seafood_success()
-    // {
-    
-    //     $nelayan = \App\Models\Nelayan::create([
-    //         'name' => 'yassar',
-    //         'email' => 'kikioryassar.2003@gmail.com',
-    //         'status' => 'active',
-    //     ]);
-        
-    //     $seafood = \App\Models\Seafood::create([
-    //         'kode_seafood' => 'SFD001',
-    //         'nama' => 'yono',
-    //         'jenis_seafood' => 'tuna',
-    //         'jumlah' => 20,
-    //         'foto' => 'path/to/default/photo.jpg',
-    //         'nelayan_id' => $nelayan->id,
-    //     ]);
-    
-    //     $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
-    //     $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
-    
-    //     $updateRequest = [
-    //         'nama' => 'yono update',
-    //         'jenis_seafood' => 'salmon',
-    //         'jumlah' => 30,                    
-    //         'photo' => $pasFoto,
-    //         'price' => 15000,
-    //     ];
+    public function test_login_admin(){
+        // $this->artisan('db:seed --class=AdminSeeder');
 
-    //     $response = $this->post(route('edit.seafood', ['id' => $seafood->kode_seafood]), $updateRequest);
-    //     $response->assertStatus(302);
-    // }
-    
-    // public function testDeleteSeafoodSuccess()
-    // {
-    //     $nelayan = \App\Models\Nelayan::create([
-    //         'name' => 'yassar',
-    //         'email' => 'kikioryassar.2003@gmail.com',
-    //         'password' => bcrypt('gakngerti180703'),
-    //         'status' => 'active',
-    //     ]);
-    
+        $request = [
+            'email' => 'fajarrosyidi80@gmail.com',
+            'password' => 'fajarrs2020',
+        ];
 
-    //     $response = $this->post(route('nelayan.login'), [
-    //         'email' => 'kikioryassar.2003@gmail.com',
-    //         'password' => 'gakngerti180703',
-    //     ]);
-    
-    //     $response->assertRedirect(route('nelayan.dashboard'));
-    
-    //     $seafood = \App\Models\Seafood::create([
-    //         'kode_seafood' => 'SF001',
-    //         'nama' => 'Tuna',
-    //         'jenis_seafood' => 'Tuna',
-    //         'jumlah' => 10,
-    //         'foto' => 'path_to_foto',
-    //         'nelayan_id' => $nelayan->id,
-    //         'status' => 'menunggu verifikasi'
-    //     ]);
-    
-    //     $response = $this->delete(route('nelayan.deleteseafood', ['kode_seafood' => $seafood->kode_seafood]));
-    // //memverifikasi bahwa data seafood dengan kode_seafood tidak lagi ada di database.
-    //     $response->assertRedirect(route('sefood.index'));
-    
-    //     $this->assertDatabaseMissing('seafoods', ['kode_seafood' => $seafood->kode_seafood]);
-    //     //memastikan bahwa data telah berhasil dihapus dari tabel seafoods.
-    // }    
-    
+        $response = $this->post(route('admin.login'), $request);
+        $response->assertRedirect(route('admin.dashboard'))->assertSessionHas('success', 'admin login succesfully');
+    }
+
+    public function test_verifikasi_akun_nelayan(){
+        $this->test_login_admin();
+        $nelayan = $this->test_nelayan_create();
+        $id = $nelayan->id;
+        $response = $this->post(route('verifikasi.nelayan', ['id' => $id ]));
+        $response->assertRedirect(route('admin.dashboard'))->assertSessionHas('success', 'Akun berhasil diverifikasi, link aktivasi telah dikirim ke email nelayan.');
+
+        return Nelayan::latest()->first();
+    }
+
+    public function test_tambahkan_password_nelayan_halaman(){
+        $nelayan = $this->test_verifikasi_akun_nelayan();
+        $token = $nelayan->remember_token;
+        $email = $nelayan->email;
+        $response = $this->get('nelayan/registered/'.$email.'/'.$token);
+        $response->assertStatus(200);
+    }
+
+    public function test_tambahkan_password_nelayan_post(){
+        $nelayan = $this->test_verifikasi_akun_nelayan();
+        $token = $nelayan->remember_token;
+
+        $request = [
+            'email' => $nelayan->email,
+            'password' => '12345678',
+            'password_confirmation' => '12345678'
+        ];
+
+        $response = $this->post(route('nelayan.registereduser', ['token' => $token]), $request);
+        $response->assertStatus(302);
+
+        return Nelayan::latest()->first();
+    }
+
+    public function test_login_nelayan_post(){
+        $nelayan = $this->test_tambahkan_password_nelayan_post();
+        $email = $nelayan->email;
+        $password = '12345678';
+
+        $request = [
+            'email' => $email,
+            'password' => $password,
+        ];
+        $response = $this->post(route('nelayan.login'), $request);
+        $response->assertRedirect(route('nelayan.dashboard'))->assertSessionHas('success', 'nelayan login succesfully');
+    }
+
+    public function test_akses_halaman_tambah_seafood(){
+        $this->test_login_nelayan_post();
+        $response = $this->get(route('sefood.index'));
+        $response->assertStatus(200);
+    }
+
+    public function test_akses_halaman_tambah_seafood_post(){
+        $this->test_login_nelayan_post();
+
+        $pathToFotoAsli = base_path('tests/fixtures/download (2).jpeg');
+        $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
+
+        $request = [
+            'name' => fake()->name(),
+            'type' => fake()->word(),
+            'quantity' => 10, 
+            'price' => 20000, 
+            'photo' => $pasFoto,
+        ];
+
+        $response = $this->post(route('sefood.store'), $request);
+        $response->assertRedirect(route('sefood.index'))->assertSessionHas('success', 'Data seafood berhasil ditambahkan.');
+
+        return Seafood::latest()->first();
+    }
+
+
+    public function test_update_data_seafood_success()
+    {
+       $seafood = $this->test_akses_halaman_tambah_seafood_post();
+
+        $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
+        $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
+
+        $id = $seafood->kode_seafood;
+
+        $request = [
+            'name' => 'yono update',
+            'type' => 'salmon',
+            'quantity' => 30,                    
+            'photo' => $pasFoto,
+            'price' => 15000,
+        ];
+
+        $response = $this->post(route('edit.seafood', ['id' => $id]), $request);
+        $response->assertStatus(302);
+    }
+
+    public function test_DeleteSeafoodSuccess()
+    {
+
+        $seafood = $this->test_akses_halaman_tambah_seafood_post();
+        $id = $seafood->kode_seafood;
+        $response = $this->post(route('nealayan.deleteseafood', ['kode_seafood' => $id]));
+        $response->assertStatus(302);
+    }    
+
 }
