@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Nelayan;
-use Illuminate\Support\Str;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Nelayan;
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BookTest extends TestCase
 {

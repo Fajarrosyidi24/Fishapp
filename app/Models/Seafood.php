@@ -45,14 +45,12 @@ class Seafood extends Model
     public static function createFromRequest(Request $request)
     {
         $fotoFile = $request->file('photo');
-
-        // Loop untuk menemukan kode seafood yang unik
         do {
             $maxKodeSeafood = Seafood::max('kode_seafood');
-            $nextNumber = $maxKodeSeafood ? intval(substr($maxKodeSeafood, 2)) + 1 : 1; // Mulai dari 1 jika tidak ada kode sebelumnya
+            $nextNumber = $maxKodeSeafood ? intval(substr($maxKodeSeafood, 2)) + 1 : 1;
             $formattedNumber = str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
             $newKodeSeafood = 'SF' . $formattedNumber;
-        } while (Seafood::where('kode_seafood', $newKodeSeafood)->exists()); // Periksa apakah kode sudah ada
+        } while (Seafood::where('kode_seafood', $newKodeSeafood)->exists());
 
         // Proses penyimpanan foto
         $namaFileUnik = Str::uuid() . '_' . time() . '_' . $fotoFile->getClientOriginalName();
@@ -66,7 +64,6 @@ class Seafood extends Model
             $newKodeharga = 'H' . $formattedNumber1;
         } while (HargaSeafood::where('kode_harga', $newKodeharga)->exists()); // Periksa apakah kode sudah ada
 
-        // Menyimpan data seafood
         self::create([
             'kode_seafood' => $newKodeSeafood,
             'nama' => $request->input('name'),

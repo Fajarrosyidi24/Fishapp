@@ -46,7 +46,6 @@ class SeafoodController extends Controller
         if (!$fotoFile) {
             return redirect()->back()->with('status', 'File foto tidak ada. Pastikan Anda mengunggah file yang benar.');
         }
-        // Menyimpan seafood baru dan harga menggunakan request yang sudah divalidasi
         Seafood::createFromRequest($request);
         return redirect()->route('sefood.index')->with('success', 'Data seafood berhasil ditambahkan.');
     }
@@ -59,7 +58,7 @@ class SeafoodController extends Controller
 
     public function edit($id)
     {
-        $seafood=Seafood::where("kode_seafood", $id)->first();
+    $seafood=Seafood::where("kode_seafood", $id)->first();
      return view('nelayan.seafood.edit-seafood', compact('seafood'));
     }
 
