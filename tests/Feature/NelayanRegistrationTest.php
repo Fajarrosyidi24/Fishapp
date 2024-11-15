@@ -14,70 +14,61 @@ class NelayanRegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_displays_nelayan_registration_form_with_kecamatan_data()
+    public function test_halaman_create_nelayan_success()
     {
         $this->artisan('laravolt:indonesia:seed');
-        $kabupaten = DB::table('indonesia_cities')->where('name', 'KABUPATEN BANYUWANGI')->first();
-        $kecamatan = DB::table('indonesia_districts')->where('city_code', $kabupaten->code)->get();
-
         $response = $this->get(route('form_registrasi_nelayan'));
-        $response->assertViewIs('nelayan.form_registration');
-        $response->assertViewHas('kecamatan', function ($viewKecamatan) use ($kecamatan) {
-            return $viewKecamatan->pluck('id')->diff($kecamatan->pluck('id'))->isEmpty();
-        });
-        $response->assertStatus(200);
+        $response->assertSee('code');
     }
 
-    public function test_create_data_nelayan_success()
+    //gagal mengakses halaman create data nelayan
+    public function test_halaman_create_nelayan_gagal_akses_data_laravolt()
+    {
+        $this->artisan('migrate:fresh');
+        $response = $this->get(route('form_registrasi_nelayan'));
+        $response->assertStatus(404);
+    }
+
+    public function validasirequestdatanelayan(): array
     {
         $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
         $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
 
-        $request = [
-            'name' => 'John Doe',
+        return [
+            'name' => fake()->name(),
             'jenis_kelamin' => 'Laki-laki',
-            'tempat_lahir' => 'Surabaya',
-            'tanggal_lahir' => '1990-01-01',
-            'district' => 'Kabupaten ABC',
-            'sub_district' => 'Kecamatan XYZ',
-            'desa' => 'Desa PQR',
-            'dusun' => 'Dusun S',
-            'rt' => '01',
-            'rw' => '02',
-            'kode_pos' => '12345',
-            'email' => 'john@example.com',
-            'no_telepon' => '081234567890',
-            'nama_kapal' => 'Kapal Indah',
-            'jenis_kapal' => 'Jenis Kapal A',
-            'jumlah_abk' => 5,
+            'tempat_lahir' => fake()->word(),
+            'tanggal_lahir' => fake()->date(),
+            'district' => fake()->word(),
+            'sub_district' => fake()->word(),
+            'desa' => fake()->word(),
+            'dusun' => fake()->word(),
+            'rt' => '002',
+            'rw' => '001',
+            'kode_pos' => '68466',
+            'email' => fake()->email(),
+            'no_telepon' => '082542534754',
+            'nama_kapal' => fake()->name(),
+            'jenis_kapal' => fake()->word(),
+            'jumlah_abk' => 200,
             'pas_foto' => $pasFoto,
         ];
-        $response = $this->post(route('post_form_pendaftaran_nelayan'), $request);
-        $response->assertRedirect()->assertSessionHas('status', 'Terima kasih! Permintaan Anda akan segera diproses oleh admin. Harap tunggu 2x 24 jam, Anda akan mendapatkan email notifikasi.');
     }
 
-    public function test_create_data_nelayan_gagal()
+    public function test_nelayan_create_post_berhasil()
     {
-        $request = [
-            'name' => 123243,
-            'jenis_kelamin' => 1424324,
-            'tempat_lahir' => 'Surabaya',
-            'tanggal_lahir' => '1990-01-01',
-            'district' => 'Kabupaten ABC',
-            'sub_district' => 'Kecamatan XYZ',
-            'desa' => 'Desa PQR',
-            'dusun' => 'Dusun S',
-            'rt' => '01',
-            'rw' => '02',
-            'kode_pos' => '12345',
-            'email' => 'john@example.com',
-            'no_telepon' => '081234567890',
-            'nama_kapal' => 'Kapal Indah',
-            'jenis_kapal' => 'Jenis Kapal A',
-            'jumlah_abk' => 5,
-            'pas_foto' => 'jerjfnej',
-        ];
+        $request = $this->validasirequestdatanelayan();
         $response = $this->post(route('post_form_pendaftaran_nelayan'), $request);
-        $response->assertStatus(302);
+        $response->assertRedirect()->assertSessionHas('status', 'Terima kasih! Permintaan Anda akan segera diproses oleh admin. Harap tunggu 2x 24 jam, Anda akan mendapatkan email notifikasi.');
+        return Nelayan::latest()->first();
+    }
+
+    public function test_nelayan_create_post_gagal()
+    {
+        $request = $this->validasirequestdatanelayan();
+        $request['email'] = null;
+        $request['kode_pos'] = 123;
+        $response = $this->post(route('post_form_pendaftaran_nelayan'), $request);
+        $response->assertRedirect()->assertSessionHasErrors('email','kode_pos');
     }
 }

@@ -13,172 +13,101 @@ use Tests\Feature\NelayanRegistrationTest;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class VerifikasiNelayanTest extends TestCase
+class VerifikasiNelayanTest extends NelayanRegistrationTest
 {
-    use RefreshDatabase;
-
-    public function test_admin_akses_halaman_login()
-    {
-        $response = $this->get(route('login_admin'));
-        $response->assertStatus(200);
-    }
-
-    public function test_login_admin_post()
+    public function test_login_admin_success()
     {
         $this->artisan('db:seed --class=AdminSeeder');
         $request = [
             'email' => 'fajarrosyidi80@gmail.com',
             'password' => 'fajarrs2020',
         ];
+
         $response = $this->post(route('admin.login'), $request);
-        $response->assertRedirect(route('admin.dashboard'))
-            ->assertSessionHas('success', 'admin login succesfully');
+        $response->assertRedirect(route('admin.dashboard'))->assertSessionHas('success', 'admin login succesfully');
     }
 
-    public function test_login_admin_post_gagal_login()
+    public function test_login_admin_gagal()
     {
         $this->artisan('db:seed --class=AdminSeeder');
         $request = [
-            'email' => 'fajarrosyidi8000@gmail.com', //email salah
-            'password' => 'fajarrs2020', //password salah
+            'email' => 'fajarrosdi80@gmail.com', //email salah
+            'password' => 12345678, //password salah
         ];
         $response = $this->post(route('admin.login'), $request);
-        $response->assertStatus(302);
+        $response->assertRedirect()->assertSessionHas('gagal', 'email atau password salah');
     }
 
-    public function test_create_data_nelayan_success()
-    {
-        $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
-        $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
-
-        $request = [
-            'name' => 'John Doe',
-            'jenis_kelamin' => 'Laki-laki',
-            'tempat_lahir' => 'Surabaya',
-            'tanggal_lahir' => '1990-01-01',
-            'district' => 'Kabupaten ABC',
-            'sub_district' => 'Kecamatan XYZ',
-            'desa' => 'Desa PQR',
-            'dusun' => 'Dusun S',
-            'rt' => '01',
-            'rw' => '02',
-            'kode_pos' => '12345',
-            'email' => 'fajarrosyidi80@gmail.com',
-            'no_telepon' => '081234567890',
-            'nama_kapal' => 'Kapal Indah',
-            'jenis_kapal' => 'Jenis Kapal A',
-            'jumlah_abk' => 15,
-            'pas_foto' => $pasFoto,
-        ];
-        $response = $this->post(route('post_form_pendaftaran_nelayan'), $request);
-        $response->assertRedirect()->assertSessionHas('status', 'Terima kasih! Permintaan Anda akan segera diproses oleh admin. Harap tunggu 2x 24 jam, Anda akan mendapatkan email notifikasi.');
-    }
-
-    public function test_akses_halaman_verifikasi_nelayan()
-    {
-        VerifikasiNelayanTest::test_login_admin_post();
-        VerifikasiNelayanTest::test_create_data_nelayan_success();
-        $response = $this->get(route('viewdatapermintaannelayan'));
+    public function test_halaman_detail_nelayan_success(){
+        $this->test_login_admin_success();
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->id;
+        $response = $this->get(route('detailpermintaanakunnelayan', ['id' => $id]));
         $response->assertStatus(200);
     }
 
-    public function test_akses_halaman_verifikasi_nelayan_gagal()
-    {
-        $response = $this->get(route('viewdatapermintaannelayan'));
-        $response->assertStatus(302); //haruslah login terlebih dahulu
+    public function test_halaman_detail_nelayan_gagal(){
+        //belum login
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->id;
+        $response = $this->get(route('detailpermintaanakunnelayan', ['id' => $id]));
+        $response->assertRedirect()->assertSessionHas('error', 'mohon login terlebih dahulu');
     }
 
-    public function test_akses_halaman_detail_nelayan()
-    {
-        VerifikasiNelayanTest::test_akses_halaman_verifikasi_nelayan();
-        $response = $this->get(route('detailpermintaanakunnelayan', ['id' => 3]));
-        $response->assertStatus(200);
+    public function test_halaman_detail_nelayan_gagal_2(){
+        $this->test_login_admin_success();
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->email;
+        $response = $this->get(route('detailpermintaanakunnelayan', ['id' => $id]));
+        $response->assertStatus(404);
     }
 
-    public function test_akses_halaman_detail_nelayan_gagal()
-    {
-        $response = $this->get(route('detailpermintaanakunnelayan', ['id' => 3])); //id tidak ditemukan
-        $response->assertStatus(302); //haruslah login terlebih dahulu
-    }
-
-    public function test_verifikasi_nelayan()
-    {
-        VerifikasiNelayanTest::test_akses_halaman_verifikasi_nelayan();
-        $nelayan = Nelayan::find(4);
-        $response = $this->post(route('verifikasi.nelayan', ['id' => $nelayan->id]));
+    public function test_verifikasi_akun_nelayan_success(){
+        $this->test_login_admin_success();
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->id;
+        $response = $this->post(route('verifikasi.nelayan', ['id' => $id]));
         $response->assertRedirect(route('admin.dashboard'))->assertSessionHas('success', 'Akun berhasil diverifikasi, link aktivasi telah dikirim ke email nelayan.');
+
+        return Nelayan::latest()->first();
     }
 
-    public function test_verifikasi_nelayan_gagal()
-    {
-        VerifikasiNelayanTest::test_create_data_nelayan_success();
-        $nelayan = Nelayan::find(5); 
-        $response = $this->post(route('verifikasi.nelayan', ['id' => $nelayan->email])); //id salah
-        $response->assertStatus(302);
+    public function test_verifikasi_akun_nelayan_gagal(){
+        //belum log in
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->id;
+        $response = $this->post(route('verifikasi.nelayan', ['id' => $id]));
+        $response->assertRedirect()->assertSessionHas('error', 'mohon login terlebih dahulu');
     }
 
-    public function test_verifikasi_nelayan_update_password_halaman()
-    {
-        VerifikasiNelayanTest::test_create_data_nelayan_success();
-        $token = Str::random(15);
-        $nelayan = Nelayan::find(6);
-        $nelayan->remember_token =  $token;
-        $nelayan->save();
-
-        $response = $this->get(route('nelayan.regnel', ['email' => $nelayan->remember_token, 'token' => $nelayan->email]));
-        $response->assertStatus(200);
+    public function test_verifikasi_akun_nelayan_gagal_2(){
+        $this->test_login_admin_success();
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = 10000; //tidak menenmukan id nelayan
+        $response = $this->post(route('verifikasi.nelayan', ['id' => $id]));
+        $response->assertStatus(404);
     }
 
-    public function test_verifikasi_nelayan_update_password_post()
-    {
-        VerifikasiNelayanTest::test_create_data_nelayan_success();
-        $token = Str::random(15);
-        $nelayan = Nelayan::find(7);
-        $nelayan->remember_token =  $token;
-        $nelayan->save();
-
-        $request = [
-            'email' => $nelayan->email,
-            'password' => '12345678',
-            'password_confirmation'=> '12345678',
-        ];
-
-        $response = $this->post(route('nelayan.registereduser', ['email' => $nelayan->email, 'token' => $nelayan->remember_token]), $request);
-        $response->assertRedirect(route('login_nelayan'))->assertSessionHas('success', 'silahkan login menggunakan email dan password yang baru saja di daftarkan');
+    public function test_tolak_akun_nelayan(){
+        $this->test_login_admin_success();
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->id;
+        $response = $this->post(route('tolakakunnelayan', ['id' => $id]));
+        $response->assertRedirect()->assertSessionHas('status', 'Pesan Penolakan Telah dikirimkan');
     }
 
-    //function create data bukan test
-    public function nelayan_create(){
-        $nelayan = Nelayan::create([
-            'name' => 'mohammad fajar rosyidi',
-            'status' => 'terdaftar',
-            'email' => 'fajarrosyidi80@gmail.com',
-            'password' => bcrypt('12345678'),
-        ]);
-
-        return $nelayan;
+    public function test_tolak_akun_nelayan_gagal(){
+        $this->test_login_admin_success();
+        $id = 1213; //tidak menemukan id
+        $response = $this->post(route('tolakakunnelayan', ['id' => $id]));
+        $response->assertStatus(404);
     }
 
-    public function test_login_nelayan(){
-        VerifikasiNelayanTest::nelayan_create();
-        $request = [
-            'email' => 'fajarrosyidi80@gmail.com',
-            'password' =>  '12345678',
-        ];
-
-        $response = $this->post(route('nelayan.login'), $request);
-        $response->assertRedirect(route('nelayan.dashboard'))
-            ->assertSessionHas('success', 'nelayan login succesfully');
-    }
-
-    public function test_login_nelayan_gagal(){
-        VerifikasiNelayanTest::nelayan_create();
-        $request = [
-            'email' => 'fajarrosyidi@gmail.com', //email salah
-            'password' =>  '12345678910', //password salah
-        ];
-
-        $response = $this->post(route('nelayan.login'), $request);
-        $response->assertStatus(302);
+    public function test_tolak_akun_nelayan_gagal_2(){
+        //belum login
+        $nelayan = NelayanRegistrationTest::test_nelayan_create_post_berhasil();
+        $id = $nelayan->id;
+        $response = $this->post(route('tolakakunnelayan', ['id' => $id]));  
+        $response->assertRedirect()->assertSessionHas('error', 'mohon login terlebih dahulu');
     }
 }
