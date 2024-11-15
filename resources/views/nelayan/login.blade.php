@@ -80,27 +80,26 @@
                             </div>
                         </div>
                     </div>
+                   
+                </div>
+                
+                <div class="form-group form-check mb-3">
+                    <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                    <label class="form-check-label" for="remember">Ingat Saya</label>
+                </div>
 
-                    <div class="form-group form-check mb-3">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Ingat Saya</label>
-                    </div>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
 
-                    <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                <div class="text-center mb-3">
+                    <span class="text-muted">atau masuk dengan</span>
+                </div>
 
-                    <div class="text-center mb-3">
-                        <span class="text-muted">atau masuk dengan</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between mb-3">
-                        <a href="{{ route('nelayan.password.request') }}" class="d-block"
-                            style="font-size: 0.575rem;">Lupa
-                            Kata Sandi?</a>
-                        <a href="{{ route('login') }}" class="d-block" style="font-size: 0.575rem;">Masuk Sebagai
-                            Pembeli</a>
-                    </div>
-                </form>
-            </div>
+                <div class="d-flex justify-content-between mb-3">
+                    <a href="{{ route('nelayan.password.request') }}" class="d-block" style="font-size: 0.850rem;">Lupa Kata Sandi?</a>
+                    <a href="{{ route('login') }}" class="d-block" style="font-size: 0.850rem;">Masuk Sebagai Pembeli</a>
+                </div>            
+                
+            </form>
         </div>
     </div>
 

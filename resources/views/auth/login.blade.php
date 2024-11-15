@@ -1,13 +1,68 @@
 @extends('layouts.app')
-@section('title')
-<title>Login Page - Fishapp</title>
 
-<style>
-    .custom-title {
-    font-size: 2rem; /* Sesuaikan ukuran font sesuai kebutuhan */
-    font-weight: bold; /* Opsional: membuat font menjadi tebal */
-}
-</style>
+@section('title')
+    <title>Login Page - Fishapp</title>
+@endsection
+
+@section('head')
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .custom-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .social-login {
+            display: flex;
+            gap: 20px;
+            
+        }
+
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 50px;
+            color: #fff;
+            background-color: #333;
+            border: 1px solid #444;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            
+        }
+
+        .login-btn:hover {
+            background-color: #555;
+            
+        }
+
+        .login-btn img {
+            margin-right: 10px;
+        }
+
+        .facebook {
+            color: #1877F2;
+            margin-left: auto; /* Mendorong tombol Facebook ke sisi kanan */
+        }
+
+        .google {
+            color: #DB4437;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -28,7 +83,7 @@
                     <div class="input-group">
                         <input type="password" class="form-control" id="password" name="password" required placeholder="Masukkan kata sandi Anda">
                         <div class="input-group-append" id="toggle-password" style="cursor: pointer;">
-                            <span class="input-group-text d-flex align-items-center" style="height: 100%;">
+                            <span class="input-group-text d-flex align-items-center">
                                 <i class="bi bi-eye" id="eye-icon"></i>
                             </span>
                         </div>
@@ -46,20 +101,21 @@
                     <span class="text-muted">atau masuk dengan</span>
                 </div>
 
-                <div class="d-flex justify-content-between mb-3">
-                    <a href="{{route('google-auth')}}" class="btn btn-outline-danger w-48">
-                        <i class="bi bi-google"></i> Google
+                <div class="social-login">
+                    <a href="{{ route('google-auth') }}" class="login-btn google">
+                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" width="30">
+                        Google
                     </a>
-                    <a href="{{route('facebook-auth')}}" class="btn btn-outline-primary w-48">
-                        <i class="bi bi-facebook"></i> Facebook
+                    <a href="{{ route('facebook-auth') }}" class="login-btn facebook">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" width="30" style="margin-left:170px">
+                        Facebook    
                     </a>
                 </div>
 
                 <div class="d-flex justify-content-between mb-3">
-                    <a href="{{ route('password.request') }}" class="d-block" style="font-size: 0.675rem;">Lupa Kata Sandi?</a>
-                    <a href="{{ route('login_nelayan') }}" class="d-block" style="font-size: 0.675rem;">Masuk sebagai nelayan</a>
-                    {{-- <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.675rem;">Login sebagai Admin</a> --}}
-                </div>            
+                    <a href="{{ route('password.request') }}" style="font-size: 0.900rem; margin-top:25px;">Lupa Kata Sandi?</a>
+                    <a href="{{ route('login_nelayan') }}" style="font-size: 0.900rem; margin-top:25px;">Masuk sebagai nelayan</a>
+                </div>
             </form>
         </div>
     </div>
@@ -70,19 +126,19 @@
 
 @section('foot')
 <script>
-     document.getElementById('toggle-password').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eye-icon');
-    
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text'; // Tampilkan password
-                eyeIcon.classList.remove('bi-eye'); // Ganti ikon mata
-                eyeIcon.classList.add('bi-eye-slash'); // Ganti ikon mata
-            } else {
-                passwordInput.type = 'password'; // Sembunyikan password
-                eyeIcon.classList.remove('bi-eye-slash'); // Ganti ikon mata
-                eyeIcon.classList.add('bi-eye'); // Ganti ikon mata
-            }
-        });
+    document.getElementById('toggle-password').addEventListener('click', function() {
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('bi-eye');
+            eyeIcon.classList.add('bi-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('bi-eye-slash');
+            eyeIcon.classList.add('bi-eye');
+        }
+    });
 </script>
 @endsection

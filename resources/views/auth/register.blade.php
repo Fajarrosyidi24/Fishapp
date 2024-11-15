@@ -68,8 +68,8 @@
                 </div>
 
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('login') }}" class="d-block" style="font-size: 0.675rem;">Sudah punya akun? Login</a>
-                    <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.675rem;">Masuk sebagai Admin</a>
+                    <a href="{{ route('login') }}" class="d-block" style="font-size: 0.850rem;">Sudah punya akun? Login</a>
+                    <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.850rem;">Masuk sebagai Admin</a>
                 </div>            
             </form>
         </div>
