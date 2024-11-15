@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+//use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Nelayan;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 class BookTest extends TestCase
 {
-    // use RefreshDatabase;
+    //use RefreshDatabase;
 
     /**
      * A basic feature test example.
