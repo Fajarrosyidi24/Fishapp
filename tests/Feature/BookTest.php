@@ -14,11 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BookTest extends TestCase
 {
-<<<<<<< HEAD
     //use RefreshDatabase;
-=======
-    use RefreshDatabase;
->>>>>>> 719f8f68a40f5a3bcf1c61fb62d9c23bbb9c228d
 
     /**
      * A basic feature test example.
