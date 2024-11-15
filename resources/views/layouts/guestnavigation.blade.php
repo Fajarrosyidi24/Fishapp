@@ -3,7 +3,7 @@
     <div class="container-fluid px-4">
         <!-- Logo dan Judul -->
         <a href="{{ route('index') }}" class="navbar-brand d-flex align-items-center">
-            <img src="{{ asset('img/logo (1).svg') }}" alt="logo" style="width: 100px; height: 100px; margin-right: 10px;">
+            <img src="{{ asset('img/logo (1).svg') }}" alt="logo" style="width: 200px; height: 300px; margin-right: 10px;">
         </a>
 
         <!-- Button Toggler (Mobile) -->
