@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use app\models\Seafood;
 use App\Models\Nelayan;
 use Illuminate\Support\Str;
@@ -19,7 +20,13 @@ class NelayanController extends Controller
     public function registration()
     {
         $kabupaten = DB::table('indonesia_cities')->where('name', 'KABUPATEN BANYUWANGI')->first();
+        if (!$kabupaten) {
+            abort(404, 'Kabupaten not found');
+        }
         $kecamatan = DB::table('indonesia_districts')->where('city_code', $kabupaten->code)->get();
+        if ($kecamatan->isEmpty()) {
+            abort(404, 'Kecamatan not found');
+        }
         return view('nelayan.form_registration', compact('kecamatan'));
     }
 
@@ -63,9 +70,20 @@ class NelayanController extends Controller
     public function regnel(Request $request, $token, $email)
     {
         $token = $email;
+
         $email = DB::table('nelayans')
             ->where('remember_token', $token)
             ->value('email');
+
+        $nelayan = Nelayan::where([
+            'email' => $email,
+            'remember_token' => $token,
+        ])->first();
+
+        if (!$nelayan) {
+            abort(404);
+        }
+
         return view('nelayan.formregistered', [
             'request' => $request,
             'token' => $token,
@@ -130,6 +148,5 @@ class NelayanController extends Controller
         } else {
             return redirect()->back()->with('error', 'Gagal');
         }
-    }        
-    
+    }
 }

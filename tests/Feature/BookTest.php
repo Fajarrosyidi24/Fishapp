@@ -10,10 +10,15 @@ use App\Models\Seafood;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BookTest extends TestCase
 {
+<<<<<<< HEAD
     //use RefreshDatabase;
+=======
+    use RefreshDatabase;
+>>>>>>> 719f8f68a40f5a3bcf1c61fb62d9c23bbb9c228d
 
     /**
      * A basic feature test example.
@@ -39,7 +44,6 @@ class BookTest extends TestCase
 
     public function test_nelayan_create()
     {
-
         $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
         $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
 
@@ -67,11 +71,10 @@ class BookTest extends TestCase
         $response->assertStatus(302);
 
         return Nelayan::latest()->first();
-
     }
 
     public function test_login_admin(){
-        // $this->artisan('db:seed --class=AdminSeeder');
+        $this->artisan('db:seed --class=AdminSeeder');
 
         $request = [
             'email' => 'fajarrosyidi80@gmail.com',
