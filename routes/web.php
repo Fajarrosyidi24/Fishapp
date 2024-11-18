@@ -14,6 +14,7 @@ use App\Http\Controllers\NelayanSettingController;
 use App\Http\Controllers\ProfileNelayanController;
 use App\Http\Controllers\BarangsewaController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\PesanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -70,6 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/sewa/barangsewa/{kode_barang}', [BarangsewaController::class, 'sewa'])->name('sewabarang');
         Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
+        Route::post('/checkout/seafood/pesan', [PesanController::class, 'store'])->name('pesanan.submit');
     });
 });
 
