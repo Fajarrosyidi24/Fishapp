@@ -11,6 +11,7 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "laravolt/indonesia": "^0.35.0",
+        "royryando/laravel-duitku": "^1.0",
         "symfony/mailer": "^7.1"
     },
     "require-dev": {
