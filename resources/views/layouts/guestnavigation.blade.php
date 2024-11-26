@@ -1,9 +1,18 @@
+ <!-- Google Fonts -->
+ <link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap" rel="stylesheet">
+
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg navbar-light shadow sticky-top" style="background-color: #097ABA;">
     <div class="container-fluid px-4">
         <!-- Logo dan Judul -->
         <a href="{{ route('index') }}" class="navbar-brand d-flex align-items-center">
-            <img src="{{ asset('img/logo (1).svg') }}" alt="logo" style="width: 200px; height: 300px; margin-right: 10px;">
+        <img src="{{ asset('img/Fishapp new logo.png') }}" alt="logo" style="width: 100px; height: 90px; margin-right: 10px;"> 
+            <span style="
+            font-family: 'Jolly Lodger', cursive; 
+            font-size: 3rem; 
+            font-weight: semi bold; 
+            color: white; 
+            line-height: 1;">FISHApp </span>
         </a>
 
         <!-- Button Toggler (Mobile) -->
