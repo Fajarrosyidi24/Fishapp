@@ -35,7 +35,7 @@
             justify-content: center;
             width: 150px;
             height: 50px;
-            color: #fff;
+            color: #ffff;
             background-color: #333;
             border: 1px solid #444;
             border-radius: 5px;
@@ -101,16 +101,22 @@
                     <span class="text-muted">atau masuk dengan</span>
                 </div>
 
-                <div class="social-login">
-                    <a href="{{ route('google-auth') }}" class="login-btn google">
-                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" width="30">
-                        Google
-                    </a>
-                    <a href="{{ route('facebook-auth') }}" class="login-btn facebook">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook" width="30" style="margin-left:110px">
-                        Facebook    
-                    </a>
+                <div class="social-login" 
+                style="display: flex; gap: 115px;">
+                <a href="{{ route('google-auth') }}" class="login-btn google; btn btn-outline-primary w-48" style="display: flex; align-items: center; text-decoration: none;" >
+                <img src="https://developers.google.com/identity/images/g-logo.png" 
+                    alt="Google" 
+                    style="width: 30px; height: auto; margin-right: 10px;">
+                    <span style="font-size: 16px; color: primary;">Google</span>
+                </a>
+                <a href="{{ route('facebook-auth') }}" class="login-btn facebook; btn btn-outline-primary w-48" style="display: flex; align-items: center; text-decoration: none;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" 
+                    alt="Facebook" 
+                    style="width: 30px; height: auto; margin-right: 10px;">
+                    <span style="font-size: 16px; color: primary;">Facebook</span>
+                </a>
                 </div>
+
 
                 <div class="d-flex justify-content-between mb-3">
                     <a href="{{ route('password.request') }}" style="font-size: 0.900rem; margin-top:25px;">Lupa Kata Sandi?</a>

@@ -17,7 +17,7 @@
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Favicon -->
-    <link href="{{ asset('img/logo (1).svg') }}" rel="icon">
+    <link href="{{ asset('img/Fishapp new logo.png') }}" rel="icon">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.3/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 

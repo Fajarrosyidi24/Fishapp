@@ -45,6 +45,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/pdatefoto', [ProfileController::class, 'updatefoto'])->name('update.profile.photo');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    Route::get('/bantuan', function (){
+        return view('bantuan');
+    })->name('bantuan');
+
+    Route::get('/pesanansaya', function (){
+        return view('pesanansaya');
+    })->name('pesanansaya');
+
     Route::get('/about2', function () {
         return view('about2');
     })->name('about2');

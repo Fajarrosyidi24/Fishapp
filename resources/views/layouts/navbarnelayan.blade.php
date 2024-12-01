@@ -1,9 +1,18 @@
+ <!-- Google Fonts -->
+ <link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap" rel="stylesheet">
+
 {{-- start nav --}}
 <nav class="sb-topnav navbar navbar-expand navbar-light "
     style="background-color: #097ABA; box-shadow: 0 -2px 8px rgba(0, 0, 0, 1);  ">
     <!-- Navbar Brand-->
     <a href="{{ route('nelayan.dashboard') }}">
-        <img src="{{ asset('img/logo (1).svg') }}" alt="logo" style="width: 45%; margin-left:10%">
+        <img src="{{ asset('img/Fishapp new logo.png') }}" alt="logo" style="width: 60px; height: 55px; margin-left: 10px;"> 
+            <span style="
+            font-family: 'Jolly Lodger', cursive; 
+            font-size: 1.8rem; 
+            font-weight: semi bold; 
+            color: white; 
+            line-height: 1;">FISHApp </span>
     </a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
