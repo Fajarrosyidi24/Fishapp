@@ -81,6 +81,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
         Route::post('/checkout/seafood/pesan', [PesanController::class, 'store'])->name('pesanan.submit');
+        Route::get('/halaman-pembayaran-seafood', [PesanController::class, 'showPaymentPage'])->name('halamanpembayaranseafood');
+        Route::post('/payment/callback', [PesanController::class, 'handleCallback']);
     });
 });
 
@@ -167,5 +169,4 @@ Route::prefix('nelayan')->group(function () {
         });
     });
 });
-
 require __DIR__ . '/auth.php';

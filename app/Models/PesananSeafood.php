@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -29,11 +30,24 @@ class PesananSeafood extends Model
         return $this->belongsToMany(Keranjang::class, 'item_seafood_checkouts', 'tb_pemesanan_id', 'keranjang_id');
     }
 
-    public static function createpesanan($total)
+    public static function createdata($datapesanan, $keranjangCount, $jumlahSubtotal)
     {
-        // self::create([
-        //    'subtotal_harga'
-        // ]);
+        $user = Auth::user()->id;
+        $alamat = AlamatTujuanSeafood::where('user_id', $user)->first();
+        $destination = "$alamat->provinsi, $alamat->kabupaten, $alamat->kecamatan, $alamat->desa, RT.$alamat->rt/RW.$alamat->rw, Kode Pos : $alamat->code_pos";
+        $tabelpesanan = self::create([
+            'subtotal_harga' => $jumlahSubtotal,
+            'jumlah_item' => $keranjangCount,
+            'ongkir'=> $datapesanan['cost'],
+            'total_keseluruhan_harga'=> $jumlahSubtotal + $datapesanan['cost'],
+            'metode_pembayaran'=> 'Transfer Bank',
+            'status' => 'menunggu pembayaran',
+            'snap_token' => Str::random(15),
+            'opsi_pengiriman' => $datapesanan['courier'],
+            'alamat_pengiriman' => $destination,
+        ]);
+
+        return $tabelpesanan;
     }
 
     public static function filterRequest($grouppesananRaw)
