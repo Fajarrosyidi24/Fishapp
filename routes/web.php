@@ -99,6 +99,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/forgot-password/{token}/{email}', [AdminController::class, 'processResetPassword'])->name('admin.password.update');
     Route::middleware('is_admin')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('viewpembeli', [AdminController::class, 'viewPembeli'])->name('admin.viewpembeli');
         Route::get('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
         Route::get('/viewdatanelayan', [AdminController::class, 'viewdatanelayan'])->name('viewdatanelayan');
         Route::get('/viewdata-pendaftaran', [AdminController::class, 'permintaannelayanakun'])->name('viewdatapermintaannelayan');
@@ -174,3 +175,4 @@ Route::prefix('nelayan')->group(function () {
     });
 });
 require __DIR__ . '/auth.php';
+////
