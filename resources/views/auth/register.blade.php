@@ -6,6 +6,7 @@
             font-size: 2rem; /* Sesuaikan ukuran font sesuai kebutuhan */
             font-weight: bold; /* Opsional: membuat font menjadi tebal */
         }
+        
     </style>
 @endsection
 
@@ -58,18 +59,25 @@
                     <span class="text-muted">atau daftar dengan</span>
                 </div>
 
-                <div class="d-flex justify-content-between mb-3">
-                    <a href="{{route('google-auth')}}" class="btn btn-outline-danger w-48">
-                        <i class="bi bi-google"></i> Google
-                    </a>
-                    <a href="{{route('facebook-auth')}}" class="btn btn-outline-primary w-48">
-                        <i class="bi bi-facebook"></i> Facebook
-                    </a>
+                <div class="social-login" 
+                style="display: flex; gap: 115px;">
+                <a href="{{ route('google-auth') }}" class="login-btn google; btn btn-outline-primary w-48" style="display: flex; align-items: center; text-decoration: none;" >
+                <img src="https://developers.google.com/identity/images/g-logo.png" 
+                    alt="Google" 
+                    style="width: 30px; height: auto; margin-right: 10px;">
+                    <span style="font-size: 16px; color: primary;">Google</span>
+                </a>
+                <a href="{{ route('facebook-auth') }}" class="login-btn facebook; btn btn-outline-primary w-48" style="display: flex; align-items: center; text-decoration: none;">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" 
+                    alt="Facebook" 
+                    style="width: 30px; height: auto; margin-right: 10px;">
+                    <span style="font-size: 16px; color: primary;">Facebook</span>
+                </a>
                 </div>
 
-                <div class="d-flex justify-content-between">
-                    <a href="{{ route('login') }}" class="d-block" style="font-size: 0.675rem;">Sudah punya akun? Login</a>
-                    <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.675rem;">Masuk sebagai Admin</a>
+                <div class="d-flex justify-content-between mb-3">
+                    <a href="{{ route('login') }}" class="d-block" style="font-size: 0.900rem; margin-top:25px;">Sudah punya akun? Login</a>
+                    <a href="{{ route('login_admin') }}" class="d-block" style="font-size: 0.900rem; margin-top:25px;">Masuk sebagai Admin</a>
                 </div>            
             </form>
         </div>

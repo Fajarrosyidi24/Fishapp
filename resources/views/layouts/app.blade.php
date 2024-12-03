@@ -10,7 +10,7 @@
     <meta content="" name="description">
 
     <!-- Favicon -->
-    <link href="{{ asset('img/logo (1).svg') }}" rel="icon">
+    <link href="{{ asset('img/Fishapp new logo.png') }}" rel="icon">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -116,3 +116,6 @@
 </script>
 </body>
 </html>
+
+{{-- api duitku --}}
+{{-- d6cfaeec5500c3659c3a131574d101c6 --}}

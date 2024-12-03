@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Rekening;
 use App\Models\BarangSewa;
+use Illuminate\Http\Request;
 use App\Http\Requests\BarangRequest;
-use App\Models\AlamatPengirimanSeafood;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AlamatPengirimanSeafood;
 
 class BarangsewaController extends Controller
 {

@@ -34,23 +34,17 @@ class KeranjangController extends Controller
 
     public function processCheckoutseafood(Request $request)
     {
-
-        //data total harga semua keranjang yang di ceklist
         $total = $request->input('total');
-
-        //alamat tujuan milik pembeli
         $alamat = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->get();
 
         if ($alamat->isEmpty()) {
             return redirect()->route('alamat.pengiriman.pembeli')->with('error', 'Anda belum mengisikan alamat pengiriman, harap isikan alamat terlebih dahulu sebelum melakukan checkout');
         }
 
-        //kode keranjang
         $kodeSeafoodArray = explode(',', $request->input('items'));
 
         //tabel keranjang dimana kode keranjangnya berasal dari $kodeSeafoodArray
         $keranjangs3 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get();
-
         //mengambil data primary key dari masing masing tabel
         $kode_seafood = Seafood::filterkode($keranjangs3);
         $id_nelayan = Nelayan::filterkode($kode_seafood);
@@ -71,6 +65,7 @@ class KeranjangController extends Controller
 
         //menggroup data yang sudah dikombinasikan menjadi 1 (nelayanid, origin,destination, weight, serta opsi pengiriman yang berasal dari api)
         $aggregatedData = Seafood::aggregatedData($combinedData, $destination);
+
         $shippingCosts = KeranjangController::api($aggregatedData);
         $groupedCosts = KeranjangController::groupedCosts($shippingCosts);
 

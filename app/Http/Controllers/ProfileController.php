@@ -78,4 +78,5 @@ class ProfileController extends Controller
             return redirect()->back()->with('success', 'foto profile berhasil diperbarui');   
         }
     }
+
 }
