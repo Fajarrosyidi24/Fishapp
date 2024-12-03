@@ -1,9 +1,18 @@
+ <!-- Google Fonts -->
+ <link href="https://fonts.googleapis.com/css2?family=Jolly+Lodger&display=swap" rel="stylesheet">
+
 <!-- Navbar Start -->
 <nav class="navbar navbar-expand-lg navbar-light shadow sticky-top" style="background-color: #097ABA;">
     <div class="container-fluid px-4">
         <!-- Logo dan Judul -->
         <a href="{{ route('dashboard') }}" class="navbar-brand d-flex align-items-center">
-            <img src="{{ asset('img/logo (1).svg') }}" alt="logo" style="width: 100px; height: 100px; margin-right: 10px;">
+            <img src="{{ asset('img/Fishapp new logo.png') }}" alt="logo" style="width: 100px; height: 90px; margin-right: 10px;"> 
+            <span style="
+            font-family: 'Jolly Lodger', cursive; 
+            font-size: 3rem; 
+            font-weight: semi bold; 
+            color: white; 
+            line-height: 1;">FISHApp </span>
         </a>
 
         <!-- Button Toggler (Mobile) -->
@@ -55,9 +64,9 @@
                         <li><a href="{{route('pembeli.produk.seafood')}}" class="dropdown-item">Seafoods</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-item nav-link">Article</a>
-                </li>
+                </li> -->
 
                 <!-- Ikon Keranjang -->
                 <li class="nav-item">
@@ -98,7 +107,7 @@
                                 @if (optional(Auth::user()->updateProfile)->foto)
                                 <img class="border rounded-circle p-2"
                             src="{{ asset('storage/fotouser/' . Auth::user()->updateProfile->foto) }}"
-                            style="width: 40px; height: 40px;">
+                            style="width: 45px; height: 45px;">
                                 @else
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill me-1" viewBox="0 0 16 16">
                                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
@@ -108,10 +117,10 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a></li>
-                                <li><a href="#" class="dropdown-item">Pesanan Saya</a></li>
+                                <li><a href="{{route('pesanansaya')}}" class="dropdown-item {{ request()->routeIs('pesanansaya') ? 'active' : '' }}" class="dropdown-item">Pesanan Saya</a></li>
                                 <li><a href="#" class="dropdown-item">Penyewaan Alat</a></li>
                                 <li><a href="{{route('alamat.pengiriman.pembeli')}}" class="dropdown-item">Alamat Pengiriman</a></li>
-                                <li><a href="#" class="dropdown-item">Settings</a></li>
+                                <li><a href="{{route('bantuan')}}" class="dropdown-item {{ request()->routeIs('bantuan') ? 'active' : '' }}">Bantuan</a></li>
                                 <li class="mt-1">
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">
                                         @csrf

@@ -20,4 +20,19 @@ class ItemSeafoodCheckout extends Model
     {
         return $this->belongsTo(Keranjang::class, 'keranjang_id', 'kode_keranjang');
     }
+
+    public function pesanan()
+    {
+        return $this->belongsTo(PesananSeafood::class, 'tb_pemesanan_id', 'id');
+    }
+
+    public static function createdata($pesananSeafood, $keranjangData)
+    {
+        foreach ($keranjangData as $data) {
+            self::create([
+                'keranjang_id'=> $data->kode_keranjang,
+                'tb_pemesanan_id' => $pesananSeafood->id,
+            ]);
+        }
+    }
 }

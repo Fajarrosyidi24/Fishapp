@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+//use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Nelayan;
@@ -10,10 +11,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class BookTest extends TestCase
 {
     use RefreshDatabase;
+
 
     /**
      * A basic feature test example.
@@ -37,7 +40,6 @@ class BookTest extends TestCase
 
     public function test_nelayan_create()
     {
-
         $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
         $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
 //array
@@ -65,7 +67,6 @@ class BookTest extends TestCase
         $response->assertStatus(302);
 //mengambil data nelayan terbaru yang baru saja ditambahkan ke database dan mengembalikannya.
         return Nelayan::latest()->first();
-
         // $this->assertDatabaseHas('nelayans', [
         //     'name' => 'John Doe',
         //     'email' => 'john@example.com',   //////////////////////////////////////////////////

@@ -80,12 +80,18 @@ class AdminController extends Controller
     public function detailpermintaan($id)
     {
         $nelayan = Nelayan::where('id', $id)->first();
+        if(!$nelayan){
+            abort(404, 'Nelayan not found');
+        }
         return view('admin.detailpermintaan', compact('nelayan'));
     }
 
     public function tolakakunnelayan(Request $request, $id)
     {
         $nelayan = Nelayan::where('id', $id)->first();
+        if (!$nelayan) {
+            abort(404, 'Nelayan not found');
+        }
         $respon = $request->all();
         Mail::to($nelayan->email)->send(new SendNelayanEmail($respon));
 
@@ -100,6 +106,9 @@ class AdminController extends Controller
     public function verifikasinelayan($id)
     {
         $nelayan = Nelayan::where('id', $id)->first();
+        if(!$nelayan){
+            abort(404, 'Nelayan not found');
+        }
         $email = $nelayan->email;
         $token = Str::random(15);
         $Url = url("nelayan/registered/{$email}/{$token}");

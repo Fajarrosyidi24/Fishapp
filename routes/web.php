@@ -14,6 +14,7 @@ use App\Http\Controllers\NelayanSettingController;
 use App\Http\Controllers\ProfileNelayanController;
 use App\Http\Controllers\BarangsewaController;
 use App\Http\Controllers\KeranjangController;
+use App\Http\Controllers\PesanController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,6 +45,15 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/pdatefoto', [ProfileController::class, 'updatefoto'])->name('update.profile.photo');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    Route::get('/bantuan', function (){
+        return view('bantuan');
+    })->name('bantuan');
+
+    Route::get('/pesanansaya', function (){
+        return view('pesanansaya');
+    })->name('pesanansaya');
+
     Route::get('/about2', function () {
         return view('about2');
     })->name('about2');
@@ -70,6 +80,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/sewa/barangsewa/{kode_barang}', [BarangsewaController::class, 'sewa'])->name('sewabarang');
         Route::get('/add-to-cart/{productId}/{jumlah}/{subtotal}', [SeafoodController::class, 'addchart'])->name('addchartseafood');
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
+        Route::post('/checkout/seafood/pesan', [PesanController::class, 'store'])->name('pesanan.submit');
+        Route::get('/halaman-pembayaran-seafood', [PesanController::class, 'showPaymentPage'])->name('halamanpembayaranseafood');
+        Route::post('/payment/callback', [PesanController::class, 'handleCallback']);
+    });
+
+    Route::prefix('user/pesanan saya')->group(function(){
+        Route::get('/semua', [PesanController::class,'semua'])->name('pesanansaya.semua');
     });
 });
 
@@ -157,6 +174,5 @@ Route::prefix('nelayan')->group(function () {
         });
     });
 });
-
 require __DIR__ . '/auth.php';
 ////
