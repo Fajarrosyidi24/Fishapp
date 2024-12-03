@@ -6,13 +6,14 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Nelayan;
 use App\Models\Seafood;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Foundation\Testing\WithFaker;
 
 class BookTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
 
     /**
      * A basic feature test example.
@@ -32,45 +33,50 @@ class BookTest extends TestCase
         $response = $this->get(route('login_nelayan'));
         $response->assertStatus(200);
     }
-    //Fungsi ini membuat contoh data Nelayan menggunakan model Nelayan.
-    //Data yang dimasukkan meliputi name, status, email, dan password.
-    //Fungsi ini akan digunakan untuk membuat akun nelayan di beberapa tes.
+
 
     public function test_nelayan_create()
     {
 
         $pathToFotoAsli = base_path('tests/fixtures/IMG_20240330_143101_396.jpg');
         $pasFoto = new UploadedFile($pathToFotoAsli, 'pas_foto.jpg', null, null, true);
-
-        $request = [
-            'name' => fake()->name(),
+//array
+        $request =[ 
+        'name' => 'John Doe',
             'jenis_kelamin' => 'Laki-laki',
-            'tempat_lahir' => fake()->word(),
-            'tanggal_lahir' => fake()->date(),
-            'district' => fake()->word(),
-            'sub_district' => fake()->word(),
-            'desa' => fake()->word(),
-            'dusun' => fake()->word(),
-            'rt' => '002',
-            'rw' => '001',
-            'kode_pos' => '68466',
-            'email' => fake()->email(),
-            'no_telepon' => '082542534754',
-            'nama_kapal' => fake()->name(),
-            'jenis_kapal' => fake()->word(),
-            'jumlah_abk' => 200,
+            'tempat_lahir' => 'Surabaya',
+            'tanggal_lahir' => '1990-01-01',
+            'district' => 'Kabupaten ABC',
+            'sub_district' => 'Kecamatan XYZ',
+            'desa' => 'Desa PQR',
+            'dusun' => 'Dusun S',
+            'rt' => '01',
+            'rw' => '02',
+            'kode_pos' => '12345',
+            'email' => 'john@example.com',
+            'no_telepon' => '081234567890',
+            'nama_kapal' => 'Kapal Indah',
+            'jenis_kapal' => 'Jenis Kapal A',
+            'jumlah_abk' => 5,
             'pas_foto' => $pasFoto,
         ];
 
         $response = $this->post(route('post_form_pendaftaran_nelayan'), $request);
         $response->assertStatus(302);
-
+//mengambil data nelayan terbaru yang baru saja ditambahkan ke database dan mengembalikannya.
         return Nelayan::latest()->first();
 
+        // $this->assertDatabaseHas('nelayans', [
+        //     'name' => 'John Doe',
+        //     'email' => 'john@example.com',   //////////////////////////////////////////////////
+        //     'no_telepon' => '081234567890',
+            
+        // ]);
     }
 
     public function test_login_admin(){
-        // $this->artisan('db:seed --class=AdminSeeder');
+    //menjalankan seeder untuk mengisi database dengan data admin untuk memastikan akun admin tersedia sebelum tes dimulai.
+         $this->artisan('db:seed --class=AdminSeeder');
 
         $request = [
             'email' => 'fajarrosyidi80@gmail.com',
@@ -84,9 +90,10 @@ class BookTest extends TestCase
     public function test_verifikasi_akun_nelayan(){
         $this->test_login_admin();
         $nelayan = $this->test_nelayan_create();
-        $id = $nelayan->id;
+        $id = $nelayan->id;//mengambil id dari nelayan yang baru dibuat, yang akan digunakan dalam proses verifikasi.
         $response = $this->post(route('verifikasi.nelayan', ['id' => $id ]));
         $response->assertRedirect(route('admin.dashboard'))->assertSessionHas('success', 'Akun berhasil diverifikasi, link aktivasi telah dikirim ke email nelayan.');
+
 
         return Nelayan::latest()->first();
     }
