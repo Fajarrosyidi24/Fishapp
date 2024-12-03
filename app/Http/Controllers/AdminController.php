@@ -20,6 +20,7 @@ use App\Mail\sendResetLinkEmailAdmin;
 use App\Http\Requests\PasswordRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 
 class AdminController extends Controller
 {
@@ -57,6 +58,7 @@ class AdminController extends Controller
     public function viewdatanelayan()
     {
         $dataNelayan = Nelayan::where('status', 'terdaftar')->get();
+        // dd($dataNelayan);
         return view('admin.viewdatanelayan', compact('dataNelayan'));
     }
     public function permintaannelayanakun()
@@ -209,6 +211,12 @@ class AdminController extends Controller
         $barang = BarangSewa::where('kode_barang', $id)->first();
         return view('admin.detailpermintaanbarang', compact('barang'));
     }
+
+    public function viewPembeli(){
+        $data = User::all();
+        return view('admin.viewdatapembeli', compact('data'));
+    }
+
 
     //njajal
 }

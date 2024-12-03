@@ -139,7 +139,7 @@
                     <div class="collapse" id="collapseLayouts1" aria-labelledby="headingOne"
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="#">Lihat Data Para Pembeli</a>
+                            <a class="nav-link" href="{{ route('admin.viewpembeli') }}">Lihat Data Para Pembeli</a>
                         </nav>
                     </div>
                 </div>
