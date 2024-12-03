@@ -52,6 +52,10 @@ class PesanController extends Controller
         $reference = $request->query('reference');
         return view('payment.checkout', compact('reference'));
     }
+
+    public function semua(){
+        return view('pembeli.pesanansaya.semua');
+    }
 }
 
 

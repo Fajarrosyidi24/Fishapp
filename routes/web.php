@@ -84,6 +84,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/halaman-pembayaran-seafood', [PesanController::class, 'showPaymentPage'])->name('halamanpembayaranseafood');
         Route::post('/payment/callback', [PesanController::class, 'handleCallback']);
     });
+
+    Route::prefix('user/pesanan saya')->group(function(){
+        Route::get('/semua', [PesanController::class,'semua'])->name('pesanansaya.semua');
+    });
 });
 
 Route::prefix('admin')->group(function () {
