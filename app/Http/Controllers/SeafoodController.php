@@ -10,6 +10,7 @@ use App\Models\PesananSeafood;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
 use App\Models\AlamatPengirimanSeafood;
+use App\Models\Nelayan;
 
 class SeafoodController extends Controller
 {
@@ -100,7 +101,8 @@ class SeafoodController extends Controller
 
     public function chatwa($id)
     {
-        $whatsappNumber = '62' . ltrim($id, '0');
+        $user = Nelayan::where('id', $id)->first();
+        $whatsappNumber = '62' . ltrim($user->detailProfile->no_telepon, '0');
         $whatsappUrl = "https://wa.me/{$whatsappNumber}";
         return redirect($whatsappUrl);
     }
