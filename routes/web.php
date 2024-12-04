@@ -82,8 +82,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
         Route::post('/checkout/seafood/pesan', [PesanController::class, 'store'])->name('pesanan.submit');
         Route::get('/halaman-pembayaran-seafood', [PesanController::class, 'showPaymentPage'])->name('halamanpembayaranseafood');
-        Route::post('/payment/callback', [PesanController::class, 'handleCallback']);
     });
+
+    Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
+    Route::post('/pesanan/seafood/api/backend/callback/{merchantOrderId}/{email}', [PesanController::class, 'CalbacknUrl'])->name('pesanan.seafood.calback');
 });
 
 Route::prefix('admin')->group(function () {

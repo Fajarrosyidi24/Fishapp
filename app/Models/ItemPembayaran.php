@@ -25,4 +25,13 @@ class ItemPembayaran extends Model
     {
         return $this->belongsTo(PesananSeafood::class, 'pesanan_id', 'id');
     }
+
+    public static function createitem($idpembayaran, $pesanan){
+        foreach($pesanan as $data){
+            self::create([
+                'pembayaran_id' => $idpembayaran,
+                'pesanan_id' => $data->id,
+            ]);
+        }
+    }
 }
