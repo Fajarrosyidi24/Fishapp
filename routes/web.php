@@ -50,9 +50,9 @@ Route::middleware('auth')->group(function () {
         return view('bantuan');
     })->name('bantuan');
 
-    Route::get('/pesanansaya', function (){
-        return view('pesanansaya');
-    })->name('pesanansaya');
+    Route::get('/pesananseafood/post', [PesanController::class,'pesananseafood'])->name('pesananseafood');
+
+    Route::get('/pesananseafood', [PesanController::class, 'pesananview'])->name('pesanan.user');
 
     Route::get('/about2', function () {
         return view('about2');
@@ -86,6 +86,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
     Route::post('/pesanan/seafood/api/backend/callback/{merchantOrderId}/{email}', [PesanController::class, 'CalbacknUrl'])->name('pesanan.seafood.calback');
+    Route::prefix('user/pesanan saya')->group(function(){
+        Route::get('/semua', [PesanController::class,'semua'])->name('pesanansaya.semua');
+        Route::get('/belumbayar', [PesanController::class,'belumbayar'])->name('pesanansaya.belumbayar');
+        Route::get('/sedangdikirim', [PesanController::class,'sedangdikirim'])->name('pesanansaya.sedangdikirim');
+    });
 });
 
 Route::prefix('admin')->group(function () {
@@ -97,6 +102,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/forgot-password/{token}/{email}', [AdminController::class, 'processResetPassword'])->name('admin.password.update');
     Route::middleware('is_admin')->group(function () {
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('viewpembeli', [AdminController::class, 'viewPembeli'])->name('admin.viewpembeli');
         Route::get('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
         Route::get('/viewdatanelayan', [AdminController::class, 'viewdatanelayan'])->name('viewdatanelayan');
         Route::get('/viewdata-pendaftaran', [AdminController::class, 'permintaannelayanakun'])->name('viewdatapermintaannelayan');
@@ -172,3 +178,4 @@ Route::prefix('nelayan')->group(function () {
     });
 });
 require __DIR__ . '/auth.php';
+////
