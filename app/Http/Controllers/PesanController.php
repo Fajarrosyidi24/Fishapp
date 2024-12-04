@@ -58,18 +58,6 @@ class PesanController extends Controller
         return view('pesananseafood', compact('reference'));
     }
 
-    public function semua(){
-        return view('profile.pesananuser.semuapesanan');
-    }
-
-    public function belumbayar(){
-        return view('pembeli.pesananseafood.belumbayar');
-    }
-
-    public function sedangdikirim(){
-        return view('pembeli.pesananseafood.sedangdikirim');
-    }
-
     public function pesananseafood(Request $request){
         if (request()->routeIs('pesananseafood') && !request()->has('reference')) {
             header("Location: " . route('pesananseafood', ['reference' => 1]));
