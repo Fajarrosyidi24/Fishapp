@@ -18,6 +18,7 @@ use App\Models\ItemPembayaran;
 use App\Models\ItemSeafoodCheckout;
 use App\Models\Merchant;
 use App\Models\Pembayaran;
+use App\Models\Seafood;
 
 class PesanController extends Controller
 {
@@ -107,4 +108,11 @@ class PesanController extends Controller
     $seafood = $seafood->get();
     return view('nelayan.seafood.index', compact('seafood'));
 }
+
+public function chatwa($id)
+    {
+        $whatsappNumber = '62' . ltrim($id, '0');
+        $whatsappUrl = "https://wa.me/{$whatsappNumber}";
+        return redirect($whatsappUrl);
+    }
 }

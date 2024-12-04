@@ -222,15 +222,13 @@
 </div>
 
 <!-- detail barang -->
- @foreach ($seafood as $se)
 <div class="container">
     <div class="header">
         <span class="star">Penjual : Pratama Zidan</span>
         <div>
-            <button class="chat-btn"></button>
-                <a href="{{route('hubungi.penjual.seafood', ['id' => $se->nelayan->detailProfile->no_telepon])}}" class="btn btn-sm btn-primary text-white">
+            <a href="{{route('hubungi.penjual.seafood', ['id' => 1])}}" class="btn btn-sm btn-primary text-white">
                     <i class="bi bi-telephone"></i> Hubungi Penjual
-                </a>
+            </a>  
         </div>
     </div>
     <div class="order">
@@ -257,7 +255,6 @@
         </div>
     </div>
 </div>
-@endforeach
 
 @include('components.foot')
 @endsection
