@@ -39,7 +39,7 @@
       background-repeat: no-repeat;
       margin: 0;
       background-attachment: fixed;
-      background-image: url('img/bg.svg');
+      background-image: url("{{asset('img/bg.svg')}}");
    }
 
    

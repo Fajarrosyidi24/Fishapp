@@ -53,9 +53,46 @@ class PesanController extends Controller
         return view('payment.checkout', compact('reference'));
     }
 
-    public function semua(){
-        return view('pembeli.pesanansaya.semua');
+    public function pesananview(Request $request){
+        $reference = $request->query('reference');
+        return view('pesananseafood', compact('reference'));
     }
+
+    public function semua(){
+        return view('profile.pesananuser.semuapesanan');
+    }
+
+    public function belumbayar(){
+        return view('pembeli.pesananseafood.belumbayar');
+    }
+
+    public function sedangdikirim(){
+        return view('pembeli.pesananseafood.sedangdikirim');
+    }
+
+    public function pesananseafood(Request $request){
+        if (request()->routeIs('pesananseafood') && !request()->has('reference')) {
+            header("Location: " . route('pesananseafood', ['reference' => 1]));
+            exit;
+        }
+        $reference = $request->query('reference');
+        return view('pesananseafood', compact('reference'));
+    }
+
+    public function index(Request $request)
+{
+    $query = $request->input('search');
+    $nelayanId = Auth::guard('nelayan')->user()->id;
+    $seafood = Seafood::where('nelayan_id', $nelayanId);
+    if ($query) {
+        $seafood->where(function ($queryBuilder) use ($query) {
+            $queryBuilder->where('nama', 'LIKE', "%{$query}%")
+                         ->orWhere('jenis_seafood', 'LIKE', "%{$query}%");
+        });
+    }
+    $seafood = $seafood->get();
+    return view('nelayan.seafood.index', compact('seafood'));
+}
 }
 
 
