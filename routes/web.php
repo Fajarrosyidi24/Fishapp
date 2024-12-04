@@ -50,9 +50,9 @@ Route::middleware('auth')->group(function () {
         return view('bantuan');
     })->name('bantuan');
 
-    Route::get('/pesanansaya', function (){
-        return view('pesanansaya');
-    })->name('pesanansaya');
+    Route::get('/pesananseafood/post', [PesanController::class,'pesananseafood'])->name('pesananseafood');
+
+    Route::get('/pesananseafood', [PesanController::class, 'pesananview'])->name('pesanan.user');
 
     Route::get('/about2', function () {
         return view('about2');
@@ -87,6 +87,8 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user/pesanan saya')->group(function(){
         Route::get('/semua', [PesanController::class,'semua'])->name('pesanansaya.semua');
+        Route::get('/belumbayar', [PesanController::class,'belumbayar'])->name('pesanansaya.belumbayar');
+        Route::get('/sedangdikirim', [PesanController::class,'sedangdikirim'])->name('pesanansaya.sedangdikirim');
     });
 });
 
