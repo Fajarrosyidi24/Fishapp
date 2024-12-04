@@ -32,15 +32,11 @@
                         <tbody>
                             <tr>
                                 <td><strong>Nama Pemesan</strong></td>
-                                <td>edhcuied</td>
+                                <td>{{$pembayaran->user->name}}</td>
                             </tr>
                             <tr>
                                 <td><strong>Total Pembayaran</strong></td>
-                                <td>ceucheic</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Metode Pembayaran</strong></td>
-                                <td>Transfer Bank / Kredit</td>
+                                <td>{{$pembayaran->payment_amount}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -97,14 +93,14 @@
         const payButton = document.getElementById('payButton');
         const retryButton = document.getElementById('retryButton');
 
-        // Event listener untuk tombol "Mulai Pembayaran"
+        // tombol "Mulai Pembayaran"
         if (payButton) {
             payButton.addEventListener('click', function() {
                 startPayment();
             });
         }
 
-        // Event listener untuk tombol "Coba Lagi"
+        // tombol "Coba Lagi"
         if (retryButton) {
             retryButton.addEventListener('click', function() {
                 startPayment();
@@ -150,8 +146,8 @@
                 retryButton.style.display = 'none';  // Sembunyikan tombol retry setelah berhasil
             } else if (status === 'pending') {
                 paymentMessage.innerHTML = `
-                    <h4 class="alert-heading text-warning">Pembayaran Sedang Diproses</h4>
-                    <p>Silakan tunggu sementara kami memproses pembayaran Anda.</p>
+                    <h4 class="alert-heading text-warning">Menunggu Pembayaran</h4>
+                    <p>Silakan selesaikan transaksi anda</p>
                 `;
                 retryButton.style.display = 'none';  // Sembunyikan tombol retry jika status pending
             } else if (status === 'error') {
