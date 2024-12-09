@@ -65,25 +65,25 @@
                         <div class="mb-3">
                             <label for="name" class="form-label" style="color: black">Nama :</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                value="{{ Auth::user()->name }}">
+                                value="{{ Auth::user()->name }}" required>
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="tempat_lahir">Tempat Lahir</label>
                             <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir"
                                 value="{{ optional(Auth::user()->updateProfile)->tempat_lahir }}"
-                                placeholder="Masukkan tempat lahir Anda">
+                                placeholder="Masukkan tempat lahir Anda" required>
                         </div>
                         <div class="form-group mb-3">
                             <label for="tanggal_lahir">Tanggal Lahir</label>
                             <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir"
-                                value="{{ optional(Auth::user()->updateProfile)->tanggal_lahir }}">
+                                value="{{ optional(Auth::user()->updateProfile)->tanggal_lahir }}" required>
                         </div>
 
                         <!-- Jenis Kelamin -->
                         <div class="form-group mb-3">
                             <label for="jenis_kelamin">Jenis Kelamin</label>
-                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
+                            <select class="form-control" id="jenis_kelamin" name="jenis_kelamin" required>
                                 <option value="" disabled
                                     {{ optional(Auth::user()->updateProfile)->jenis_kelamin ? '' : 'selected' }}>Pilih Jenis
                                     Kelamin
@@ -108,7 +108,7 @@
 
                         <div class="mb-3">
                             <label for="nomer_telepon" class="form-label" style="color: black">Nomor Telepon :</label>
-                            <input type="tel" class="form-control" id="nomer_telepon" name="nomer_telepon"
+                            <input type="tel" class="form-control" id="nomer_telepon" name="nomer_telepon" required
                                  value="{{ optional(Auth::user()->updateProfile)->no_telepon }}"
                                 placeholder="Masukkan Nomor Telepon Anda" pattern="[0-9]{10,14}"
                                 title="Masukkan nomor telepon yang valid (minimal 10 digit, maksimal 14 digit)">
@@ -118,7 +118,7 @@
                             <label for="alamat">Alamat Lengkap : </label>
                             <div class="row gx-2">
                                 <div class="col-md-6 mb-2">
-                                    <input type="text" class="form-control" id="provinsi" name="provinsi"
+                                    <input type="text" class="form-control" id="provinsi" name="provinsi" required
                                     @if (optional(Auth::user()->updateProfile)->provinsi)
                                     value="{{ optional(Auth::user()->updateProfile)->provinsi }}"
                                     @else
@@ -127,7 +127,7 @@
                                      readonly>
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <select class="form-control" id="district" name="district">
+                                    <select class="form-control" id="district" name="district" required>
                                         <option value="" disabled {{ optional(Auth::user()->updateProfile)->kabupaten ? '' : 'selected' }}>
                                             Pilih Kabupaten
                                         </option>
@@ -144,7 +144,7 @@
                                 </div>                                
                                 
                                 <div class="col-md-6 mb-2">
-                                    <select class="form-control" id="sub_district" name="sub_district">
+                                    <select class="form-control" id="sub_district" name="sub_district" required>
                                         <option value=""
                                             {{ optional(Auth::user()->updateProfile)->kecamatan ? '' : 'selected' }} disabled>Pilih Kecamatan
                                         </option>
@@ -157,7 +157,7 @@
                                     </select>
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <select name="desa" id="desa" class="form-control">
+                                    <select name="desa" id="desa" class="form-control" required>
                                         <option value="" disabled
                                             {{ empty(optional(Auth::user()->updateProfile)->desa) ? 'selected' : '' }}>Pilih Desa
                                         </option>
@@ -168,19 +168,19 @@
                                 </div>
                                 
                                 <div class="col-md-6 mb-2">
-                                    <input type="text" class="form-control" id="dusun" name="dusun"
+                                    <input type="text" class="form-control" id="dusun" name="dusun" required
                                         value="{{ optional(Auth::user()->updateProfile)->dusun }}" placeholder="Dusun">
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <input type="text" class="form-control" id="rt" name="rt"
+                                    <input type="text" class="form-control" id="rt" name="rt" required
                                         value="{{ optional(Auth::user()->updateProfile)->rt }}" placeholder="RT">
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <input type="text" class="form-control" id="rw" name="rw"
+                                    <input type="text" class="form-control" id="rw" name="rw" required
                                         value="{{ optional(Auth::user()->updateProfile)->rw }}" placeholder="RW">
                                 </div>
                                 <div class="col-md-6 mb-2">
-                                    <input type="text" class="form-control" id="kode_pos" name="kode_pos"
+                                    <input type="text" class="form-control" id="kode_pos" name="kode_pos" required
                                         value="{{ optional(Auth::user()->updateProfile)->code_pos }}" placeholder="Kode Pos">
                                 </div>
                                 
