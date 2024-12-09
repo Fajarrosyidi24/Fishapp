@@ -30,6 +30,11 @@ class Pembayaran extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function merchant()
+    {
+        return $this->hasOne(Merchant::class, 'pembayaran_id', 'id');
+    }
+
     public static function store($params)
     {
         $pembayaran = self::create([

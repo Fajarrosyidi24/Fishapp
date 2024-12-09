@@ -54,7 +54,7 @@ class DuitkuPaymentService implements PaymentGatewayInterface
             return $result;
         }
 
-        throw new \Exception($httpCode->body());
+        throw new \Exception("API request failed with status code: " . $httpCode);
     }
 
     public function callbackUrl(array $data): bool

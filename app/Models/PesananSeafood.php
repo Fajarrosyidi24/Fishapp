@@ -30,6 +30,11 @@ class PesananSeafood extends Model
         return $this->belongsToMany(Keranjang::class, 'item_seafood_checkouts', 'tb_pemesanan_id', 'keranjang_id');
     }
 
+    public function item()
+    {
+        return $this->belongsToMany(Pembayaran::class, 'item_pembayarans', 'pesanan_id', 'pembayaran_id');
+    }
+
     public static function createdata($datapesanan, $keranjangCount, $jumlahSubtotal)
     {
         $user = Auth::user()->id;

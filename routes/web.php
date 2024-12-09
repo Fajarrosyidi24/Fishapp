@@ -49,11 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/bantuan', function (){
         return view('bantuan');
     })->name('bantuan');
-
-    Route::get('/pesananseafood/post', [PesanController::class,'pesananseafood'])->name('pesananseafood');
-
-    Route::get('/pesananseafood', [PesanController::class, 'pesananview'])->name('pesanan.user');
-
+    Route::get('/pesananseafood', [PesanController::class,'pesananseafood'])->name('pesananseafood');
     Route::get('/about2', function () {
         return view('about2');
     })->name('about2');
@@ -82,6 +78,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
         Route::post('/checkout/seafood/pesan', [PesanController::class, 'store'])->name('pesanan.submit');
         Route::get('/halaman-pembayaran-seafood', [PesanController::class, 'showPaymentPage'])->name('halamanpembayaranseafood');
+        Route::post('/payment/update-status', [PesanController::class, 'updatePaymentStatus'])->name('update.payment.status');
     });
 
     Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
