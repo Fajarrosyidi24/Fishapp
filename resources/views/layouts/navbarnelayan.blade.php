@@ -107,8 +107,8 @@
                     <div class="collapse" id="collapseTransaksi" aria-labelledby="headingThree"
                         data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="#">Seafood</a>
-                            <a class="nav-link" href="#">Barang Sewa</a>
+                            <a class="nav-link" href="{{route('history.transaksi.seafood')}}">Seafood</a>
+                            <a class="nav-link" href="{{route('history.transaksi.barangsewa')}}">Barang Sewa</a>
                         </nav>
                     </div>
 

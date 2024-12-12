@@ -15,6 +15,8 @@ use App\Http\Controllers\ProfileNelayanController;
 use App\Http\Controllers\BarangsewaController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PesanController;
+use App\Models\BarangSewa;
+use App\Models\Seafood;
 
 Route::get('/', function () {
     return view('welcome');
@@ -156,6 +158,7 @@ Route::prefix('nelayan')->group(function () {
             Route::get('/', [BarangsewaController::class, 'index'])->name('barangsewa.index');
             Route::get('/create-barangsewa', [BarangsewaController::class, 'create'])->name('create.barangsewa');
             Route::post('/create-barangsewa/post', [BarangsewaController::class, 'store'])->name('barang.store');
+            Route::get('/history/transaksi/barangsewa', [BarangsewaController::class, 'history_barangsewa'])->name('history.transaksi.barangsewa');
         });
         Route::prefix('seafood')->group(function(){
             Route::get('/', [SeafoodController::class, 'index'])->name('sefood.index');
@@ -165,6 +168,7 @@ Route::prefix('nelayan')->group(function () {
             Route::get('/edit-seafood/{kode_seafood}', [SeafoodController::class, 'edit'])->name('seafood.edit.nelayan');
             Route::post('/edit-seafood/{id}/post', [SeafoodController::class, 'editseafood'])->name('edit.seafood');
             Route::post('/edit-seafood/{kode_seafood}/delete', [SeafoodController::class, 'deleteseafood'])->name('nealayan.deleteseafood');
+            Route::get('/history/transaksi/seafood', [SeafoodController::class, 'history_seafood'])->name('history.transaksi.seafood');
         });
         Route::prefix('pesanan')->group(function(){
             Route::get('/seafood', [SeafoodController::class, 'pesananseafoodnelayan'])->name('nelayan.pesanan.seafood');
