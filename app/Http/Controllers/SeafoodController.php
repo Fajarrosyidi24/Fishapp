@@ -118,4 +118,8 @@ class SeafoodController extends Controller
         Keranjang::createkeranjangseafood($productId, $jumlah, $subtotal);
         return redirect()->back()->with('success', 'Barang Telah dimasukan Kedalam Keranjang');
     }
+
+    public function history_seafood() {
+        return view('nelayan.pesanan.seafood');
+    }
 }

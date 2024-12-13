@@ -63,4 +63,9 @@ class BarangsewaController extends Controller
         $barang = BarangSewa::where('status', 'siap dipesan')->get();
         return view('pembeli.produk.barangsewa', compact('barang'));
     }
+
+    public function history_barangsewa()
+     {
+        return view('nelayan.pesanan.barangsewa');
+    }
 }
