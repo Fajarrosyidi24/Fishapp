@@ -20,4 +20,11 @@ class PengirimanSeafood extends Model
         return $this->belongsTo(PesananSeafood::class, 'pesanan_id', 'id');
     }
 
+    public static function store($imageName, $id){
+       return self::create([
+            'pesanan_id' => $id,
+            'upload_foto_bukti_pengiriman' => $imageName,
+        ]);
+    }
+
 }
