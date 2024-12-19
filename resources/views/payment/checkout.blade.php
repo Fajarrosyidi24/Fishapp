@@ -148,47 +148,48 @@
                     retryButton.style.display = 'none';
 
                     // Membuat form untuk mengirim data result dan reference
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '{{ route('update.payment.status') }}'; // Route tujuan untuk update status pembayaran
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action =
+                    '{{ route('update.payment.status') }}'; // Route tujuan untuk update status pembayaran
 
-    // Menambahkan input untuk CSRF token
-    const csrfToken = document.createElement('input');
-    csrfToken.type = 'hidden';
-    csrfToken.name = '_token';
-    csrfToken.value = '{{ csrf_token() }}'; // Menambahkan token CSRF Laravel
+                    // Menambahkan input untuk CSRF token
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}'; // Menambahkan token CSRF Laravel
 
-    // Menambahkan input untuk data result dan reference
-    const inputResult = document.createElement('input');
-    inputResult.type = 'hidden';
-    inputResult.name = 'result';
-    inputResult.value = JSON.stringify(result); // Mengirimkan data result dalam format JSON
+                    // Menambahkan input untuk data result dan reference
+                    const inputResult = document.createElement('input');
+                    inputResult.type = 'hidden';
+                    inputResult.name = 'result';
+                    inputResult.value = JSON.stringify(result); // Mengirimkan data result dalam format JSON
 
-    const inputReference = document.createElement('input');
-    inputReference.type = 'hidden';
-    inputReference.name = 'reference';
-    inputReference.value = reference;
+                    const inputReference = document.createElement('input');
+                    inputReference.type = 'hidden';
+                    inputReference.name = 'reference';
+                    inputReference.value = reference;
 
-    // Menambahkan input ke form
-    form.appendChild(csrfToken);
-    form.appendChild(inputResult);
-    form.appendChild(inputReference);
+                    // Menambahkan input ke form
+                    form.appendChild(csrfToken);
+                    form.appendChild(inputResult);
+                    form.appendChild(inputReference);
 
-    // Menambahkan tombol submit
-    const submitButton = document.createElement('button');
-    submitButton.type = 'submit';
-    submitButton.classList.add('btn', 'btn-primary');
-    submitButton.textContent = 'Update Status Pembayaran';
-    form.appendChild(submitButton);
+                    // Menambahkan tombol submit
+                    const submitButton = document.createElement('button');
+                    submitButton.type = 'submit';
+                    submitButton.classList.add('btn', 'btn-primary');
+                    submitButton.textContent = 'Update Status Pembayaran';
+                    form.appendChild(submitButton);
 
-    // Menambahkan form ke dalam div paymentResultSection
-    paymentResultSection.appendChild(form);
+                    // Menambahkan form ke dalam div paymentResultSection
+                    paymentResultSection.appendChild(form);
 
-    // Menyembunyikan tombol submit setelah form ditambahkan
-    submitButton.style.display = 'none';
+                    // Menyembunyikan tombol submit setelah form ditambahkan
+                    submitButton.style.display = 'none';
 
-    // Otomatis klik tombol submit setelah form ditambahkan ke halaman
-    submitButton.click();
+                    // Otomatis klik tombol submit setelah form ditambahkan ke halaman
+                    submitButton.click();
                 } else if (status === 'pending') {
                     paymentMessage.innerHTML = `
                     <h4 class="alert-heading text-warning">Menunggu Pembayaran</h4>

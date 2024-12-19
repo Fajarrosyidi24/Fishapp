@@ -35,15 +35,20 @@ class Pembayaran extends Model
         return $this->hasOne(Merchant::class, 'pembayaran_id', 'id');
     }
 
+    public function pembayaran()
+    {
+        return $this->hasOne(StatusPembayaran::class, 'pembayaran_id', 'id');
+    }
+
     public static function store($params)
     {
         $pembayaran = self::create([
             'merchant_order_id' => $params['merchantOrderId'],
             'payment_amount' => $params['paymentAmount'],
-            'customer_va_name'=> $params['customerVaName'],
-            'email'=> $params['email'],
-            'phone_number'=> $params['phoneNumber'],
-            'item_details'=> json_encode($params['itemDetails']),
+            'customer_va_name' => $params['customerVaName'],
+            'email' => $params['email'],
+            'phone_number' => $params['phoneNumber'],
+            'item_details' => json_encode($params['itemDetails']),
             'customer_detail' => json_encode($params['customerDetail']),
             'callback_url' => $params['callbackUrl'],
             'return_url' => $params['returnUrl'],
@@ -51,6 +56,6 @@ class Pembayaran extends Model
             'user_id' => Auth::user()->id,
         ]);
 
-        return $pembayaran; 
+        return $pembayaran;
     }
 }
