@@ -118,8 +118,9 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a href="{{route('profile.edit')}}" class="dropdown-item">Profile</a></li>
                                 <li><a href="{{route('pesananseafood')}}" class="dropdown-item {{ request()->routeIs('pesananseafood') ? 'active' : '' }}" class="dropdown-item">Pesanan Seafood</a></li>
-                                <li><a href="#" class="dropdown-item">Penyewaan Alat</a></li>
+                                <li><a href="{{route('penyewaanalat')}}" class="dropdown-item">Penyewaan Alat</a></li>
                                 <li><a href="{{route('alamat.pengiriman.pembeli')}}" class="dropdown-item">Alamat Pengiriman</a></li>
+                                <li><a href="{{route('guestarticle')}}" class="dropdown-item">Artikel</a></li>
                                 <li><a href="{{route('bantuan')}}" class="dropdown-item {{ request()->routeIs('bantuan') ? 'active' : '' }}">Bantuan</a></li>
                                 <li class="mt-1">
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">

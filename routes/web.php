@@ -52,6 +52,7 @@ Route::middleware('auth')->group(function () {
         return view('bantuan');
     })->name('bantuan');
     Route::get('/pesananseafood', [PesanController::class,'pesananseafood'])->name('pesananseafood');
+    Route::get('/penyewaanalat', [PesanController::class,'penyewaanalat'])->name('penyewaanalat');
     Route::get('/about2', function () {
         return view('about2');
     })->name('about2');
