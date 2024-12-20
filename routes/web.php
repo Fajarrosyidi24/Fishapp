@@ -52,7 +52,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/bantuan', function (){
         return view('bantuan');
     })->name('bantuan');
-<<<<<<< HEAD
 
     Route::get('/pesananseafood/post', [PesanController::class,'pesananseafood'])->name('pesananseafood');
 
@@ -61,10 +60,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/penyewaanalat/post', [PenyewaanAlatController::class,'penyewaanalat'])->name('penyewaanalat');
 
     Route::get('/penyewaanalat', [PenyewaanAlatController::class, 'penyewaanview'])->name('penyewaan.user');
-
-=======
-    Route::get('/pesananseafood', [PesanController::class,'pesananseafood'])->name('pesananseafood');
->>>>>>> 610b4a6be2f57dae9c58149e024e4694db0a5bb8
     Route::get('/about2', function () {
         return view('about2');
     })->name('about2');
