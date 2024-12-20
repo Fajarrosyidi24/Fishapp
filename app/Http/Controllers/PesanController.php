@@ -74,7 +74,7 @@ class PesanController extends Controller
         $merchant = Merchant::where('pembayaran_id', $pembayaran->id)->first();
         return redirect(route('halamanpembayaranseafood', ['reference' => $merchant->reference, 'idpembayaran' => $pembayaran->id]));
     }
-
+    
     public function pesananseafood(Request $request)
     {
         // Redirect ke reference default jika tidak ada parameter reference

@@ -13,6 +13,7 @@ use App\Models\AlamatPengirimanSeafood;
 use App\Models\ItemPembayaran;
 use App\Models\Merchant;
 use App\Models\Nelayan;
+use App\Models\PengirimanSeafood;
 use App\Models\User;
 
 class SeafoodController extends Controller
@@ -88,7 +89,7 @@ class SeafoodController extends Controller
     public function pesananseafoodnelayan()
     {
         $pesananSeafood = PesananSeafood::with('keranjangs.seafood')
-            ->whereIn('status', ['menunggu pembayaran', 'sedang dikemas'])
+            ->whereIn('status', ['menunggu pembayaran', 'sedang dikemas', 'dikirim'])
             ->get()
             ->filter(function ($pesanan) {
                 return $pesanan->keranjangs
@@ -161,6 +162,28 @@ class SeafoodController extends Controller
     }
 
     public function storebuktipengiriman(Request $request, $id){
-        dd($request->all());
+        $validated = $request->validate([
+            'photo' => 'required|string',  // Validasi jika 'photo' berupa string Base64
+        ]);
+        $base64Image = $request->input('photo');
+        if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $matches)) {
+            $imageExtension = $matches[1];  // jpg, png, jpeg, gif
+            $imageData = substr($base64Image, strpos($base64Image, ',') + 1);
+            $imageData = base64_decode($imageData);
+            if (!in_array($imageExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                return back()->withErrors(['photo' => 'Foto harus berupa: jpg, jpeg, png, gif.']);
+            }
+            if (strlen($imageData) > 10240 * 1024) {  // 10MB
+                return back()->withErrors(['photo' => 'ukuran foto tidak boleh lebih 10MB.']);
+            }
+            $imageName = 'photo_' . time() . '.' . $imageExtension;
+            $imagePath = storage_path('app/public/fotopengirimanseafood/' . $imageName);
+            file_put_contents($imagePath, $imageData);
+            PengirimanSeafood::store($imageName, $id);
+            PesananSeafood::kirim($id);
+            return back()->with('success', 'Foto berhasil diunggah!');
+        } else {
+            return back()->withErrors(['photo' => 'Invalid image data.']);
+        }
     }
 }
