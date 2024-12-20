@@ -59,21 +59,26 @@
                     <span class="text-muted">atau daftar dengan</span>
                 </div>
 
-                <div class="social-login" 
-                style="display: flex; gap: 115px;">
-                <a href="{{ route('google-auth') }}" class="login-btn google; btn btn-outline-primary w-48" style="display: flex; align-items: center; text-decoration: none;" >
-                <img src="https://developers.google.com/identity/images/g-logo.png" 
-                    alt="Google" 
-                    style="width: 30px; height: auto; margin-right: 10px;">
-                    <span style="font-size: 16px; color: primary;">Google</span>
-                </a>
-                <a href="{{ route('facebook-auth') }}" class="login-btn facebook; btn btn-outline-primary w-48" style="display: flex; align-items: center; text-decoration: none;">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" 
-                    alt="Facebook" 
-                    style="width: 30px; height: auto; margin-right: 10px;">
-                    <span style="font-size: 16px; color: primary;">Facebook</span>
-                </a>
+                <div class="container mt-1">
+                <div class="row">
+                            <div class="col-6">
+                                <a href="{{ route('google-auth') }}" class="login-btn google; btn btn-outline-primary"           style="display: flex; align-items: center; text-decoration: none;">
+                                <img src="https://developers.google.com/identity/images/g-logo.png" 
+                                    alt="Google" 
+                                    style="width: 20px; height: auto;">
+                                    <span style="font-size: 16px; color: primary;">Google</span>
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <a href="{{ route('facebook-auth') }}" class="login-btn facebook; btn btn-outline-primary" style="display: flex; align-items: center; text-decoration: none;">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" 
+                                    alt="Facebook" 
+                                    style="width: 20px; height: auto;">
+                                    <span style="font-size: 16px; color: primary;">Facebook</span>
+                                </a>
+                            </div>
                 </div>
+            </div>
 
                 <div class="d-flex justify-content-between mb-3">
                     <a href="{{ route('login') }}" class="d-block" style="font-size: 0.900rem; margin-top:25px;">Sudah punya akun? Login</a>

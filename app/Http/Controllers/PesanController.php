@@ -139,6 +139,10 @@ class PesanController extends Controller
         return view('pesananseafood', compact('reference', 'pesanan'));
     }
 
+    public function penyewaanalat(Request $request) {
+        return view('penyewaanalat');
+    }
+
 
     public function index(Request $request)
     {

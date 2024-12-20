@@ -208,33 +208,43 @@
     <div class="container mt-1">
         <div class="row">
             <!-- Navbar -->
-            <div class="col-12">
-                <div class="navbar-1 d-flex justify-content-between">
+            <div class="navbar-1 d-flex justify-content-between">
+                    <div class="d-flex justify-content-center col-2">
                     <a href="{{ route('pesananseafood', ['reference' => 1]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 1 ? 'active' : '' }}">
                         Semua
                     </a>
-                    <a href="{{ route('pesananseafood', ['reference' => 2]) }}"
+                    </div>
+                    <div class="d-flex justify-content-center col-2">
+                        <a href="{{ route('pesananseafood', ['reference' => 2]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 2 ? 'active' : '' }}">
                         Belum Bayar
                     </a>
-                    <a href="{{ route('pesananseafood', ['reference' => 3]) }}"
+                    </div>
+                    <div class="d-flex justify-content-center col-2">
+                        <a href="{{ route('pesananseafood', ['reference' => 3]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 3 ? 'active' : '' }}">
                         Sedang Dikemas
                     </a>
-                    <a href="{{ route('pesananseafood', ['reference' => 4]) }}"
+                    </div>
+                    <div class="d-flex justify-content-center col-2">
+                        <a href="{{ route('pesananseafood', ['reference' => 4]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 4 ? 'active' : '' }}">
                         Sedang Dikirim
                     </a>
-                    <a href="{{ route('pesananseafood', ['reference' => 5]) }}"
+                    </div>
+                    <div class="d-flex justify-content-center col-2">
+                        <a href="{{ route('pesananseafood', ['reference' => 5]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 5 ? 'active' : '' }}">
                         Selesai
                     </a>
-                    <a href="{{ route('pesananseafood', ['reference' => 6]) }}"
+                    </div>
+                    <div class="d-flex justify-content-center col-2">
+                        <a href="{{ route('pesananseafood', ['reference' => 6]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 6 ? 'active' : '' }}">
                         Dibatalkan
                     </a>
-                </div>
+                    </div>
             </div>
 
             @foreach ($pesanan as $pe)
