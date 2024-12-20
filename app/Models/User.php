@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserProfile::class);
     }
+
+    public function alamat()
+    {
+        return $this->hasOne(AlamatTujuanSeafood::class, 'user_id', 'id');
+    }
 }

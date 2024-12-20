@@ -16,6 +16,8 @@ use App\Http\Controllers\BarangsewaController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PenyewaanAlatController;
 use App\Http\Controllers\PesanController;
+use App\Models\BarangSewa;
+use App\Models\Seafood;
 
 Route::get('/', function () {
     return view('welcome');
@@ -50,6 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/bantuan', function (){
         return view('bantuan');
     })->name('bantuan');
+<<<<<<< HEAD
 
     Route::get('/pesananseafood/post', [PesanController::class,'pesananseafood'])->name('pesananseafood');
 
@@ -59,6 +62,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/penyewaanalat', [PenyewaanAlatController::class, 'penyewaanview'])->name('penyewaan.user');
 
+=======
+    Route::get('/pesananseafood', [PesanController::class,'pesananseafood'])->name('pesananseafood');
+>>>>>>> 610b4a6be2f57dae9c58149e024e4694db0a5bb8
     Route::get('/about2', function () {
         return view('about2');
     })->name('about2');
@@ -87,9 +93,11 @@ Route::middleware('auth')->group(function () {
         Route::post('/checkout/seafood', [KeranjangController::class, 'processCheckoutseafood'])->name('checkout.route');
         Route::post('/checkout/seafood/pesan', [PesanController::class, 'store'])->name('pesanan.submit');
         Route::get('/halaman-pembayaran-seafood', [PesanController::class, 'showPaymentPage'])->name('halamanpembayaranseafood');
-        Route::post('/payment/callback', [PesanController::class, 'handleCallback']);
+        Route::post('/payment/update-status', [PesanController::class, 'updatePaymentStatus'])->name('update.payment.status');
     });
 
+    Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
+    Route::post('/pesanan/seafood/api/backend/callback/{merchantOrderId}/{email}', [PesanController::class, 'CalbacknUrl'])->name('pesanan.seafood.calback');
     Route::prefix('user/pesanan saya')->group(function(){
         Route::get('/semua', [PesanController::class,'semua'])->name('pesanansaya.semua');
         Route::get('/belumbayar', [PesanController::class,'belumbayar'])->name('pesanansaya.belumbayar');
@@ -163,6 +171,7 @@ Route::prefix('nelayan')->group(function () {
             Route::get('/', [BarangsewaController::class, 'index'])->name('barangsewa.index');
             Route::get('/create-barangsewa', [BarangsewaController::class, 'create'])->name('create.barangsewa');
             Route::post('/create-barangsewa/post', [BarangsewaController::class, 'store'])->name('barang.store');
+            Route::get('/history/transaksi/barangsewa', [BarangsewaController::class, 'history_barangsewa'])->name('history.transaksi.barangsewa');
         });
         Route::prefix('seafood')->group(function(){
             Route::get('/', [SeafoodController::class, 'index'])->name('sefood.index');
@@ -172,14 +181,14 @@ Route::prefix('nelayan')->group(function () {
             Route::get('/edit-seafood/{kode_seafood}', [SeafoodController::class, 'edit'])->name('seafood.edit.nelayan');
             Route::post('/edit-seafood/{id}/post', [SeafoodController::class, 'editseafood'])->name('edit.seafood');
             Route::post('/edit-seafood/{kode_seafood}/delete', [SeafoodController::class, 'deleteseafood'])->name('nealayan.deleteseafood');
+            Route::get('/history/transaksi/seafood', [SeafoodController::class, 'history_seafood'])->name('history.transaksi.seafood');
         });
         Route::prefix('pesanan')->group(function(){
             Route::get('/seafood', [SeafoodController::class, 'pesananseafoodnelayan'])->name('nelayan.pesanan.seafood');
-            Route::get('/detailpesananseafood', [SeafoodController::class, 'detailpesananseafood'])->name('detailpesananseafood');
+            Route::get('/seafood/detail/pembayaran/{id}/{pesanan_id}', [SeafoodController::class, 'detailpembayaran'])->name('pembayaran.detail');
+            Route::post('/seafood/upload/buktu-pengiriman/{id}', [SeafoodController::class, 'storebuktipengiriman'])->name('upload.pengiriman.seafood');
             Route::get('/barangsewa', [BarangsewaController::class, 'pesananbarangsewanelayan'])->name('nelayan.pesanan.barangsewa');
-            Route::get('/detailpesananbarangsewa', [BarangsewaController::class,'detailpesananbarangsewa'])->name('detailpesananbarangsewa.nelayan');
-        });
+            });
     });
 });
 require __DIR__ . '/auth.php';
-////

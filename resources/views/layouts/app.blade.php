@@ -116,6 +116,3 @@
 </script>
 </body>
 </html>
-
-{{-- api duitku --}}
-{{-- d6cfaeec5500c3659c3a131574d101c6 --}}

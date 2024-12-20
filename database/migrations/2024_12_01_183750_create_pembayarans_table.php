@@ -16,8 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('merchant_order_id')->unique();
             $table->decimal('payment_amount', 15, 2);
-            $table->decimal('biaya_admin', 15, 2);
-            $table->decimal('total_ongkir', 15, 2);
             $table->string('customer_va_name');
             $table->string('email');
             $table->string('phone_number');

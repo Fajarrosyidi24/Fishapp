@@ -25,9 +25,36 @@ class PesananSeafood extends Model
         'alamat_pengiriman',
     ];
 
+    public static function kirim($id){
+        $data = self::find($id); 
+
+        if ($data) {
+            $data->status = 'dikirim';
+            $data->save();
+
+            foreach ($data->keranjangs as $keranjang) {
+                $keranjang->status = 'dikirim';
+                $keranjang->save();
+            }
+            return $data;
+        } else {
+            return null;
+        }
+    }
+
     public function keranjangs()
     {
         return $this->belongsToMany(Keranjang::class, 'item_seafood_checkouts', 'tb_pemesanan_id', 'keranjang_id');
+    }
+
+    public function item()
+    {
+        return $this->belongsToMany(Pembayaran::class, 'item_pembayarans', 'pesanan_id', 'pembayaran_id');
+    }
+
+    public function pengiriman()
+    {
+        return $this->hasOne(PengirimanSeafood::class, 'pesanan_id', 'id');
     }
 
     public static function createdata($datapesanan, $keranjangCount, $jumlahSubtotal)
