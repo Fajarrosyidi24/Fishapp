@@ -85,11 +85,11 @@
 <div class="faq-container">
         <h1 class="faq-item">FAQ</h1>
         <div class="faq-item">
-            <div class="faq-category">[Baru di Shopee]</div>
-            <div class="faq-question">Mengapa saya tidak bisa mendaftar akun Shopee dengan no. handphone saya?</div>
+            <div class="faq-category">[Akun Saya]</div>
+            <div class="faq-question">Mengapa saya tidak bisa mendaftar?</div>
             <div class="faq-container faq-answer">
-                <h1 class="faq-item">[Akun Saya] Mengapa saya tidak bisa login ke akun Shopee saya?</h1>
-                <p>Upaya log in yang gagal ke akun Shopee Anda dapat terjadi karena alasan berikut:</p>
+                <h3 class="faq-item">[Akun Saya] Mengapa saya tidak bisa mendaftar?</h3>
+                <p>Upaya register yang gagal dapat terjadi karena alasan berikut:</p>
                 <table id="datatablesSimple" class="table table-striped table-bordered">
                     <thead>
                         <tr style="background-color:#097ABA; color:#000">
@@ -101,35 +101,14 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td><i>Password salah</i></td>
-                            <td>Periksa kembali apakah Anda telah memasukkan <i>password</i> dengan benar. Jika Anda lupa <i>password</i>, temukan solusi mengenai <a href="#">reset password akun Shopee</a>.</td>
+                            <td>Email Sudah Terdafrar</td>
+                            <td>Periksa kembali email yang anda masukkan. Pastikan bahwa email yang anda masukkan belum terdaftar ke sistem</td>
                         </tr>
                         <tr>
                             <td>2</td>
-                            <td>Salah no. telepon</td>
+                            <td>Salah Konfirmasi Password</td>
                             <td>
-                                Periksa kembali apakah Anda sudah memasukkan no. telepon yang terdaftar. Pastikan Anda sudah memasukkan no. telepon yang terdaftar pada akun Shopee.
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Gagal Verifikasi Wajah</td>
-                            <td>
-                                <ul>
-                                    <li>Verifikasi Wajah dapat dilakukan jika Anda sudah melakukan <a href="#">verifikasi ShopeePay</a>. Sistem Shopee akan melakukan pengecekan apakah wajah Anda sudah sesuai dengan data saat verifikasi ShopeePay.</li>
-                                    <li>Ketika melakukan verifikasi, pastikan kondisi lingkungan Anda kondusif (contoh: cahaya terang dan koneksi internet stabil). Pelajari lebih lanjut mengenai <a href="#">cara melakukan verifikasi wajah saat log in</a>.</li>
-                                </ul>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Kode verifikasi sudah kedaluwarsa</td>
-                            <td>
-                                <ul>
-                                    <li>Pastikan Anda memasukkan kode verifikasi yang sudah dikirimkan melalui WhatsApp atau SMS dalam batas waktu yang sudah ditentukan.</li>
-                                    <li>Jika Anda memasukkan kode verifikasi di luar waktu yang sudah ditentukan, silakan minta kembali kode verifikasi baru.</li>
-                                </ul>
-                            </td>
+                                Periksa kembali apakah Anda sudah memasukkan password dengan benar pada kolom konfirmasi password.</td>
                         </tr>
                     </tbody>
                 </table>
