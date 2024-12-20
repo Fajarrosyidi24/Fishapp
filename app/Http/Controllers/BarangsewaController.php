@@ -60,7 +60,7 @@ class BarangsewaController extends Controller
 
     public function barangsewauser()
     {
-        $barang = BarangSewa::where('status', 'siap dipesan')->get();
+        $barang = BarangSewa::where('status', 'siap dijual')->get();
         return view('pembeli.produk.barangsewa', compact('barang'));
     }
 

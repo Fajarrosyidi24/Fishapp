@@ -57,7 +57,7 @@
                             class="btn btn-sm btn-primary text-white">
                             <i class="bi bi-eye"></i> Detail
                         </a>
-                        <a href="#"
+                        <a href="{{ route('sewabarang', ['kode_barang' => $br->kode_barang]) }}"
                             class="btn btn-sm btn-success text-white">
                             <i class="bi bi-cart-plus"></i> Sewa
                         </a>
