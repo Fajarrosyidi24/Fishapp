@@ -75,11 +75,18 @@ class PesanController extends Controller
         return redirect(route('halamanpembayaranseafood', ['reference' => $merchant->reference, 'idpembayaran' => $pembayaran->id]));
     }
 
+<<<<<<< HEAD
+    public function pesananseafood(Request $request){
+        if (request()->routeIs('pesananseafood') && !request()->has('reference')) {
+            header("Location: " . route('pesananseafood', ['reference' => 1]));
+            exit;
+=======
     public function pesananseafood(Request $request)
     {
         // Redirect ke reference default jika tidak ada parameter reference
         if (request()->routeIs('pesananseafood') && !$request->has('reference')) {
             return redirect()->route('pesananseafood', ['reference' => 1]);
+>>>>>>> 610b4a6be2f57dae9c58149e024e4694db0a5bb8
         }
 
         $reference = $request->query('reference');
