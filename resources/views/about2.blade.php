@@ -61,6 +61,6 @@
 </div>
 <!-- About End -->
 
-@include('components.team')
+{{-- @include('components.team') --}}
 @include('components.foot')
 @endsection

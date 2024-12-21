@@ -87,6 +87,7 @@
 
                      @php
                          $jumlahpesananSeafood = \App\Models\PesananSeafood::with('keranjangs.seafood') // Pastikan eager loading hingga relasi seafood
+                         ->where('status', 'sedang dikemas')
                              ->get()
                              ->filter(function ($pesanan) {
                                  return $pesanan->keranjangs
@@ -108,18 +109,24 @@
                         ">
                          <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
                          Daftar Pesanan
+                         @if($jumlahTotalPesanan == 0)
+                         @else
                          <span class="badge rounded-pill bg-danger">
-                             {{ $jumlahTotalPesanan }}
-                         </span>
+                            {{ $jumlahTotalPesanan }}
+                        </span>
+                         @endif
                          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                      </a>
                      <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                          data-bs-parent="#sidenavAccordion">
                          <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
                              <a class="nav-link" href="{{ route('nelayan.pesanan.seafood') }}">Seafood
+                                @if($jumlahpesananSeafood == 0)
+                         @else
                                 <span class="badge rounded-pill bg-danger">
                                     {{ $jumlahpesananSeafood }}
                                 </span>
+                                @endif
                              </a>
                              <a class="nav-link" href="{{ route('nelayan.pesanan.barangsewa') }}">Barang Sewa</a>
                          </nav>

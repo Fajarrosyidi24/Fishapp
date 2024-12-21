@@ -31,7 +31,7 @@
             <table id="datatablesSimple" class="table table-striped table-hover table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
+                        {{-- <th>No</th> --}}
                         <th>Nama Pembeli</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Detail</th>
@@ -41,7 +41,7 @@
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>No</th>
+                        {{-- <th>No</th> --}}
                         <th>Nama Pembeli</th>
                         <th class="text-center">Status</th>
                         <th class="text-center">Detail</th>
@@ -53,7 +53,7 @@
                     @foreach ($pesananSeafood as $index => $pesanan)
                         <tr>
                             <!-- Nomor Urut -->
-                            <td class="text-center">{{ $index + 1 }}</td>
+                            {{-- <td class="text-center">{{ $index + 1 }}</td> --}}
 
                             <td>
                                 @if ($pesanan->keranjangs->isNotEmpty() && $pesanan->keranjangs->first()->user)
@@ -101,7 +101,7 @@
                             <td class="text-center">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#productModal2{{ $pesanan->id }}">
                                     <button type="button" class="btn btn-sm btn-success"
-                                        @if ($pesanan->status != 'sedang dikemas') disabled @endif>
+                                        @if ($pesanan->status != 'sedang dikemas') disabled hidden @endif>
                                         <i class="fa-solid fa-truck"></i> Kirim
                                     </button>
                                 </a>

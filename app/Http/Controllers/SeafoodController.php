@@ -176,12 +176,32 @@ class SeafoodController extends Controller
             if (strlen($imageData) > 10240 * 1024) {  // 10MB
                 return back()->withErrors(['photo' => 'ukuran foto tidak boleh lebih 10MB.']);
             }
+
+            $bukti = PengirimanSeafood::where('pesanan_id', $id)->first();
+            if ($bukti) {
+                $oldImagePath = storage_path('app/public/fotopengirimanseafood/' . $bukti->foto);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+
+                $imageName = 'photo_' . time() . '.' . $imageExtension;
+                $imagePath = storage_path('app/public/fotopengirimanseafood/' . $imageName);
+                file_put_contents($imagePath, $imageData);
+
+                $bukti->upload_foto_bukti_pengiriman = $imageName;
+                $bukti->save();
+
+                PesananSeafood::kirim($id);
+            return back()->with('success', 'Foto berhasil diperbarui!');
+
+            }else{
             $imageName = 'photo_' . time() . '.' . $imageExtension;
             $imagePath = storage_path('app/public/fotopengirimanseafood/' . $imageName);
             file_put_contents($imagePath, $imageData);
             PengirimanSeafood::store($imageName, $id);
             PesananSeafood::kirim($id);
             return back()->with('success', 'Foto berhasil diunggah!');
+            }
         } else {
             return back()->withErrors(['photo' => 'Invalid image data.']);
         }
