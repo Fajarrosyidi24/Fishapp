@@ -18,6 +18,7 @@ use App\Models\ItemPembayaran;
 use App\Models\ItemSeafoodCheckout;
 use App\Models\Merchant;
 use App\Models\Pembayaran;
+use App\Models\PenerimaanSeafood;
 use App\Models\Seafood;
 use App\Models\StatusPembayaran;
 use App\Models\UserProfile;
@@ -74,7 +75,7 @@ class PesanController extends Controller
         $merchant = Merchant::where('pembayaran_id', $pembayaran->id)->first();
         return redirect(route('halamanpembayaranseafood', ['reference' => $merchant->reference, 'idpembayaran' => $pembayaran->id]));
     }
-    
+
     public function pesananseafood(Request $request)
     {
         // Redirect ke reference default jika tidak ada parameter reference
@@ -132,14 +133,15 @@ class PesanController extends Controller
                 ->filter(function ($pesanan) {
                     return $pesanan->keranjangs->contains('user_id', Auth::user()->id);
                 });
-        }else{
+        } else {
             return redirect()->route('pesananseafood', ['reference' => 1]);
         }
 
         return view('pesananseafood', compact('reference', 'pesanan'));
     }
 
-    public function penyewaanalat(Request $request) {
+    public function penyewaanalat(Request $request)
+    {
         return view('penyewaanalat');
     }
 
@@ -174,13 +176,72 @@ class PesanController extends Controller
         $pembayaran = Pembayaran::where('merchant_order_id', $merchantOrderId)->first();
         $status = StatusPembayaran::where('pembayaran_id', $pembayaran->id)->first();
         $idStatus = $status->id;
-        StatusPembayaran::updateStatus($idStatus);
+
         $itemPembayaran = ItemPembayaran::where('pembayaran_id', $pembayaran->id)->pluck('pesanan_id');
         $pesanan = PesananSeafood::whereIn('id', $itemPembayaran)->get();
-        PesananSeafood::whereIn('id', $itemPembayaran)->update(['status' => 'sedang dikemas']);
-        $itemKeranjang = ItemSeafoodCheckout::whereIn('tb_pemesanan_id', $pesanan->pluck('id'))->get();
-        $idkeranjang = $itemKeranjang->pluck('keranjang_id');
-        Keranjang::whereIn('kode_keranjang', $idkeranjang)->update(['status' => 'sedang dikemas']);
-        return redirect()->route('pesananseafood')->with('status', 'pesanan anda sedang dikemas');
+
+        if ($pesanan->contains('status', 'menunggu pembayaran')) {
+            StatusPembayaran::updateStatus($idStatus);
+            PesananSeafood::whereIn('id', $itemPembayaran)->update(['status' => 'sedang dikemas']);
+            $itemKeranjang = ItemSeafoodCheckout::whereIn('tb_pemesanan_id', $pesanan->pluck('id'))->get();
+            $idkeranjang = $itemKeranjang->pluck('keranjang_id');
+            Keranjang::whereIn('kode_keranjang', $idkeranjang)->update(['status' => 'sedang dikemas']);
+            return redirect()->route('pesananseafood')->with('status', 'pesanan anda sedang dikemas');
+        } else {
+            return redirect()->route('pesananseafood');
+        }
+    }
+
+    public function detailPesanan($id)
+    {
+        $pesanan = PesananSeafood::where('id', $id)->first();
+        return view('pembeli.detailpesananseafood', compact('pesanan'));
+    }
+
+
+    public function storebuktipenerimaan(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'photo' => 'required|string',  // Validasi jika 'photo' berupa string Base64
+        ]);
+        $base64Image = $request->input('photo');
+        if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $matches)) {
+            $imageExtension = $matches[1];  // jpg, png, jpeg, gif
+            $imageData = substr($base64Image, strpos($base64Image, ',') + 1);
+            $imageData = base64_decode($imageData);
+            if (!in_array($imageExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
+                return back()->withErrors(['photo' => 'Foto harus berupa: jpg, jpeg, png, gif.']);
+            }
+            if (strlen($imageData) > 10240 * 1024) {  // 10MB
+                return back()->withErrors(['photo' => 'ukuran foto tidak boleh lebih 10MB.']);
+            }
+
+            $bukti = PenerimaanSeafood::where('pesanan_id', $id)->first();
+
+            if ($bukti) {
+                $oldImagePath = storage_path('app/public/fotopenerimaanseafood/' . $bukti->foto);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+
+                $imageName = 'photo_' . time() . '.' . $imageExtension;
+                $imagePath = storage_path('app/public/fotopenerimaanseafood/' . $imageName);
+                file_put_contents($imagePath, $imageData);
+
+                $bukti->upload_foto_bukti_penerimaan = $imageName;
+                $bukti->save();
+                PesananSeafood::terima($id);
+                return back()->with('success', 'Foto berhasil diperbarui!');
+            } else {
+                $imageName = 'photo_' . time() . '.' . $imageExtension;
+                $imagePath = storage_path('app/public/fotopenerimaanseafood/' . $imageName);
+                file_put_contents($imagePath, $imageData);
+                PenerimaanSeafood::store($imageName, $id);
+                PesananSeafood::terima($id);
+                return back()->with('success', 'Foto berhasil diunggah!');
+            }
+        } else {
+            return back()->withErrors(['photo' => 'Invalid image data.']);
+        }
     }
 }
