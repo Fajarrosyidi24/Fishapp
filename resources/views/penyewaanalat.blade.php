@@ -93,4 +93,5 @@
 
             </div>
         </div>
-    @endsection
+    @include('components.foot')
+@endsection
