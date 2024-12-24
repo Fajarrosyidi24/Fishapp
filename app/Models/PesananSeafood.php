@@ -23,6 +23,7 @@ class PesananSeafood extends Model
         'snap_token',
         'opsi_pengiriman',
         'alamat_pengiriman',
+        'etd',
     ];
 
     public static function kirim($id){
@@ -34,6 +35,23 @@ class PesananSeafood extends Model
 
             foreach ($data->keranjangs as $keranjang) {
                 $keranjang->status = 'dikirim';
+                $keranjang->save();
+            }
+            return $data;
+        } else {
+            return null;
+        }
+    }
+
+    public static function terima($id){
+        $data = self::find($id); 
+
+        if ($data) {
+            $data->status = 'selesai';
+            $data->save();
+
+            foreach ($data->keranjangs as $keranjang) {
+                $keranjang->status = 'selesai';
                 $keranjang->save();
             }
             return $data;
@@ -72,6 +90,7 @@ class PesananSeafood extends Model
             'snap_token' => Str::random(15),
             'opsi_pengiriman' => $datapesanan['courier'],
             'alamat_pengiriman' => $destination,
+            'etd' => $datapesanan['etd'],
         ]);
 
         return $tabelpesanan;
