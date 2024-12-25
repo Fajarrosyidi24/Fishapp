@@ -275,7 +275,7 @@
 
                                             <!-- Deskripsi Produk -->
                                             <div class="order-details ms-3 w-75">
-                                                <h4>nama : {{ $keranjang->seafood->nama }}</h4>
+                                                <h4>Nama : {{ $keranjang->seafood->nama }}</h4>
                                                 <span>Jumlah Pesanan : {{ $keranjang->jumlah }}</span>
                                             </div>
                                         </div>
