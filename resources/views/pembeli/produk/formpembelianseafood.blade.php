@@ -2,201 +2,158 @@
 @section('title')
     <title>Form Pembelian Seafood {{ $seafood->nama }} Page - Fishapp</title>
     <style>
-        .product-container {
+        .penjual {
+            background-color: #fff;
             display: flex;
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 5px;
             max-width: 1200px;
             /* Lebar lebih kecil */
             margin: auto;
             color: black;
         }
-
-        .product-image img {
-            width: 150px;
-            /* Ukuran gambar lebih kecil */
-            height: auto;
-            border-radius: 6px;
+        .deskripsi {
+            padding-top: 10px;
         }
-
-        .product-details {
-            flex: 1;
-            padding: 0 15px;
-            /* Padding lebih kecil */
-        }
-
-        .product-details h1 {
-            font-size: 1.2em;
-            /* Ukuran font lebih kecil */
-            margin: 0;
-        }
-
-        .product-details p {
-            margin: 3px 0;
-            font-size: 0.9em;
-            /* Font yang lebih kecil */
-        }
-
-        .price {
-            font-size: 1.2em;
-            color: green;
-        }
-
-        .detail {
-            font-size: 0.8em;
-            color: #555;
-        }
-
         .purchase-section {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            border-left: 1px solid #ccc;
-            padding-left: 10px;
+            align-items: flex-start;
+            padding-top: 10px;
             /* Padding lebih kecil */
         }
-
         .quantity-selector {
-            text-align: center;
+            display: flex;
+            align-items: center; /* Untuk menyelaraskan elemen secara vertikal */
+            gap: 5px; /* Jarak label dan kontrol */
         }
 
         .quantity-controls {
             display: flex;
-            align-items: center;
-            margin: 5px 0;
-            /* Margin lebih kecil */
+            align-items: center; /* Untuk menyelaraskan tombol dan input secara vertikal */
+            margin-left: 20px; /* Jarak antara label dan kontrol kuantitas */
         }
 
         .quantity-controls button {
-            width: 25px;
-            /* Lebar tombol lebih kecil */
-            height: 25px;
+            width: 30px;
+            height: 30px;
             border: 1px solid #ccc;
-            background-color: #fff;
+            background-color:rgb(255, 252, 252);
             font-size: 1em;
+            cursor: pointer;
         }
 
         .quantity-controls input {
-            width: 40px;
-            /* Lebar input lebih kecil */
+            width: 50px;
+            height: 30px;
             text-align: center;
             border: 1px solid #ccc;
-            margin: 0 5px;
-            /* Margin lebih kecil */
+            font-size: 1em;
         }
 
         .subtotal {
-            text-align: center;
+            text-align: left;
+            font-size: 1em;
+            font-weight: bold;
+            padding-top: 20px;
+        }
+        .btn {
             font-size: 0.9em;
-            /* Font subtotal lebih kecil */
         }
-
-        .button-container {
-            display: flex;
-            gap: 5px;
-            /* Jarak lebih kecil antara tombol */
-        }
-
-        .add-to-cart,
-        .buy-now {
-            padding: 5px 15px;
-            /* Padding tombol lebih kecil */
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            text-align: center;
-            font-size: 0.9em;
-            /* Ukuran font tombol lebih kecil */
-        }
-
-        .add-to-cart {
-            background-color: #007bff;
-        }
-
-        .buy-now {
-            background-color: #28a745;
+        .product-container {
+            padding-top: 30px;
         }
     </style>
 @endsection
 
 @section('content')
-    <div class="product-container mt-3 mb-5">
-        <div class="product-image">
-            <img src="{{ asset('storage/fotoseafood/' . $seafood->foto) }}" alt="foto_seafood">
-        </div>
-        <div class="product-details">
-            <h1>{{ $seafood->nama }} {{ $seafood->jenis_seafood }}</h1>
-            <p>Sedang Tersedia {{ $seafood->jumlah }} KG untuk saat ini</p>
-            <p class="price">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }},-</p>
-            <p class="detail">{{ $seafood->nama }} yang dijual selalu dalam kondisi fresh baru ditangkap. Harga
-                hitungan per 1 kg.</p>
-        </div>
-        <div class="purchase-section">
-            <div class="quantity-selector">
-                <label for="quantity">Atur Jumlah Pembelian /KG</label>
-                <div class="quantity-controls">
-                    <button class="minus">-</button>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1"
-                        max="{{ $seafood->jumlah }}">
-                    <button class="plus">+</button>
+<div class="container mt-5 mb-3">
+        <div class="row g-4 align-items-start">
+                <!-- Gambar Produk -->
+                <div class="col-12 col-lg-6 text-center">
+                    <img src="{{ asset('storage/fotoseafood/' . $seafood->foto) }}" class="img-fluid rounded w-50 w-lg-100" alt="foto seafood">
                 </div>
-            </div>
-            <div class="subtotal">
-                <p>Subtotal</p>
-                <p id="subtotal-amount">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }},-</p>
-            </div>
-            <div class="button-container">
-                <button class="add-to-cart" data-id="{{ $seafood->kode_seafood }}">+ Masukan kedalam Keranjang</button>
-            </div>
+
+                <!-- Detail Produk -->
+                <div class="col-12 col-lg-6">
+                    <h1 class="card-title fs-1">{{ $seafood->nama }}</h1>
+                    <!-- Total Penjualan -->
+                    <div class="mb-2">
+                                <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
+                                <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
+                                        aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
+                                </div>
+                    </div>
+                    <p class="card-text fw-bold mb-1 fs-4" style="color:black;">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }} /KG</p>
+                    <div class="product-details">
+                        <p>Sedang Tersedia {{ $seafood->jumlah }} KG untuk saat ini</p>
+                    </div>
+                    <div class="penjual"> 
+                    </div>
+                        <p class="deskripsi"> <h4>Deskripsi Produk</h4>
+                        {{ $seafood->nama }} yang dijual selalu dalam kondisi fresh baru ditangkap. Harga hitungan per 1 kg.
+                        </p>
+                    <div class="purchase-section">
+                        <div class="quantity-selector">
+                            <label for="quantity">Kuantitas /KG</label>
+                            <div class="quantity-controls">
+                                <button class="minus">-</button>
+                                <input type="number" id="quantity" name="quantity" value="1" min="1"
+                                    max="{{ $seafood->jumlah }}">
+                                <button class="plus">+</button>
+                            </div>
+                        </div>
+                        <div class="subtotal">
+                            <p class="label fw-bold mb-0">Subtotal</p>
+                            <p class="amount mb-0 ms-0" id="subtotal-amount">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }},-</p>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-primary text-white" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
+                        <button class="btn btn-sm btn-success text-white">Beli Sekarang</button>
+                    </div>
+                </div>
         </div>
-    </div>
 
     {{-- produk lainnya --}}
-    <div class="container">
+    <div class="product-container">
         <h6 style="color: black; text-align: center;"><------ Produk lainnya ------></h6>
         @php $count = 0; @endphp
-        <div class="container mb-3">
+        <div class="product-container mb-3">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"> <!-- Grid responsif -->
                 @foreach ($produklainnya as $se)
                     <!-- Produk Card -->
                     <div class="col">
-                        <div class="card h-100 shadow-sm">
-                            <img src="{{ asset('storage/fotoseafood/' . $se->foto) }}" class="card-img-top" alt="foto seafood"
-                                style="height: 150px; object-fit: cover;">
-                            <div class="card-body">
-                                <h5 class="card-title fs-6">{{ $se->nama }}</h5>
-                                <!-- Total Penjualan -->
-                                <div class="mb-2">
-                                    <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
-                                    <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
-                                            aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
+                        <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="text-decoration-none text-dark">
+                            <div class="card h-100 shadow-sm">
+                                <img src="{{ asset('storage/fotoseafood/' . $se->foto) }}" class="card-img-top" alt="foto seafood"
+                                    style="height: 150px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title fs-6">{{ $se->nama }}</h5>
+                                    <!-- Total Penjualan -->
+                                    <div class="mb-2">
+                                        <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
+                                        <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
+                                                aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
+                                        </div>
+                                    </div>
+                                    <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
+                                    <p class="card-text mb-2">Tersedia {{ $se->jumlah }} KG</p>
+                                    <!-- Rating Bintang -->
+                                    <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
+                                    <div class="mb-2">
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        <i class="bi bi-star text-muted"></i>
                                     </div>
                                 </div>
-                                <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
-                                <p class="card-text mb-2">Tersedia {{ $se->jumlah }} KG</p>
-                                <!-- Rating Bintang -->
-                                <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
-                                <div class="mb-2">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star text-muted"></i>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <a href="#" data-bs-toggle="modal"
-                                        data-bs-target="#productModal{{ $se->kode_seafood }}"
-                                        class="btn btn-sm btn-primary text-white">
-                                        <i class="bi bi-eye"></i> Detail
-                                    </a>
-                                    <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="btn btn-sm btn-success text-white">
-                                        <i class="bi bi-cart-plus"></i> Beli
-                                    </a>
-                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
     
                     <div class="modal fade" id="productModal{{ $se->kode_seafood }}" tabindex="-1"
