@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Nelayan;
 use App\Models\Seafood;
+use App\Models\Merchant;
 use App\Models\Rekening;
 use App\Models\Keranjang;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ItemPembayaran;
 use App\Models\PesananSeafood;
+use App\Models\PengirimanSeafood;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
 use App\Models\AlamatPengirimanSeafood;
-use App\Models\ItemPembayaran;
-use App\Models\Merchant;
-use App\Models\Nelayan;
-use App\Models\PengirimanSeafood;
-use App\Models\User;
 
 class SeafoodController extends Controller
 {
@@ -162,48 +163,12 @@ class SeafoodController extends Controller
     }
 
     public function storebuktipengiriman(Request $request, $id){
-        $validated = $request->validate([
-            'photo' => 'required|string',  // Validasi jika 'photo' berupa string Base64
-        ]);
-        $base64Image = $request->input('photo');
-        if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $matches)) {
-            $imageExtension = $matches[1];  // jpg, png, jpeg, gif
-            $imageData = substr($base64Image, strpos($base64Image, ',') + 1);
-            $imageData = base64_decode($imageData);
-            if (!in_array($imageExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                return back()->withErrors(['photo' => 'Foto harus berupa: jpg, jpeg, png, gif.']);
-            }
-            if (strlen($imageData) > 10240 * 1024) {  // 10MB
-                return back()->withErrors(['photo' => 'ukuran foto tidak boleh lebih 10MB.']);
-            }
-
-            $bukti = PengirimanSeafood::where('pesanan_id', $id)->first();
-            if ($bukti) {
-                $oldImagePath = storage_path('app/public/fotopengirimanseafood/' . $bukti->foto);
-                if (file_exists($oldImagePath)) {
-                    unlink($oldImagePath);
-                }
-
-                $imageName = 'photo_' . time() . '.' . $imageExtension;
-                $imagePath = storage_path('app/public/fotopengirimanseafood/' . $imageName);
-                file_put_contents($imagePath, $imageData);
-
-                $bukti->upload_foto_bukti_pengiriman = $imageName;
-                $bukti->save();
-
-                PesananSeafood::kirim($id);
-            return back()->with('success', 'Foto berhasil diperbarui!');
-
-            }else{
-            $imageName = 'photo_' . time() . '.' . $imageExtension;
-            $imagePath = storage_path('app/public/fotopengirimanseafood/' . $imageName);
-            file_put_contents($imagePath, $imageData);
-            PengirimanSeafood::store($imageName, $id);
-            PesananSeafood::kirim($id);
-            return back()->with('success', 'Foto berhasil diunggah!');
-            }
-        } else {
-            return back()->withErrors(['photo' => 'Invalid image data.']);
-        }
+        $fotoFile = $request->file('photo');
+        $imageName = Str::uuid() . '_' . time() . '_' . $fotoFile->getClientOriginalName();
+        $fotoPath = $fotoFile->storeAs('public/fotopenerimaanseafood', $imageName);
+        $bukti = PengirimanSeafood::where('pesanan_id', $id)->first();
+        PengirimanSeafood::store($imageName, $id);
+        PesananSeafood::kirim($id);
+        return back()->with('success', 'Foto berhasil diunggah!'); 
     }
 }
