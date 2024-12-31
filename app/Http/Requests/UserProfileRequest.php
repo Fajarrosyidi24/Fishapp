@@ -32,7 +32,7 @@ class UserProfileRequest extends FormRequest
             'dusun' => 'nullable|string|max:255',
             'rt' => 'nullable|string|max:5',
             'rw' => 'nullable|string|max:5',
-            'kode_pos' => 'nullable|string|max:10',
+            'kode_pos' => 'nullable|string|max:5|min:5',
             'email' => 'nullable|email|max:255',
             'nomer_telepon' => 'nullable|string|regex:/^[0-9]+$/|min:10|max:15',
         ];
@@ -50,7 +50,8 @@ class UserProfileRequest extends FormRequest
             'tanggal_lahir.date' => 'Tanggal lahir harus dalam format yang valid.',
             'rt.max' => 'RT tidak boleh lebih dari 5 karakter.',
             'rw.max' => 'RW tidak boleh lebih dari 5 karakter.',
-            'kode_pos.max' => 'Kode pos tidak boleh lebih dari 10 karakter.',
+            'kode_pos.max' => 'Kode pos tidak boleh lebih atau kurang dari 5 karakter.',
+            'kode_pos.min' => 'Kode pos tidak boleh lebih atau kurang dari 5 karakter.',
             'email.email' => 'Format email tidak valid.',
             'nomer_telepon.regex' => 'Nomor telepon hanya boleh berisi angka.',
             'nomer_telepon.min' => 'Nomor telepon harus minimal 10 digit.',

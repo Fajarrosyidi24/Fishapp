@@ -19,6 +19,10 @@ class CreatePesanan extends Model
             $pesananSeafood = PesananSeafood::createdata($datapesanan, $keranjangCount, $jumlahSubtotal);
             ItemSeafoodCheckout::createdata($pesananSeafood, $keranjangData);
             Keranjang::whereIn('kode_keranjang', $kodeKeranjang)->update(['status' => 'menunggu pembayaran']);
+            foreach($keranjangData as $data){
+                $data->seafood->jumlah = $data->seafood->jumlah - $data->jumlah;
+                $data->seafood->save();
+            }
             $pesanan[] = $pesananSeafood;
         }
 

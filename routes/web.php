@@ -91,6 +91,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/payment/update-status', [PesanController::class, 'updatePaymentStatus'])->name('update.payment.status');
         Route::get('/detail/pesanan/seafood/{id}', [PesanController::class, 'detailPesanan'])->name('detail.pesanan.pembeli.seafood');
         Route::post('/seafood/upload/bukti-penerimaan/{id}', [PesanController::class, 'storebuktipenerimaan'])->name('upload.penerimaan.seafood');
+        Route::post('/seafood/{seafood}/rating', [SeafoodController::class, 'ratingpost'])->name('rating.store');
     });
 
     Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
