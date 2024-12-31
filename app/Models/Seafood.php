@@ -31,9 +31,19 @@ class Seafood extends Model
         return $this->belongsTo(Nelayan::class, 'nelayan_id');
     }
 
+    public function keranjangs()
+    {
+        return $this->hasMany(Keranjang::class, 'seafood_id', 'kode_seafood');
+    }
+
     public function harga()
     {
         return $this->hasOne(HargaSeafood::class, 'seafood_id', 'kode_seafood');
+    }
+
+    public function rating()
+    {
+        return $this->hasOne(RatingSeafood::class, 'seafood_id', 'kode_seafood');
     }
 
     /**
@@ -113,7 +123,8 @@ class Seafood extends Model
         $seafood->delete();
     }
 
-    public static function filterkode($keranjangs3){
+    public static function filterkode($keranjangs3)
+    {
         $kodeSeafoods = [];
         foreach ($keranjangs3 as $keranjang) {
             $seafood = Seafood::where('kode_seafood', $keranjang->seafood_id)->first();
@@ -125,7 +136,8 @@ class Seafood extends Model
         return $kodeSeafoods;
     }
 
-    public static function jumlah($keranjangs1){
+    public static function jumlah($keranjangs1)
+    {
         $jumlahSeafood = [];
         foreach ($keranjangs1 as $keranjang) {
             $seafood_id = $keranjang['seafood_id'];
@@ -146,7 +158,8 @@ class Seafood extends Model
         return $jumlahSeafood;
     }
 
-    public static function combinedData($jumlahSeafood, $cityids){
+    public static function combinedData($jumlahSeafood, $cityids)
+    {
         $combinedData = [];
         foreach ($cityids as $city) {
             $nelayanId = $city['nelayan_id'];
@@ -160,12 +173,13 @@ class Seafood extends Model
                     ];
                 }
             }
-        }  
-        
+        }
+
         return $combinedData;
     }
 
-    public static function aggregatedData($combinedData, $destination){
+    public static function aggregatedData($combinedData, $destination)
+    {
         $aggregatedData = [];
 
         foreach ($combinedData as $data) {
