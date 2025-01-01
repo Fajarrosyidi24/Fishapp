@@ -80,7 +80,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user/produk')->group(function () {
         Route::get('/seafood', [SeafoodController::class, 'seafooduser'])->name('pembeli.produk.seafood');
-        Route::get('/barangsewa', [BarangsewaController::class, 'barangsewauser'])->name('pembeli.produk.barangsewa');
         Route::get('/hubungi/penjual/{id}', [SeafoodController::class, 'chatwa'])->name('hubungi.penjual.seafood');
         Route::get('/beli/seafood/{kode_seafood}', [SeafoodController::class, 'beli'])->name('beliseafood');
         Route::get('/sewa/barangsewa/{kode_barang}', [BarangsewaController::class, 'sewa'])->name('sewabarang');
@@ -92,6 +91,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/detail/pesanan/seafood/{id}', [PesanController::class, 'detailPesanan'])->name('detail.pesanan.pembeli.seafood');
         Route::post('/seafood/upload/bukti-penerimaan/{id}', [PesanController::class, 'storebuktipenerimaan'])->name('upload.penerimaan.seafood');
         Route::post('/seafood/{seafood}/rating', [SeafoodController::class, 'ratingpost'])->name('rating.store');
+
+        Route::get('/barangsewa', [BarangsewaController::class, 'barangsewauser'])->name('pembeli.produk.barangsewa');
     });
 
     Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
@@ -169,7 +170,11 @@ Route::prefix('nelayan')->group(function () {
             Route::get('/', [BarangsewaController::class, 'index'])->name('barangsewa.index');
             Route::get('/create-barangsewa', [BarangsewaController::class, 'create'])->name('create.barangsewa');
             Route::post('/create-barangsewa/post', [BarangsewaController::class, 'store'])->name('barang.store');
+            Route::get('/detail-barang/{kode_barang}', [BarangsewaController::class, 'detail'])->name('barang.detail.nelayan');
             Route::get('/history/transaksi/barangsewa', [BarangsewaController::class, 'history_barangsewa'])->name('history.transaksi.barangsewa');
+            Route::get('/edit-barang/{kode_barang}', [BarangsewaController::class, 'edit'])->name('barang.edit.nelayan');
+            Route::post('/edit-barang/{id}/post', [BarangsewaController::class, 'editbarang'])->name('edit.barang');
+            Route::post('/edit-barang/{kode_barang}/delete', [BarangsewaController::class, 'deletebarang'])->name('nealayan.deletesBarang');
         });
         Route::prefix('seafood')->group(function(){
             Route::get('/', [SeafoodController::class, 'index'])->name('sefood.index');

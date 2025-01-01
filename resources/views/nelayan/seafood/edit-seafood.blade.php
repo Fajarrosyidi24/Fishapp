@@ -12,7 +12,7 @@
 
         <div class="card shadow-sm">
             <div class="card-body">
-                <h5 class="card-title">Form Tambah Seafood</h5>
+                <h5 class="card-title">Form Edit Seafood</h5>
                 <form action="{{route('edit.seafood', ['id' => $seafood->kode_seafood])}}" method="POST" enctype="multipart/form-data">
                     @csrf
 
