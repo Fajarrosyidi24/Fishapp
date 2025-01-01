@@ -68,4 +68,25 @@ class BarangsewaController extends Controller
      {
         return view('nelayan.pesanan.barangsewa');
     }
+
+    public function detail($id){
+        $barang = BarangSewa::where("kode_barang", $id)->first();
+        return view('nelayan.barang.detail-barang', compact('barang'));
+    }
+
+    public function edit($id){
+        $barang = BarangSewa::where("kode_barang", $id)->first();
+        return view('nelayan.barang.edit-barang', compact('barang'));
+    }
+
+    public function editbarang(BarangRequest $request, $id){
+        $fotoFile = $request->file('photo');
+        BarangSewa::updateFromRequest($request, $id);
+        return redirect()->route('barangsewa.index')->with('success', 'Data Barang berhasil diedit.');
+    }
+
+    public function deletebarang($kode_barang){
+        BarangSewa::deleteFromRequest($kode_barang);
+        return redirect()->route('barangsewa.index')->with('success', 'Barang berhasil dihapus.');
+    }
 }
