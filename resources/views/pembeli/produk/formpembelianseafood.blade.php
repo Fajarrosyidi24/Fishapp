@@ -2,67 +2,120 @@
 @section('title')
     <title>Form Pembelian Seafood {{ $seafood->nama }} Page - Fishapp</title>
     <style>
-        .penjual {
-            background-color: #fff;
+        .product-container {
             display: flex;
             border: 1px solid #ccc;
-            padding: 5px;
+            padding: 10px;
             max-width: 1200px;
             /* Lebar lebih kecil */
             margin: auto;
             color: black;
         }
-        .deskripsi {
-            padding-top: 10px;
+
+        .product-image img {
+            width: 150px;
+            /* Ukuran gambar lebih kecil */
+            height: auto;
+            border-radius: 6px;
         }
+
+        .product-details {
+            flex: 1;
+            padding: 0 15px;
+            /* Padding lebih kecil */
+        }
+
+        .product-details h1 {
+            font-size: 1.2em;
+            /* Ukuran font lebih kecil */
+            margin: 0;
+        }
+
+        .product-details p {
+            margin: 3px 0;
+            font-size: 0.9em;
+            /* Font yang lebih kecil */
+        }
+
+        .price {
+            font-size: 1.2em;
+            color: green;
+        }
+
+        .detail {
+            font-size: 0.8em;
+            color: #555;
+        }
+
         .purchase-section {
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            align-items: flex-start;
-            padding-top: 10px;
+            align-items: center;
+            border-left: 1px solid #ccc;
+            padding-left: 10px;
             /* Padding lebih kecil */
         }
+
         .quantity-selector {
-            display: flex;
-            align-items: center; /* Untuk menyelaraskan elemen secara vertikal */
-            gap: 5px; /* Jarak label dan kontrol */
+            text-align: center;
         }
 
         .quantity-controls {
             display: flex;
-            align-items: center; /* Untuk menyelaraskan tombol dan input secara vertikal */
-            margin-left: 20px; /* Jarak antara label dan kontrol kuantitas */
+            align-items: center;
+            margin: 5px 0;
+            /* Margin lebih kecil */
         }
 
         .quantity-controls button {
-            width: 30px;
-            height: 30px;
+            width: 25px;
+            /* Lebar tombol lebih kecil */
+            height: 25px;
             border: 1px solid #ccc;
-            background-color:rgb(255, 252, 252);
+            background-color: #fff;
             font-size: 1em;
-            cursor: pointer;
         }
 
         .quantity-controls input {
-            width: 50px;
-            height: 30px;
+            width: 40px;
+            /* Lebar input lebih kecil */
             text-align: center;
             border: 1px solid #ccc;
-            font-size: 1em;
+            margin: 0 5px;
+            /* Margin lebih kecil */
         }
 
         .subtotal {
-            text-align: left;
-            font-size: 1em;
-            font-weight: bold;
-            padding-top: 20px;
-        }
-        .btn {
+            text-align: center;
             font-size: 0.9em;
+            /* Font subtotal lebih kecil */
         }
-        .product-container {
-            padding-top: 30px;
+
+        .button-container {
+            display: flex;
+            gap: 5px;
+            /* Jarak lebih kecil antara tombol */
+        }
+
+        .add-to-cart,
+        .buy-now {
+            padding: 5px 15px;
+            /* Padding tombol lebih kecil */
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            text-align: center;
+            font-size: 0.9em;
+            /* Ukuran font tombol lebih kecil */
+        }
+
+        .add-to-cart {
+            background-color: #007bff;
+        }
+
+        .buy-now {
+            background-color: #28a745;
         }
     </style>
 @endsection
@@ -111,49 +164,85 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary text-white add-to-cart" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
+                        <button class="btn btn-sm btn-primary text-white" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
                         <button class="btn btn-sm btn-success text-white">Beli Sekarang</button>
                     </div>
                 </div>
         </div>
 
     {{-- produk lainnya --}}
-    <div class="product-container">
+    <div class="container">
         <h6 style="color: black; text-align: center;"><------ Produk lainnya ------></h6>
         @php $count = 0; @endphp
-        <div class="product-container mb-3">
+        <div class="container mb-3">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"> <!-- Grid responsif -->
                 @foreach ($produklainnya as $se)
                     <!-- Produk Card -->
                     <div class="col">
-                        <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="text-decoration-none text-dark">
-                            <div class="card h-100 shadow-sm">
-                                <img src="{{ asset('storage/fotoseafood/' . $se->foto) }}" class="card-img-top" alt="foto seafood"
-                                    style="height: 150px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title fs-6">{{ $se->nama }}</h5>
-                                    <!-- Total Penjualan -->
-                                    <div class="mb-2">
-                                        <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
-                                        <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
-                                                aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
-                                        </div>
-                                    </div>
-                                    <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
-                                    <p class="card-text mb-2">Tersedia {{ $se->jumlah }} KG</p>
-                                    <!-- Rating Bintang -->
-                                    <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
-                                    <div class="mb-2">
-                                        <i class="bi bi-star-fill text-warning"></i>
-                                        <i class="bi bi-star-fill text-warning"></i>
-                                        <i class="bi bi-star-fill text-warning"></i>
-                                        <i class="bi bi-star-fill text-warning"></i>
-                                        <i class="bi bi-star text-muted"></i>
-                                    </div>
+                        <div class="card h-100 shadow-sm">
+                            <img src="{{ asset('storage/fotoseafood/' . $se->foto) }}" class="card-img-top" alt="foto seafood"
+                                style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title fs-6">{{ $se->nama }}</h5>
+                                <!-- Total Penjualan -->
+                               <div class="mb-2">
+                        <small class="text-muted">
+                            <i class="bi bi-graph-up"></i> {{ $se->jumlah_terjual }} kali terjual
+                        </small>
+                        <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
+                            @php
+                                // Menghitung persentase jumlah terjual dibandingkan dengan stok
+                                $percentage = ($se->jumlah_terjual / $se->jumlah) * 100;
+                                $percentage = min($percentage, 100); // Membatasi agar tidak melebihi 100%
+                            @endphp
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $percentage }}%;"
+                                aria-valuenow="{{ $se->jumlah_terjual }}" aria-valuemin="0" aria-valuemax="{{ $se->jumlah }}">
+                            </div>
+                        </div>
+                    </div>
+                                <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
+                                <p class="card-text mb-2">Tersedia {{ $se->jumlah }} KG</p>
+                                <!-- Rating Bintang -->
+                                <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
+                                <div class="mb-2">
+                      @php
+    // Inisialisasi rating
+    $rating = 0;
+    $fullStars = 0;
+    $halfStar = false;
+
+    // Pastikan relasi rating ada sebelum menghitung rata-rata
+    if ($se->rating && $se->rating->count() > 0) {
+        $rating = $se->rating->avg('rating'); // Menghitung rata-rata rating
+        $fullStars = floor($rating); // Mengambil nilai bintang penuh
+        $halfStar = $rating - $fullStars >= 0.5; // Mengecek apakah ada bintang setengah
+    }
+@endphp
+                        <!-- Menampilkan bintang penuh -->
+                        @for ($i = 1; $i <= $fullStars; $i++)
+                            <i class="bi bi-star-fill text-warning"></i>
+                        @endfor
+                        <!-- Menampilkan bintang setengah jika ada -->
+                        @if ($halfStar)
+                            <i class="bi bi-star-half text-warning"></i>
+                        @endif
+                        <!-- Menampilkan bintang kosong -->
+                        @for ($i = $fullStars + ($halfStar ? 1 : 0); $i < 5; $i++)
+                            <i class="bi bi-star text-muted"></i>
+                        @endfor
+                    </div>
+                                <div class="d-flex gap-2">
+                                    <a href="#" data-bs-toggle="modal"
+                                        data-bs-target="#productModal{{ $se->kode_seafood }}"
+                                        class="btn btn-sm btn-primary text-white">
+                                        <i class="bi bi-eye"></i> Detail
+                                    </a>
+                                    <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="btn btn-sm btn-success text-white">
+                                        <i class="bi bi-cart-plus"></i> Beli
+                                    </a>
                                 </div>
                             </div>
-                        </a>
+                        </div>
                     </div>
     
                     <div class="modal fade" id="productModal{{ $se->kode_seafood }}" tabindex="-1"

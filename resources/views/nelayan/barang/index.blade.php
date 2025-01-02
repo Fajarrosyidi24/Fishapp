@@ -62,22 +62,47 @@
                         <i class="bi bi-star text-muted"></i>
                     </div>
                     <div class="d-flex gap-1">
-                        <a href="#" class="btn btn-sm btn-primary">
+                        <a href="{{ route('barang.detail.nelayan', ['kode_barang' => $se->kode_barang]) }}" class="btn btn-sm btn-primary">
                             <i class="bi bi-eye"></i>
                         </a>
-                        <a href="#" class="btn btn-sm btn-warning text-white">
+                        <a href="{{ route('barang.edit.nelayan', ['kode_barang' => $se->kode_barang]) }}" class="btn btn-sm btn-warning text-white">
                             <i class="bi bi-pencil-square"></i> 
                         </a>
-                        <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#productModal3{{ $se->kode_seafood }}">
+                        <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#productModal3{{ $se->kode_barang }}">
                             <i class="bi bi-trash"></i>
                         </a>
-
                     </div>
                 </div>
             </div>
         </div>
         @endforeach
+
+        @foreach ($barangsewa as $se)
+                <div class="modal fade" id="productModal3{{ $se->kode_barang }}" tabindex="-1"
+                    aria-labelledby="productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="productModalLabel" style="color: black">
+                                    {{ $se->nama_barang }} - Delete</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('nealayan.deletesBarang', ['kode_barang' => $se->kode_barang]) }}"
+                                    method="POST" enctype="multipart/form-data">
+                                    @csrf
+
+                                    <p>apakah anda akan menghapus barang ini?</p>
+                                    <button type="submit" class="btn btn-danger">iya</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 </div>
-
 @endsection

@@ -9,7 +9,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-
 class PenyewaanAlatController extends Controller
 {
     public function penyewaanview(Request $request){

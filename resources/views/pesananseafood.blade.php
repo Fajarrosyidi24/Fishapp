@@ -209,42 +209,36 @@
         <div class="row">
             <!-- Navbar -->
             <div class="navbar-1 d-flex justify-content-between">
-                    <div class="d-flex justify-content-center col-2">
+                <div class="d-flex justify-content-center col-2">
                     <a href="{{ route('pesananseafood', ['reference' => 1]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 1 ? 'active' : '' }}">
                         Semua
                     </a>
-                    </div>
-                    <div class="d-flex justify-content-center col-2">
-                        <a href="{{ route('pesananseafood', ['reference' => 2]) }}"
+                </div>
+                <div class="d-flex justify-content-center col-2">
+                    <a href="{{ route('pesananseafood', ['reference' => 2]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 2 ? 'active' : '' }}">
                         Belum Bayar
                     </a>
-                    </div>
-                    <div class="d-flex justify-content-center col-2">
-                        <a href="{{ route('pesananseafood', ['reference' => 3]) }}"
+                </div>
+                <div class="d-flex justify-content-center col-2">
+                    <a href="{{ route('pesananseafood', ['reference' => 3]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 3 ? 'active' : '' }}">
                         Sedang Dikemas
                     </a>
-                    </div>
-                    <div class="d-flex justify-content-center col-2">
-                        <a href="{{ route('pesananseafood', ['reference' => 4]) }}"
+                </div>
+                <div class="d-flex justify-content-center col-2">
+                    <a href="{{ route('pesananseafood', ['reference' => 4]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 4 ? 'active' : '' }}">
                         Sedang Dikirim
                     </a>
-                    </div>
-                    <div class="d-flex justify-content-center col-2">
-                        <a href="{{ route('pesananseafood', ['reference' => 5]) }}"
+                </div>
+                <div class="d-flex justify-content-center col-2">
+                    <a href="{{ route('pesananseafood', ['reference' => 5]) }}"
                         class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 5 ? 'active' : '' }}">
                         Selesai
                     </a>
-                    </div>
-                    {{-- <div class="d-flex justify-content-center col-2">
-                        <a href="{{ route('pesananseafood', ['reference' => 6]) }}"
-                        class="nav-link {{ request()->routeIs('pesananseafood') && request('reference') == 6 ? 'active' : '' }}">
-                        Dibatalkan
-                    </a>
-                    </div> --}}
+                </div>
             </div>
             @foreach ($pesanan as $pe)
                 <div class="container">
@@ -262,16 +256,17 @@
                                     </a>
                                 </div>
                                 <span class="text-primary font-weight-bold">
-                                    <strong>Nomor Invoice: </strong>{{$pe->item->first()->merchant_order_id}}
+                                    <strong>Nomor Invoice: </strong>{{ $pe->item->first()->merchant_order_id }}
                                 </span>
-                                
+
 
                                 <!-- Data Produk -->
                                 <div class="d-flex flex-column">
                                     @foreach ($pe->keranjangs as $keranjang)
                                         <div class="d-flex mb-3 align-items-center">
                                             <!-- Gambar Produk -->
-                                            <img src="{{ asset('storage/fotoseafood/' . $keranjang->seafood->foto) }}" alt="Produk" class="product-img">
+                                            <img src="{{ asset('storage/fotoseafood/' . $keranjang->seafood->foto) }}"
+                                                alt="Produk" class="product-img">
 
                                             <!-- Deskripsi Produk -->
                                             <div class="order-details ms-3 w-75">
@@ -283,234 +278,195 @@
 
                                     <!-- Status Pesanan -->
                                     {{-- <span>Total : Rp {{ number_format($pe->item->first()->payment_amount, 0, ',', '.') }}</span> --}}
-                                    <span>Status Pembayaran : {{$pe->status}}</span>
+                                    <span>Status Pembayaran : {{ $pe->status }}</span>
                                     <div class="status mt-3">
-                                        @if($pe->status == 'sedang dikemas')
-                                        <span class="material-symbols-outlined">local_shipping</span>
-                                        <span>Pesanan Anda Sedang Dikemas oleh Penjual</span>
-                                        <div class="tooltip-icon">
-                                            <i class="fas fa-question-circle"></i>
-                                            <div class="tooltip-text">Terakhir di-update pada <br>{{$pe->updated_at}}</div>
-                                        </div>
-                                        <span class="text-warning">Pending</span>
-                                        {{-- <a href="#" class="btn btn-sm btn-danger">Batalkan Pesanan</a> --}}
+                                        @if ($pe->status == 'sedang dikemas')
+                                            <span class="material-symbols-outlined">local_shipping</span>
+                                            <span>Pesanan Anda Sedang Dikemas oleh Penjual</span>
+                                            <div class="tooltip-icon">
+                                                <i class="fas fa-question-circle"></i>
+                                                <div class="tooltip-text">Terakhir di-update pada <br>{{ $pe->updated_at }}
+                                                </div>
+                                            </div>
+                                            <span class="text-warning">Pending</span>
+                                            {{-- <a href="#" class="btn btn-sm btn-danger">Batalkan Pesanan</a> --}}
                                         @elseif($pe->status == 'menunggu pembayaran')
-                                        <a href="{{route('halamanpembayaranseafood', ['reference' => $pe->item->first()->merchant->reference, 'idpembayaran' => $pe->item->first()->id])}}" class="btn btn-sm btn-warning"> Bayar Sekarang</a>
+                                            <a href="{{ route('halamanpembayaranseafood', ['reference' => $pe->item->first()->merchant->reference, 'idpembayaran' => $pe->item->first()->id]) }}"
+                                                class="btn btn-sm btn-warning"> Bayar Sekarang</a>
                                         @elseif($pe->status == 'dikirim')
-                                        <span class="material-symbols-outlined">local_shipping</span>
-                                        <span>Pesanan Anda Sedang dalam perjalanan menuju ke alamat anda</span>
-                                        <div class="tooltip-icon">
-                                            <i class="fas fa-question-circle"></i>
-                                            <div class="tooltip-text">Terakhir di-update pada <br>{{$pe->updated_at}}</div>
-                                        </div>
-                                        <span class="text-warning">Estimasi Pesanan Sampai : {{$pe->etd}}</span>
-                                        <a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#productModal{{ $pe->id }}">Konfirmasi Pesanan Telah Sampai</a>
+                                            <span class="material-symbols-outlined">local_shipping</span>
+                                            <span>Pesanan Anda Sedang dalam perjalanan menuju ke alamat anda</span>
+                                            <div class="tooltip-icon">
+                                                <i class="fas fa-question-circle"></i>
+                                                <div class="tooltip-text">Terakhir di-update pada <br>{{ $pe->updated_at }}
+                                                </div>
+                                            </div>
+                                            <span class="text-warning">Estimasi Pesanan Sampai : {{ $pe->etd }}</span>
+                                            <a href="#" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#productModal{{ $pe->id }}">Konfirmasi Pesanan Telah
+                                                Sampai</a>
+                                        @elseif($pe->status == 'selesai')
+                                        @php
+                                        // Pastikan keranjang ada
+                                        $firstKeranjang = $pe->keranjangs->first();
+                                        $existingRating = null;
+                                        
+                                        if ($firstKeranjang && $firstKeranjang->seafood && $firstKeranjang->seafood->rating) {
+                                            // Ambil rating jika ada
+                                            $existingRating = $firstKeranjang->seafood->rating->first();
+                                        }
+                                        @endphp
+
+                                            @if (!$existingRating)
+                                                <!-- Tampilkan tombol untuk memasukkan rating jika belum ada rating -->
+                                                <button class="btn btn-sm btn-warning"
+                                                    onclick="openRatingModal({{ $pe->id }})">
+                                                    <i class="bi bi-star"></i> Masukan Rating
+                                                </button>
+                                            @else
+                                                <!-- Tampilkan rating jika sudah ada -->
+                                                <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
+                                                <div class="mb-2">
+                                                    @for ($i = 1; $i <= 5; $i++)
+                                                        <i
+                                                            class="bi bi-star{{ $i <= $existingRating->rating ? '-fill text-warning' : ' text-muted' }}"></i>
+                                                    @endfor
+                                                </div>
+                                                <!-- Menampilkan ulasan jika ada -->
+                                                @if ($existingRating->review)
+                                                    <p class="card-text text-muted mt-2">Ulasan:
+                                                        {{ $existingRating->review }}</p>
+                                                @else
+                                                @endif
+                                            @endif
                                         @endif
-                                        <a href="{{route('detail.pesanan.pembeli.seafood', ['id' => $pe->id])}}" class="btn btn-sm btn-primary"> Detail</a>
+
+                                        <a href="{{ route('detail.pesanan.pembeli.seafood', ['id' => $pe->id]) }}"
+                                            class="btn btn-sm btn-primary"> Detail</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                
+
+
                 <!-- Modal -->
-    <div class="modal fade" id="productModal{{ $pe->id }}" tabindex="-1"
-        aria-labelledby="productModalLabel{{ $pe->id }}" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="productModalLabel{{ $pe->id }}">Konfirmasi Pesanan</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-
-                <!-- Modal Body -->
-                <form action="{{ route('upload.penerimaan.seafood', ['id' => $pe->id]) }}" method="post"
-                    enctype="multipart/form-data">
-                    @csrf
-                    @method('POST')
-                    <div class="modal-body">
-                        <!-- Pesanan Info -->
-                        <p>
-                            Apakah Anda yakin pesanan dengan nomor invoice
-                            <strong class="text-primary">{{ $pe->item->first()->merchant_order_id ?? '-' }}</strong>
-                            telah diterima?
-                        </p>
-
-                        <!-- Upload Foto -->
-                        <label for="photo" class="form-label">Upload Bukti oenerimaan pesanan:</label>
-                        <div class="d-flex flex-column align-items-center">
-                            <!-- Video Container -->
-                            <div id="video-container{{ $pe->id }}" class="video-container border rounded mb-3">
-                                <video id="video-webcam{{ $pe->id }}" autoplay class="rounded"
-                                    style="width: 100%; max-width: 400px; object-fit: cover;">
-                                    Browser tidak mendukung video. Mohon perbarui browser Anda.
-                                </video>
+                <div class="modal fade" id="productModal{{ $pe->id }}" tabindex="-1"
+                    aria-labelledby="productModalLabel{{ $pe->id }}" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <!-- Modal Header -->
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title" id="productModalLabel{{ $pe->id }}">Konfirmasi Pesanan</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
 
-                            <!-- Preview Container -->
-                            <div id="preview-container{{ $pe->id }}" class="text-center mb-3 d-none">
-                                <img id="preview-img{{ $pe->id }}" alt="Preview Foto"
-                                    class="img-fluid border rounded" style="max-width: 400px;">
-                                <button type="button" id="retake-photo-btn{{ $pe->id }}"
-                                    class="btn btn-warning mt-3" onclick="retakePhoto({{ $pe->id }})">
-                                    Ambil Foto Ulang
-                                </button>
-                            </div>
+                            <!-- Modal Body -->
+                            <form action="{{ route('upload.penerimaan.seafood', ['id' => $pe->id]) }}" method="post"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @method('POST')
+                                <div class="modal-body">
+                                    <!-- Pesanan Info -->
+                                    <p>
+                                        Apakah Anda yakin pesanan dengan nomor invoice
+                                        <strong
+                                            class="text-primary">{{ $pe->item->first()->merchant_order_id ?? '-' }}</strong>
+                                        telah diterima?
+                                    </p>
 
-                            <!-- Foto Input Controls -->
-                            <div class="text-center">
-                                <button type="button" onclick="takeSnapshoot({{ $pe->id }})"
-                                    class="btn btn-primary me-2">Ambil Foto</button>
-                                <input type="file" id="file-input{{ $pe->id }}" accept="image/*"
-                                    class="form-control d-none" onchange="previewImage(event, {{ $pe->id }})">
-                                <button type="button" class="btn btn-secondary"
-                                    onclick="triggerFileInput({{ $pe->id }})">Pilih dari Penyimpanan</button>
-                            </div>
+                                    <!-- Upload Foto -->
+                                    <label for="photo" class="form-label">Upload Bukti oenerimaan pesanan:</label>
+                                    <div class="d-flex flex-column align-items-center">
+                                        <input type="file" id="photo-input{{ $pe->id }}" name="photo" required>
+                                    </div>
 
-                            <!-- Hidden Photo Input -->
-                            <input type="hidden" id="photo-input{{ $pe->id }}" name="photo" required>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-success w-100">Konfirmasi</button>
+                                    <!-- Submit Button -->
+                                    <div class="text-center mt-4">
+                                        <button type="submit" class="btn btn-success w-100">Konfirmasi</button>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                </div>
+
+
+                <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="ratingModalLabel">Input Rating</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="ratingForm" action="{{ route('rating.store', ['seafood' => $pe->id]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <input type="hidden" name="pesanan_id" id="pesananId">
+                                    <div class="mb-3">
+                                        <label for="rating" class="form-label">Rating</label>
+                                        <select class="form-select" name="rating" id="rating" required>
+                                            <option value="" disabled selected>Pilih Rating</option>
+                                            <option value="1">1 - Sangat Buruk
+                                                <span class="text-warning">&#9733;</span>
+                                            </option>
+                                            <option value="2">2 - Buruk
+                                                <span class="text-warning">&#9733;&#9733;</span>
+                                            </option>
+                                            <option value="3">3 - Cukup
+                                                <span class="text-warning">&#9733;&#9733;&#9733;</span>
+                                            </option>
+                                            <option value="4">4 - Baik
+                                                <span class="text-warning">&#9733;&#9733;&#9733;&#9733;</span>
+                                            </option>
+                                            <option value="5">5 - Sangat Baik
+                                                <span class="text-warning">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                                            </option>
+                                        </select>
+
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="ulasan" class="form-label">Ulasan</label>
+                                        <textarea class="form-control" name="ulasan" id="ulasan" rows="3"
+                                            placeholder="Tulis ulasan Anda (opsional)"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Kirim</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endforeach
         </div>
     </div>
 
+
     <div class="alert alert-info mt-3">
         <h5 class="mb-2"><strong>Catatan Penting:</strong></h5>
         <p>
-            Jika terdapat beberapa produk dengan nomor invoice yang sama, 
+            Jika terdapat beberapa produk dengan nomor invoice yang sama,
             maka saat pembayaran dilakukan untuk salah satu pesanan, maka
-            pesanan lain dengan nomor invoice tersebut akan secara otomatis 
+            pesanan lain dengan nomor invoice tersebut akan secara otomatis
             dianggap telah dibayar.
         </p>
     </div>
-    
+
     @include('components.foot')
 @endsection
 
-
-
 @section('foot')
     <script>
-        function initializeCamera(pesananId) {
-            const video = document.querySelector(`#video-webcam${pesananId}`);
-            navigator.mediaDevices.getUserMedia({
-                    video: true
-                })
-                .then(stream => {
-                    video.srcObject = stream;
-                })
-                .catch(error => {
-                    alert("Izinkan menggunakan webcam untuk demo!");
-                });
+        function openRatingModal(pesananId) {
+            // Set pesanan ID di input form
+            document.getElementById('pesananId').value = pesananId;
+            // Tampilkan modal
+            new bootstrap.Modal(document.getElementById('ratingModal')).show();
         }
-
-        function takeSnapshoot(pesananId) {
-            const video = document.querySelector(`#video-webcam${pesananId}`);
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            const width = video.videoWidth;
-            const height = video.videoHeight;
-
-            canvas.width = width;
-            canvas.height = height;
-
-            context.drawImage(video, 0, 0, width, height);
-
-            const imgData = canvas.toDataURL('image/png');
-            const previewImg = document.querySelector(`#preview-img${pesananId}`);
-            const previewContainer = document.querySelector(`#preview-container${pesananId}`);
-            const videoContainer = document.querySelector(`#video-container${pesananId}`);
-            const photoInput = document.querySelector(`#photo-input${pesananId}`);
-
-            // Tampilkan preview
-            previewImg.src = imgData;
-            previewContainer.classList.remove('d-none');
-
-            // Sembunyikan video
-            videoContainer.classList.add('d-none');
-
-            // Simpan data ke input hidden
-            photoInput.value = imgData;
-        }
-
-        function triggerFileInput(pesananId) {
-            const fileInput = document.querySelector(`#file-input${pesananId}`);
-            fileInput.click();
-        }
-
-        function previewImage(event, pesananId) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewImg = document.querySelector(`#preview-img${pesananId}`);
-                    const previewContainer = document.querySelector(`#preview-container${pesananId}`);
-                    const videoContainer = document.querySelector(`#video-container${pesananId}`);
-                    const photoInput = document.querySelector(`#photo-input${pesananId}`);
-
-                    // Tampilkan preview
-                    previewImg.src = e.target.result;
-                    previewContainer.classList.remove('d-none');
-
-                    // Sembunyikan video
-                    videoContainer.classList.add('d-none');
-
-                    // Simpan data ke input hidden
-                    photoInput.value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function retakePhoto(pesananId) {
-            const videoContainer = document.querySelector(`#video-container${pesananId}`);
-            const previewContainer = document.querySelector(`#preview-container${pesananId}`);
-            const photoInput = document.querySelector(`#photo-input${pesananId}`);
-
-            // Tampilkan kembali video dan sembunyikan preview
-            videoContainer.classList.remove('d-none');
-            previewContainer.classList.add('d-none');
-
-            // Kosongkan input hidden
-            photoInput.value = "";
-
-            // Inisialisasi ulang kamera
-            initializeCamera(pesananId);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const modals = document.querySelectorAll('.modal');
-
-            modals.forEach(modal => {
-                modal.addEventListener('shown.bs.modal', event => {
-                    const pesananId = modal.id.replace('productModal2', '');
-                    initializeCamera(pesananId);
-                });
-
-                modal.addEventListener('hidden.bs.modal', event => {
-                    const video = modal.querySelector('video');
-                    if (video && video.srcObject) {
-                        const stream = video.srcObject;
-                        const tracks = stream.getTracks();
-                        tracks.forEach(track => track.stop());
-                        video.srcObject = null;
-                    }
-                });
-            });
-        });
     </script>
 @endsection
