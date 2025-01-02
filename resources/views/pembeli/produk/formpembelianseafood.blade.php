@@ -111,7 +111,7 @@
                         </div>
                     </div>
                     <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary text-white" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
+                        <button class="btn btn-sm btn-primary text-white add-to-cart" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
                         <button class="btn btn-sm btn-success text-white">Beli Sekarang</button>
                     </div>
                 </div>
@@ -204,9 +204,9 @@
                                             <input type="tel" class="form-control" id="tel"
                                                 value="{{ $se->nelayan->detailProfile->no_telepon }}" readonly>
                                         </div>
-    
                                     </form>
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-sm btn-secondary"
                                         data-bs-dismiss="modal">Close</button>
@@ -231,102 +231,95 @@
             <button class="btn btn-primary show-more-button">Tampilkan Lebih Banyak</button>
         </div>
     </div>
-    @include('components.foot')
-@endsection
-
-@section('foot')
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const minusButton = document.querySelector('.minus');
-            const plusButton = document.querySelector('.plus');
-            const quantityInput = document.getElementById('quantity');
-            const subtotalAmount = document.getElementById('subtotal-amount');
-            const pricePerKg = {{ $seafood->harga->harga }};
-
-            minusButton.addEventListener('click', () => {
-                let currentValue = parseInt(quantityInput.value);
-                if (currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
+            document.addEventListener('DOMContentLoaded', (event) => {
+                const minusButton = document.querySelector('.minus');
+                const plusButton = document.querySelector('.plus');
+                const quantityInput = document.getElementById('quantity');
+                const subtotalAmount = document.getElementById('subtotal-amount');
+                const pricePerKg = {{ $seafood->harga->harga }};
+    
+                minusButton.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                        updateSubtotal();
+                    }
+                });
+    
+                plusButton.addEventListener('click', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue < parseInt(quantityInput.max)) {
+                        quantityInput.value = currentValue + 1;
+                        updateSubtotal();
+                    }
+                });
+    
+                quantityInput.addEventListener('change', () => {
+                    let currentValue = parseInt(quantityInput.value);
+                    if (currentValue < 1) {
+                        quantityInput.value = 1;
+                    } else if (currentValue > parseInt(quantityInput.max)) {
+                        quantityInput.value = quantityInput.max;
+                    }
                     updateSubtotal();
-                }
-            });
-
-            plusButton.addEventListener('click', () => {
-                let currentValue = parseInt(quantityInput.value);
-                if (currentValue < parseInt(quantityInput.max)) {
-                    quantityInput.value = currentValue + 1;
-                    updateSubtotal();
-                }
-            });
-
-            quantityInput.addEventListener('change', () => {
-                let currentValue = parseInt(quantityInput.value);
-                if (currentValue < 1) {
-                    quantityInput.value = 1;
-                } else if (currentValue > parseInt(quantityInput.max)) {
-                    quantityInput.value = quantityInput.max;
+                });
+    
+                function updateSubtotal() {
+                    let currentValue = parseInt(quantityInput.value);
+                    let newSubtotal = pricePerKg * currentValue;
+                    subtotalAmount.textContent = 'Rp ' + newSubtotal.toLocaleString('id-ID') + ',-';
                 }
                 updateSubtotal();
             });
-
-            function updateSubtotal() {
-                let currentValue = parseInt(quantityInput.value);
-                let newSubtotal = pricePerKg * currentValue;
-                subtotalAmount.textContent = 'Rp ' + newSubtotal.toLocaleString('id-ID') + ',-';
-            }
-            updateSubtotal();
-        });
-    </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const showMoreButton = document.querySelector('.show-more-button');
-        const products = document.querySelectorAll('.col');
-        const initialProductsToShow = 4; // Jumlah produk yang ditampilkan awalnya
-        let visibleProducts = initialProductsToShow;
-
-        // Sembunyikan produk yang tidak pertama kali
-        for (let i = 0; i < products.length; i++) {
-            if (i >= initialProductsToShow) {
-                products[i].style.display = 'none';
-            }
-        }
-
-        // Tampilkan lebih banyak produk saat tombol "Tampilkan Lebih Banyak" diklik
-        showMoreButton.addEventListener('click', function() {
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const showMoreButton = document.querySelector('.show-more-button');
+            const products = document.querySelectorAll('.col');
+            const initialProductsToShow = 4; // Jumlah produk yang ditampilkan awalnya
+            let visibleProducts = initialProductsToShow;
+    
+            // Sembunyikan produk yang tidak pertama kali
             for (let i = 0; i < products.length; i++) {
-                if (i >= visibleProducts) {
-                    products[i].style.display = 'block';
+                if (i >= initialProductsToShow) {
+                    products[i].style.display = 'none';
                 }
             }
-
-            visibleProducts += initialProductsToShow;
-            if (visibleProducts >= products.length) {
-                showMoreButton.style.display = 'none';
-            }
-        });
-    });
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // Find all elements with class 'add-to-cart'
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-
-        // Add click event listener to each button
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const productId = button.getAttribute(
-                'data-id'); // Get product ID from data-id attribute
-                const jumlah = document.getElementById('quantity')
-                .value; // Get quantity from input field
-                const subtotal = document.getElementById('subtotal-amount').textContent.replace(
-                    /[^\d]/g, ''); // Get subtotal from element text
-
-                // Redirect to the add-to-cart route with parameters
-                window.location.href = `/user/produk/add-to-cart/${productId}/${jumlah}/${subtotal}`;
+    
+            // Tampilkan lebih banyak produk saat tombol "Tampilkan Lebih Banyak" diklik
+            showMoreButton.addEventListener('click', function() {
+                for (let i = 0; i < products.length; i++) {
+                    if (i >= visibleProducts) {
+                        products[i].style.display = 'block';
+                    }
+                }
+    
+                visibleProducts += initialProductsToShow;
+                if (visibleProducts >= products.length) {
+                    showMoreButton.style.display = 'none';
+                }
             });
         });
-    });
-</script>
+    
+        document.addEventListener('DOMContentLoaded', () => {
+            // Find all elements with class 'add-to-cart'
+            const addToCartButtons = document.querySelectorAll('.add-to-cart');
+    
+            // Add click event listener to each button
+            addToCartButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const productId = button.getAttribute(
+                    'data-id'); // Get product ID from data-id attribute
+                    const jumlah = document.getElementById('quantity')
+                    .value; // Get quantity from input field
+                    const subtotal = document.getElementById('subtotal-amount').textContent.replace(
+                        /[^\d]/g, ''); // Get subtotal from element text
+    
+                    // Redirect to the add-to-cart route with parameters
+                    window.location.href = `/user/produk/add-to-cart/${productId}/${jumlah}/${subtotal}`;
+                });
+            });
+        });
+    </script>
+    @include('components.foot')
 @endsection
