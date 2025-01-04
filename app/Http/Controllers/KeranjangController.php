@@ -20,7 +20,12 @@ class KeranjangController extends Controller
             'user_id' => Auth::guard()->user()->id,
         ])->get();
         $total = $keranjang->sum('subtotal');
-        return view('pembeli.keranjang.index', compact('keranjang', 'total'));
+        $alamat = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->get();
+
+        if ($alamat->isEmpty()) {
+            return redirect()->route('alamat.pengiriman.pembeli')->with('error', 'Anda belum mengisikan alamat pengiriman, harap isikan alamat terlebih dahulu sebelum melakukan checkout');
+        }
+        return view('pembeli.keranjang.index', compact('keranjang', 'total','alamat'));
     }
 
     public function deleteItems($kodeBarangString)
@@ -41,29 +46,22 @@ class KeranjangController extends Controller
             return redirect()->route('alamat.pengiriman.pembeli')->with('error', 'Anda belum mengisikan alamat pengiriman, harap isikan alamat terlebih dahulu sebelum melakukan checkout');
         }
 
-        $kodeSeafoodArray = explode(',', $request->input('items'));
-
-        //tabel keranjang dimana kode keranjangnya berasal dari $kodeSeafoodArray
+        $kodeSeafoodArray = explode(',', $request->input('selected_items'));
+       
         $keranjangs3 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get();
-        //mengambil data primary key dari masing masing tabel
         $kode_seafood = Seafood::filterkode($keranjangs3);
         $id_nelayan = Nelayan::filterkode($kode_seafood);
         $id_pengiriman = AlamatPengirimanSeafood::filterkode($id_nelayan);
-
-        ////mengambil data alamat pembeli, mengambil data city idnya saja untuk digunakan integrasi api
         $destination = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->first();
         $tujuan = $destination->cityid;
 
-        // mengambil data jumlah/total weigt seafood dari masing masing keranjang yang di ceklist
         $keranjangs1 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get()->toArray();
         $jumlahSeafood = Seafood::jumlah($keranjangs1);
 
-        //mengkombinasikan antara jumlah seafood serta cityid milik nelayan
         $alamat_pengiriman = AlamatPengirimanSeafood::alamat($jumlahSeafood);
         $cityids = AlamatPengirimanSeafood::cityids($alamat_pengiriman);
         $combinedData = Seafood::combinedData($jumlahSeafood, $cityids);
 
-        //menggroup data yang sudah dikombinasikan menjadi 1 (nelayanid, origin,destination, weight, serta opsi pengiriman yang berasal dari api)
         $aggregatedData = Seafood::aggregatedData($combinedData, $destination);
 
         $shippingCosts = KeranjangController::api($aggregatedData);

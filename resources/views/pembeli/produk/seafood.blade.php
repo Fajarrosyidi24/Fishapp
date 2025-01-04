@@ -82,78 +82,10 @@
                             <i class="bi bi-star text-muted"></i>
                         @endfor
                     </div>
-                    <div class="d-flex gap-2">
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#productModal{{ $se->kode_seafood }}"
-                            class="btn btn-sm btn-primary text-white">
-                            <i class="bi bi-eye"></i> Detail
-                        </a>
-                        <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}"
-                            class="btn btn-sm btn-success text-white">
-                            <i class="bi bi-cart-plus"></i> Beli
-                        </a>
-                    </div>
                 </div>
             </div>
         </a>
     </div>
-    
-   <div class="modal fade" id="productModal{{ $se->kode_seafood }}" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="productModalLabel" style="color: black">
-                    Detail Produk
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    @csrf
-                    <!-- Nama Seafood -->
-                    <div class="mb-3">
-                        <label for="namaSeafood" class="form-label">Nama Seafood</label>
-                        <input type="text" class="form-control" id="namaSeafood" value="{{ $se->nama }}" readonly>
-                    </div>
-                    <!-- Jenis Seafood -->
-                    <div class="mb-3">
-                        <label for="jenisSeafood" class="form-label">Jenis Seafood</label>
-                        <input type="text" class="form-control" id="jenisSeafood" value="{{ $se->jenis_seafood }}" readonly>
-                    </div>
-                    <!-- Jumlah -->
-                    <div class="mb-3">
-                        <label for="jumlahSeafood" class="form-label">Jumlah Tersedia</label>
-                        <input type="text" class="form-control" id="jumlahSeafood" value="{{ $se->jumlah }} KG" readonly>
-                    </div>
-                    <!-- Harga -->
-                    <div class="mb-3">
-                        <label for="hargaSeafood" class="form-label">Harga Seafood</label>
-                        <input type="text" class="form-control" id="hargaSeafood" value="Rp {{ number_format($se->harga->harga, 0, ',', '.') }}" readonly>
-                    </div>
-                    <!-- Nama Penjual -->
-                    <div class="mb-3">
-                        <label for="namaPenjual" class="form-label">Nama Penjual</label>
-                        <input type="text" class="form-control" id="namaPenjual" value="{{ $se->nelayan->name }}" readonly>
-                    </div>
-                    <div class="mb-3">
-                                            <label for="alamat" class="form-label">Alamat Lengkap</label>
-                                            <textarea class="form-control" id="alamat" rows="3" readonly>{{ $se->nelayan->detailProfile->alamat_lengkap }}</textarea>
-                                        </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <a href="{{route('hubungi.penjual.seafood', ['id' =>$se->nelayan->detailProfile->id ])}}" class="btn btn-sm btn-primary text-white">
-                                        <i class="bi bi-telephone"></i> Hubungi Penjual
-                                    </a>
-    
-                                    <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="btn btn-sm btn-success text-white">
-                                        <i class="bi bi-cart-plus"></i> Beli
-                                    </a>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endforeach
 
         </div>

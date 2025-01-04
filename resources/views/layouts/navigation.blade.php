@@ -122,7 +122,6 @@
                                 <li><a href="{{route('penyewaanalat')}}" class="dropdown-item {{ request()->routeIs('penyewaanalat') ? 'active' : '' }}" class="dropdown-item">Penyewaan Alat</a></li>
                                 <li><a href="{{route('alamat.pengiriman.pembeli')}}" class="dropdown-item">Alamat Pengiriman</a></li>
                                 <li><a href="{{route('guestarticle')}}" class="dropdown-item">Artikel</a></li>
-                                <li><a href="{{route('bantuan')}}" class="dropdown-item {{ request()->routeIs('bantuan') ? 'active' : '' }}">Bantuan</a></li>
                                 <li class="mt-1">
                                     <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">
                                         @csrf

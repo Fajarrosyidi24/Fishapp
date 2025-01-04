@@ -132,7 +132,16 @@ class SeafoodController extends Controller
 
     public function beli($kode_seafood)
     {
-        $seafood = Seafood::where('kode_seafood', $kode_seafood)->first();
+        // Ambil seafood berdasarkan kode, dengan relasi keranjangs dan pesanan
+            $seafood = Seafood::where('kode_seafood', $kode_seafood)
+            ->with(['keranjangs.pesanan'])
+            ->first();
+
+        // Hitung jumlah terjual untuk seafood yang dipilih
+        $seafood->jumlah_terjual = $seafood->keranjangs->filter(function ($keranjang) {
+            return $keranjang->pesanan->where('status', 'selesai')->count() > 0;
+        })->count();
+
         $produklainnya = Seafood::where('status', 'siap dijual')->get();
         foreach ($produklainnya as $item) {
             $item->jumlah_terjual = $item->keranjangs->filter(function ($keranjang) {

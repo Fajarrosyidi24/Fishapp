@@ -51,8 +51,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            align-items: center;
-            border-left: 1px solid #ccc;
+            align-items: start;
             padding-left: 10px;
             /* Padding lebih kecil */
         }
@@ -87,8 +86,9 @@
         }
 
         .subtotal {
-            text-align: center;
-            font-size: 0.9em;
+            text-align: start;
+            font-size: 1.5em;
+            padding : 5px;
             /* Font subtotal lebih kecil */
         }
 
@@ -123,62 +123,89 @@
 @section('content')
 <div class="container mt-5 mb-3">
         <div class="row g-4 align-items-start">
-                <!-- Gambar Produk -->
-                <div class="col-12 col-lg-6 text-center">
-                    <img src="{{ asset('storage/fotoseafood/' . $seafood->foto) }}" class="img-fluid rounded w-50 w-lg-100" alt="foto seafood">
-                </div>
-
-                <!-- Detail Produk -->
-                <div class="col-12 col-lg-6">
-                    <h1 class="card-title fs-1">{{ $seafood->nama }}</h1>
-                    <!-- Total Penjualan -->
-                    <div class="mb-2">
-                                <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
-                                <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
-                                        aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
-                                </div>
-                    </div>
-                    <p class="card-text fw-bold mb-1 fs-4" style="color:black;">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }} /KG</p>
-                    <div class="product-details">
-                        <p>Sedang Tersedia {{ $seafood->jumlah }} KG untuk saat ini</p>
-                    </div>
-                    <div class="penjual"> 
-                    </div>
-                        <p class="deskripsi"> <h4>Deskripsi Produk</h4>
-                        {{ $seafood->nama }} yang dijual selalu dalam kondisi fresh baru ditangkap. Harga hitungan per 1 kg.
-                        </p>
-                    <div class="purchase-section">
-                        <div class="quantity-selector">
-                            <label for="quantity">Kuantitas /KG</label>
-                            <div class="quantity-controls">
-                                <button class="minus">-</button>
-                                <input type="number" id="quantity" name="quantity" value="1" min="1"
-                                    max="{{ $seafood->jumlah }}">
-                                <button class="plus">+</button>
+            
+            
+            <!-- Gambar Produk -->
+            <div class="col-12 col-lg-6 text-center">
+                <img src="{{ asset('storage/fotoseafood/' . $seafood->foto) }}" class="img-fluid rounded w-50 w-lg-100" alt="foto seafood">
+            </div>
+            
+            <!-- Detail Produk -->
+            <div class="col-12 col-lg-6">
+                <h1 class="card-title fs-1">{{ $seafood->nama }}</h1>
+                
+                 <!-- Total Penjualan -->
+                 <div class="mb-2">
+                        <small class="text-muted">
+                            <i class="bi bi-graph-up"></i> {{ $seafood->jumlah_terjual }} kali terjual
+                        </small>
+                        <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
+                            @php
+                                // Menghitung persentase jumlah terjual dibandingkan dengan stok
+                                $percentage = ($seafood->jumlah_terjual / $seafood->jumlah) * 100;
+                                $percentage = min($percentage, 100); // Membatasi agar tidak melebihi 100%
+                            @endphp
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $percentage }}%;"
+                                aria-valuenow="{{ $seafood->jumlah_terjual }}" aria-valuemin="0" aria-valuemax="{{ $seafood->jumlah }}">
                             </div>
                         </div>
-                        <div class="subtotal">
-                            <p class="label fw-bold mb-0">Subtotal</p>
-                            <p class="amount mb-0 ms-0" id="subtotal-amount">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }},-</p>
+                    </div>
+                
+                <p class="card-text fw-bold mb-1 fs-4" style="color:black;">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }} /KG</p>
+                <div class="product-details">
+                    <p>Sedang Tersedia {{ $seafood->jumlah }} KG untuk saat ini</p>
+                </div>
+                <!-- Penjual -->
+                <div class="d-flex justify-content-between align-items-start mb-3" 
+                    style="background-color: white; border: 1px solid #ddd; padding: 10px; width: 100%; box-sizing: border-box; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <img src="{{ asset('storage/fotonelayan/' . $seafood->nelayan->detailProfile->foto) }}" 
+                            alt="Foto Nelayan" 
+                            class="rounded img-thumbnail" 
+                            style="width: 60px; height: 60px; object-fit: cover; border-radius: 50% !important; border: none;">
+                        <span style="font-weight: bold;">{{ $seafood->nelayan->name }}</span>
+                    </div>
+                    <a href="#" class="btn btn-sm text-white d-flex align-items-center"
+                        style="background-color: #25D366; border-color: #25D366; align-self: center; font-size: 14px;" 
+                        ><i class="bi bi-chat"></i>Hubungi Penjual</a>
+                </div>
+
+                    <p class="deskripsi"> <h4>Deskripsi Produk</h4>
+                    {{ $seafood->nama }} yang dijual selalu dalam kondisi fresh baru ditangkap. Harga hitungan per 1 kg.
+                    </p>
+                <div class="purchase-section">
+                    <div class="quantity-selector">
+                        <label for="quantity">Kuantitas /KG</label>
+                        <div class="quantity-controls">
+                            <button class="minus">-</button>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1"
+                            max="{{ $seafood->jumlah }}">
+                            <button class="plus">+</button>
                         </div>
                     </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-sm btn-primary text-white" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
-                        <button class="btn btn-sm btn-success text-white">Beli Sekarang</button>
+                    <div class="subtotal">
+                        <p class="label fw-bold mb-0">Subtotal</p>
+                        <p class="amount mb-0 ms-0" id="subtotal-amount">Rp {{ number_format($seafood->harga->harga, 0, ',', '.') }},-</p>
                     </div>
                 </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-primary text-white add-to-cart" data-id="{{ $seafood->kode_seafood }}"><i class="bi bi-cart-plus"></i>Masukkan Keranjang</button>
+                    <button class="btn btn-sm btn-success text-white">Beli Sekarang</button>
+                </div>
+            </div>
+            
         </div>
 
     {{-- produk lainnya --}}
     <div class="container">
-        <h6 style="color: black; text-align: center;"><------ Produk lainnya ------></h6>
+        <h6 style="color: black; text-align: center; padding: 50px;"><------ Produk lainnya ------></h6>
         @php $count = 0; @endphp
         <div class="container mb-3">
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"> <!-- Grid responsif -->
                 @foreach ($produklainnya as $se)
                     <!-- Produk Card -->
                     <div class="col">
+                    <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="text-decoration-none text-dark">
                         <div class="card h-100 shadow-sm">
                             <img src="{{ asset('storage/fotoseafood/' . $se->foto) }}" class="card-img-top" alt="foto seafood"
                                 style="height: 150px; object-fit: cover;">
@@ -231,84 +258,10 @@
                             <i class="bi bi-star text-muted"></i>
                         @endfor
                     </div>
-                                <div class="d-flex gap-2">
-                                    <a href="#" data-bs-toggle="modal"
-                                        data-bs-target="#productModal{{ $se->kode_seafood }}"
-                                        class="btn btn-sm btn-primary text-white">
-                                        <i class="bi bi-eye"></i> Detail
-                                    </a>
-                                    <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="btn btn-sm btn-success text-white">
-                                        <i class="bi bi-cart-plus"></i> Beli
-                                    </a>
-                                </div>
+                                
                             </div>
                         </div>
-                    </div>
-    
-                    <div class="modal fade" id="productModal{{ $se->kode_seafood }}" tabindex="-1"
-                        aria-labelledby="productModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="productModalLabel" style="color: black">
-                                        Detail
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        @csrf
-                                        <div class="mb-3">
-                                            <label for="namaSeafood" class="form-label">Nama Seafood</label>
-                                            <input type="text" class="form-control" id="namaSeafood"
-                                                value="{{ $se->nama }}" readonly>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="hargaSeafood" class="form-label">Harga Seafood</label>
-                                            <input type="text" class="form-control" id="hargaSeafood"
-                                                value="{{ $se->harga->harga }}" readonly>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="jenis_seafood" class="form-label">Jenis</label>
-                                            <input type="text" class="form-control" id="jenis_seafood"
-                                                value="{{ $se->jenis_seafood }}" readonly>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="jumlah" class="form-label">Stok</label>
-                                            <input type="number" class="form-control" id="jumlah"
-                                                value="{{ $se->jumlah }}" readonly>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="penjual" class="form-label">Nama Penjual</label>
-                                            <input type="text" class="form-control" id="penjual"
-                                                value="{{ $se->nelayan->name }}" readonly>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="alamat" class="form-label">Alamat Lengkap</label>
-                                            <textarea class="form-control" id="alamat" rows="3" readonly>{{ $se->nelayan->detailProfile->alamat_lengkap }}</textarea>
-                                        </div>
-    
-                                        <div class="mb-3">
-                                            <label for="tel" class="form-label">Nama Penjual</label>
-                                            <input type="tel" class="form-control" id="tel"
-                                                value="{{ $se->nelayan->detailProfile->no_telepon }}" readonly>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-sm btn-secondary"
-                                        data-bs-dismiss="modal">Close</button>
-                                    <a href="{{route('hubungi.penjual.seafood', ['id' =>$se->nelayan->detailProfile->id ])}}" class="btn btn-sm btn-primary text-white">
-                                        <i class="bi bi-telephone"></i> Hubungi Penjual
-                                    </a>
-    
-                                    <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="btn btn-sm btn-success text-white">
-                                        <i class="bi bi-cart-plus"></i> Beli
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                    </a>
                     </div>
                     @php $count++; @endphp
                 @endforeach
