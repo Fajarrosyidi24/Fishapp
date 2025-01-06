@@ -4,23 +4,25 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\Seafood;
+use App\Models\Merchant;
 use App\Models\ApiDuitku;
 use App\Models\Keranjang;
+use App\Models\Pembayaran;
+use App\Models\UserProfile;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CreatePesanan;
+use App\Models\ItemPembayaran;
 use App\Models\PesananSeafood;
+use App\Models\StatusPembayaran;
+use App\Models\PenerimaanSeafood;
 use App\Models\AlamatTujuanSeafood;
+use App\Models\ItemSeafoodCheckout;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AlamatPengirimanSeafood;
 use App\Interface\PaymentGatewayInterface;
-use App\Models\CreatePesanan;
-use App\Models\ItemPembayaran;
-use App\Models\ItemSeafoodCheckout;
-use App\Models\Merchant;
-use App\Models\Pembayaran;
-use App\Models\Seafood;
-use App\Models\StatusPembayaran;
-use App\Models\UserProfile;
 
 class PesanController extends Controller
 {
@@ -36,7 +38,23 @@ class PesanController extends Controller
         $profile = UserProfile::where('user_id', Auth::user()->id)->first();
         if (is_null($profile)) {
             return redirect()->route('profile.edit')->with('status', 'harap lengkapi profile terlebih dahulu sebelum melakukan pemesanan');
-        }
+        }elseif (
+            is_null($profile->tempat_lahir) ||
+            is_null($profile->tanggal_lahir) ||
+            is_null($profile->alamat_lengkap) ||
+            is_null($profile->provinsi) ||
+            is_null($profile->kabupaten) ||
+            is_null($profile->kecamatan) ||
+            is_null($profile->desa) ||
+            is_null($profile->dusun) ||
+            is_null($profile->rt) ||
+            is_null($profile->rw) ||
+            is_null($profile->code_pos) ||
+            is_null($profile->jenis_kelamin) ||
+            is_null($profile->no_telepon) 
+        ) {
+            return redirect()->route('profile.edit')->with('status', 'Harap lengkapi semua data profil sebelum melakukan pemesanan');
+        } 
 
         $total = $request->input('totalPayment');
         $user = User::where('id', Auth::user()->id)->first();
@@ -74,7 +92,7 @@ class PesanController extends Controller
         $merchant = Merchant::where('pembayaran_id', $pembayaran->id)->first();
         return redirect(route('halamanpembayaranseafood', ['reference' => $merchant->reference, 'idpembayaran' => $pembayaran->id]));
     }
-    
+
     public function pesananseafood(Request $request)
     {
         // Redirect ke reference default jika tidak ada parameter reference
@@ -132,14 +150,15 @@ class PesanController extends Controller
                 ->filter(function ($pesanan) {
                     return $pesanan->keranjangs->contains('user_id', Auth::user()->id);
                 });
-        }else{
+        } else {
             return redirect()->route('pesananseafood', ['reference' => 1]);
         }
 
         return view('pesananseafood', compact('reference', 'pesanan'));
     }
 
-    public function penyewaanalat(Request $request) {
+    public function penyewaanalat(Request $request)
+    {
         return view('penyewaanalat');
     }
 
@@ -174,13 +193,37 @@ class PesanController extends Controller
         $pembayaran = Pembayaran::where('merchant_order_id', $merchantOrderId)->first();
         $status = StatusPembayaran::where('pembayaran_id', $pembayaran->id)->first();
         $idStatus = $status->id;
-        StatusPembayaran::updateStatus($idStatus);
+
         $itemPembayaran = ItemPembayaran::where('pembayaran_id', $pembayaran->id)->pluck('pesanan_id');
         $pesanan = PesananSeafood::whereIn('id', $itemPembayaran)->get();
-        PesananSeafood::whereIn('id', $itemPembayaran)->update(['status' => 'sedang dikemas']);
-        $itemKeranjang = ItemSeafoodCheckout::whereIn('tb_pemesanan_id', $pesanan->pluck('id'))->get();
-        $idkeranjang = $itemKeranjang->pluck('keranjang_id');
-        Keranjang::whereIn('kode_keranjang', $idkeranjang)->update(['status' => 'sedang dikemas']);
-        return redirect()->route('pesananseafood')->with('status', 'pesanan anda sedang dikemas');
+
+        if ($pesanan->contains('status', 'menunggu pembayaran')) {
+            StatusPembayaran::updateStatus($idStatus);
+            PesananSeafood::whereIn('id', $itemPembayaran)->update(['status' => 'sedang dikemas']);
+            $itemKeranjang = ItemSeafoodCheckout::whereIn('tb_pemesanan_id', $pesanan->pluck('id'))->get();
+            $idkeranjang = $itemKeranjang->pluck('keranjang_id');
+            Keranjang::whereIn('kode_keranjang', $idkeranjang)->update(['status' => 'sedang dikemas']);
+            return redirect()->route('pesananseafood')->with('status', 'pesanan anda sedang dikemas');
+        } else {
+            return redirect()->route('pesananseafood');
+        }
+    }
+
+    public function detailPesanan($id)
+    {
+        $pesanan = PesananSeafood::where('id', $id)->first();
+        return view('pembeli.detailpesananseafood', compact('pesanan'));
+    }
+
+
+    public function storebuktipenerimaan(Request $request, $id)
+    {
+        $fotoFile = $request->file('photo');
+        $imageName = Str::uuid() . '_' . time() . '_' . $fotoFile->getClientOriginalName();
+        $fotoPath = $fotoFile->storeAs('public/fotopenerimaanseafood', $imageName);
+        $bukti = PenerimaanSeafood::where('pesanan_id', $id)->first();
+        PenerimaanSeafood::store($imageName, $id);
+        PesananSeafood::terima($id);
+        return back()->with('success', 'Foto berhasil diunggah!'); 
     }
 }

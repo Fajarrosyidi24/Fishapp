@@ -43,7 +43,6 @@ class AdminController extends Controller
         }
     }
 
-
     public function dashboard()
     {
         $dataNelayan2 = Nelayan::all();
@@ -55,22 +54,26 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         return redirect()->route('login_admin')->with('success', 'admin logout succesfully');
     }
+
     public function viewdatanelayan()
     {
         $dataNelayan = Nelayan::where('status', 'terdaftar')->get();
         // dd($dataNelayan);
         return view('admin.viewdatanelayan', compact('dataNelayan'));
     }
+
     public function permintaannelayanakun()
     {
         $dataNelayan = Nelayan::where('status', 'pending')->get();
         return view('admin.permintaanakunnelayanpendaftaran', compact('dataNelayan'));
     }
+
     public function checkpenjualan()
     {
         $seafood = Seafood::where('status', 'menunggu di verifikasi admin')->get();
         return view('admin.checkpenjualan', compact('seafood'));
     }
+    
     public function dataseafood()
     {
         $seafood = Seafood::where('status', 'siap dijual')->get();
@@ -225,7 +228,5 @@ class AdminController extends Controller
         $data = User::all();
         return view('admin.viewdatapembeli', compact('data'));
     }
-
-
     //njajal
 }

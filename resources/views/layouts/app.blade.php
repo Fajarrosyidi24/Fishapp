@@ -42,7 +42,28 @@
       background-image: url("{{asset('img/bg.svg')}}");
    }
 
-   
+   .warning-banner {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(45deg, #ffcc00, #ff9900);
+        color: #000;
+        font-weight: bold;
+        font-size: 16px;
+        text-align: center;
+        padding: 15px 10px;
+        z-index: 1000;
+        box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #ff0000;
+        text-transform: uppercase;
+    }
+    .warning-banner span {
+        font-size: 14px;
+        color: #333;
+        display: block;
+        margin-top: 5px;
+    }
    </style>
 </head>
 <body class="font-sans antialiased min-h-screen dark:bg-gray-900">
@@ -54,6 +75,11 @@
 @else
 @include('layouts.guestnavigation')
 @endif
+
+<div class="warning-banner">
+    ⚠️ Perhatian: Website ini masih dalam tahap pengembangan ⚠️
+    <span>Fitur-fitur tertentu mungkin belum berfungsi dengan sempurna. Terima kasih atas pengertiannya.</span>
+</div>
 
 @yield('content')
 

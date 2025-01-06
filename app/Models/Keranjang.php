@@ -31,6 +31,11 @@ class Keranjang extends Model
         return $this->belongsTo(Seafood::class, 'seafood_id', 'kode_seafood');
     }
 
+    public function pesanan()
+    {
+        return $this->belongsToMany(PesananSeafood::class, 'item_seafood_checkouts','keranjang_id', 'tb_pemesanan_id');
+    }
+
     public static function createkeranjangseafood($productId, $jumlah, $subtotal){
         $maxKodeKeranjang = Keranjang::max('kode_keranjang');
         $nextNumber = $maxKodeKeranjang ? intval(substr($maxKodeKeranjang, 2)) + 1 : 1;

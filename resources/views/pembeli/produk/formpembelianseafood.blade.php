@@ -167,24 +167,52 @@
                             <div class="card-body">
                                 <h5 class="card-title fs-6">{{ $se->nama }}</h5>
                                 <!-- Total Penjualan -->
-                                <div class="mb-2">
-                                    <small class="text-muted"><i class="bi bi-graph-up"></i> 2000 kali terjual</small>
-                                    <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
-                                        <div class="progress-bar bg-success" role="progressbar" style="width: 20%;"
-                                            aria-valuenow="200" aria-valuemin="0" aria-valuemax="10000"></div>
-                                    </div>
-                                </div>
+                               <div class="mb-2">
+                        <small class="text-muted">
+                            <i class="bi bi-graph-up"></i> {{ $se->jumlah_terjual }} kali terjual
+                        </small>
+                        <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
+                            @php
+                                // Menghitung persentase jumlah terjual dibandingkan dengan stok
+                                $percentage = ($se->jumlah_terjual / $se->jumlah) * 100;
+                                $percentage = min($percentage, 100); // Membatasi agar tidak melebihi 100%
+                            @endphp
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $percentage }}%;"
+                                aria-valuenow="{{ $se->jumlah_terjual }}" aria-valuemin="0" aria-valuemax="{{ $se->jumlah }}">
+                            </div>
+                        </div>
+                    </div>
                                 <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
                                 <p class="card-text mb-2">Tersedia {{ $se->jumlah }} KG</p>
                                 <!-- Rating Bintang -->
                                 <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
                                 <div class="mb-2">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    <i class="bi bi-star text-muted"></i>
-                                </div>
+                      @php
+    // Inisialisasi rating
+    $rating = 0;
+    $fullStars = 0;
+    $halfStar = false;
+
+    // Pastikan relasi rating ada sebelum menghitung rata-rata
+    if ($se->rating && $se->rating->count() > 0) {
+        $rating = $se->rating->avg('rating'); // Menghitung rata-rata rating
+        $fullStars = floor($rating); // Mengambil nilai bintang penuh
+        $halfStar = $rating - $fullStars >= 0.5; // Mengecek apakah ada bintang setengah
+    }
+@endphp
+                        <!-- Menampilkan bintang penuh -->
+                        @for ($i = 1; $i <= $fullStars; $i++)
+                            <i class="bi bi-star-fill text-warning"></i>
+                        @endfor
+                        <!-- Menampilkan bintang setengah jika ada -->
+                        @if ($halfStar)
+                            <i class="bi bi-star-half text-warning"></i>
+                        @endif
+                        <!-- Menampilkan bintang kosong -->
+                        @for ($i = $fullStars + ($halfStar ? 1 : 0); $i < 5; $i++)
+                            <i class="bi bi-star text-muted"></i>
+                        @endfor
+                    </div>
                                 <div class="d-flex gap-2">
                                     <a href="#" data-bs-toggle="modal"
                                         data-bs-target="#productModal{{ $se->kode_seafood }}"

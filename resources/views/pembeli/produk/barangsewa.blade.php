@@ -4,15 +4,16 @@
 @endsection
 
 @section('content')
-    <div class="container-fluid bg-primary py-5 mb-5 page-header">
+      <!-- Header Start -->
+      <div class="container-fluid bg-primary py-5 mb-5 page-header">
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-lg-10 text-center">
                     <h1 class="display-3 text-white animated slideInDown">Produk</h1>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb justify-content-center">
-                            <li class="breadcrumb-item">
-                                <a class="text-white" href="{{ route('pembeli.produk.barangsewa') }}">Barang Sewa</a>
+                            <li class="breadcrumb-item"><a class="text-white"
+                                    href="{{ route('pembeli.produk.barangsewa') }}">Barang Sewa</a>
                             </li>
                             <li class="breadcrumb-item text-white active" aria-current="page">Barang Sewa</li>
                         </ol>
@@ -21,6 +22,7 @@
             </div>
         </div>
     </div>
+    <!-- Header End -->
 
     <div class="container mb-3">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">

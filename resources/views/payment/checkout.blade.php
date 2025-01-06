@@ -38,9 +38,23 @@
                                     <td><strong>Total Pembayaran</strong></td>
                                     <td>{{ $pembayaran->payment_amount }}</td>
                                 </tr>
+                                <tr>
+                                    <td><strong>Status Pembayaran</strong></td>
+                                    <td>{{ $pembayaran->pembayaran->status_pembayaran }}</td>
+                                </tr>
                             </tbody>
                         </table>
 
+                        @if($pembayaran->pembayaran->status_pembayaran == 'PAID')
+                        <div class="text-center">
+                            <p><strong>Silakan klik tombol di bawah untuk Melihat Detail Pembayaran</strong></p>
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-success btn-lg" id="DetailpayButton2">
+                                    Detail Pembayaran
+                                </button>
+                            </div>
+                        </div>
+                        @else
                         <div class="text-center">
                             <p><strong>Silakan klik tombol di bawah untuk melanjutkan pembayaran.</strong></p>
                             <div class="d-grid gap-2">
@@ -49,6 +63,7 @@
                                 </button>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -142,8 +157,7 @@
 
                 if (status === 'success') {
                     paymentMessage.innerHTML = `
-                    <h4 class="alert-heading text-success">Pembayaran Berhasil!</h4>
-                    <p>Pesanan Anda telah berhasil diproses. Terima kasih atas pembayaran Anda.</p>
+                    <p>Pesanan Anda telah berhasil diproses</p>
                 `;
                     retryButton.style.display = 'none';
 
@@ -190,6 +204,86 @@
 
                     // Otomatis klik tombol submit setelah form ditambahkan ke halaman
                     submitButton.click();
+                } else if (status === 'pending') {
+                    paymentMessage.innerHTML = `
+                    <h4 class="alert-heading text-warning">Menunggu Pembayaran</h4>
+                    <p>Silakan selesaikan transaksi anda</p>
+                `;
+                    retryButton.style.display = 'none'; // Sembunyikan tombol retry jika status pending
+                } else if (status === 'error') {
+                    paymentMessage.innerHTML = `
+                    <h4 class="alert-heading text-danger">Terjadi Kesalahan Dalam Pembayaran</h4>
+                    <p>Maaf, terjadi masalah saat memproses pembayaran Anda. Silakan coba lagi.</p>
+                `;
+                    retryButton.style.display = 'inline-block'; // Menampilkan tombol retry
+                } else if (status === 'closed') {
+                    paymentMessage.innerHTML = `
+                    <h4 class="alert-heading text-info">Popup Ditutup</h4>
+                    <p>Anda menutup popup tanpa menyelesaikan pembayaran. Silakan lanjutkan pembayaran untuk menyelesaikan transaksi.</p>
+                `;
+                    retryButton.style.display = 'inline-block'; // Menampilkan tombol retry
+                }
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const reference = "{{ $reference }}";
+            const payButton = document.getElementById('DetailpayButton2');
+            const retryButton = document.getElementById('retryButton');
+
+            // tombol "Mulai Pembayaran"
+            if (payButton) {
+                payButton.addEventListener('click', function() {
+                    startPayment();
+                });
+            }
+
+            // tombol "Coba Lagi"
+            if (retryButton) {
+                retryButton.addEventListener('click', function() {
+                    startPayment();
+                });
+            }
+
+            // Fungsi untuk memulai pembayaran
+            function startPayment() {
+                document.getElementById('loadingSection').style.display = 'block';
+                // payButton.disabled = true;
+
+                // Proses pembayaran
+                checkout.process(reference, {
+                    defaultLanguage: "id", // Bahasa default
+                    successEvent: function(result) {
+                        showPaymentResult('success', result);
+                    },
+                    pendingEvent: function(result) {
+                        showPaymentResult('pending', result);
+                    },
+                    errorEvent: function(result) {
+                        showPaymentResult('error', result);
+                    },
+                    closeEvent: function(result) {
+                        showPaymentResult('closed', result);
+                    }
+                });
+            }
+
+
+            // Tampilkan hasil pembayaran di halaman
+            function showPaymentResult(status, result) {
+                document.getElementById('loadingSection').style.display = 'none';
+                const paymentResultSection = document.getElementById('paymentResultSection');
+                const paymentMessage = document.getElementById('paymentMessage');
+
+                paymentResultSection.style.display = 'block';
+
+                if (status === 'success') {
+                    paymentMessage.innerHTML = `
+                    <p>Pesanan Anda telah berhasil diproses</p>
+                `;
+                    retryButton.style.display = 'none';
                 } else if (status === 'pending') {
                     paymentMessage.innerHTML = `
                     <h4 class="alert-heading text-warning">Menunggu Pembayaran</h4>

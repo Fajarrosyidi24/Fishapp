@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Nelayan;
 use App\Models\Seafood;
+use App\Models\Merchant;
 use App\Models\Rekening;
 use App\Models\Keranjang;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ItemPembayaran;
 use App\Models\PesananSeafood;
+use App\Models\PengirimanSeafood;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\SeafoodRequest;
 use App\Models\AlamatPengirimanSeafood;
-use App\Models\ItemPembayaran;
-use App\Models\Merchant;
-use App\Models\Nelayan;
-use App\Models\PengirimanSeafood;
-use App\Models\User;
+use App\Models\RatingSeafood;
 
 class SeafoodController extends Controller
 {
@@ -83,6 +85,12 @@ class SeafoodController extends Controller
     public function seafoodguest()
     {
         $seafood = Seafood::where('status', 'siap dijual')->get();
+        foreach ($seafood as $item) {
+            $item->jumlah_terjual = $item->keranjangs->filter(function ($keranjang) {
+                // Filter pesanan yang memiliki status 'selesai'
+                return $keranjang->pesanan->where('status', 'selesai')->count() > 0;
+            })->count();
+        }
         return view('produkseafood', compact('seafood'));
     }
 
@@ -105,6 +113,12 @@ class SeafoodController extends Controller
     public function seafooduser()
     {
         $seafood = Seafood::where('status', 'siap dijual')->get();
+        foreach ($seafood as $item) {
+            $item->jumlah_terjual = $item->keranjangs->filter(function ($keranjang) {
+                // Filter pesanan yang memiliki status 'selesai'
+                return $keranjang->pesanan->where('status', 'selesai')->count() > 0;
+            })->count();
+        }
         return view('pembeli.produk.seafood', compact('seafood'));
     }
 
@@ -120,6 +134,12 @@ class SeafoodController extends Controller
     {
         $seafood = Seafood::where('kode_seafood', $kode_seafood)->first();
         $produklainnya = Seafood::where('status', 'siap dijual')->get();
+        foreach ($produklainnya as $item) {
+            $item->jumlah_terjual = $item->keranjangs->filter(function ($keranjang) {
+                // Filter pesanan yang memiliki status 'selesai'
+                return $keranjang->pesanan->where('status', 'selesai')->count() > 0;
+            })->count();
+        }
         return view('pembeli.produk.formpembelianseafood', compact('seafood', 'produklainnya'));
     }
 
@@ -141,7 +161,7 @@ class SeafoodController extends Controller
         // Ambil ID pembayaran terkait dengan pesanan tersebut
         $itempembayaran = ItemPembayaran::where('pesanan_id', $pesananSeafood->id)->first();
         $idpembayaran = $itempembayaran->pembayaran_id;
-        
+
         // Query pesanan berdasarkan ID pembayaran dan user_id
         $pesanan = PesananSeafood::with('keranjangs')
             // Filter berdasarkan ID pembayaran pada relasi item
@@ -154,36 +174,44 @@ class SeafoodController extends Controller
             })
             ->get();
 
-            $merchant = Merchant::where('pembayaran_id', $idpembayaran)->first();
-            $reference = $merchant->reference;
-        
+        $merchant = Merchant::where('pembayaran_id', $idpembayaran)->first();
+        $reference = $merchant->reference;
+
         // Kirim data pesanan ke view
-        return view('nelayan.pesanan.detailpembayaran', compact('pesanan', 'reference'));        
+        return view('nelayan.pesanan.detailpembayaran', compact('pesanan', 'reference'));
     }
 
-    public function storebuktipengiriman(Request $request, $id){
+    public function storebuktipengiriman(Request $request, $id)
+    {
+        $fotoFile = $request->file('photo');
+        $imageName = Str::uuid() . '_' . time() . '_' . $fotoFile->getClientOriginalName();
+        $fotoPath = $fotoFile->storeAs('public/fotopenerimaanseafood', $imageName);
+        $bukti = PengirimanSeafood::where('pesanan_id', $id)->first();
+        PengirimanSeafood::store($imageName, $id);
+        PesananSeafood::kirim($id);
+        return back()->with('success', 'Foto berhasil diunggah!');
+    }
+
+    public function ratingpost(Request $request, $seafood){
         $validated = $request->validate([
-            'photo' => 'required|string',  // Validasi jika 'photo' berupa string Base64
+            'rating' => 'required|integer|between:1,5',  // Pastikan rating adalah angka antara 1 hingga 5
+            'ulasan' => 'nullable|string|max:255', // Ulasan bersifat opsional dan maksimal 255 karakter
+        ], [
+            'rating.required' => 'Pilih rating yang sesuai.',
+            'rating.integer' => 'Rating harus berupa angka.',
+            'rating.between' => 'Rating harus antara 1 dan 5.',
+            'ulasan.max' => 'Ulasan tidak boleh lebih dari 255 karakter.',
         ]);
-        $base64Image = $request->input('photo');
-        if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $matches)) {
-            $imageExtension = $matches[1];  // jpg, png, jpeg, gif
-            $imageData = substr($base64Image, strpos($base64Image, ',') + 1);
-            $imageData = base64_decode($imageData);
-            if (!in_array($imageExtension, ['jpg', 'jpeg', 'png', 'gif'])) {
-                return back()->withErrors(['photo' => 'Foto harus berupa: jpg, jpeg, png, gif.']);
-            }
-            if (strlen($imageData) > 10240 * 1024) {  // 10MB
-                return back()->withErrors(['photo' => 'ukuran foto tidak boleh lebih 10MB.']);
-            }
-            $imageName = 'photo_' . time() . '.' . $imageExtension;
-            $imagePath = storage_path('app/public/fotopengirimanseafood/' . $imageName);
-            file_put_contents($imagePath, $imageData);
-            PengirimanSeafood::store($imageName, $id);
-            PesananSeafood::kirim($id);
-            return back()->with('success', 'Foto berhasil diunggah!');
-        } else {
-            return back()->withErrors(['photo' => 'Invalid image data.']);
+
+        $idpesanan = PesananSeafood::where('id', $seafood)->first();
+        $keranjangs = $idpesanan->keranjangs;
+        foreach ($keranjangs as $keranjang) {
+           $rating = RatingSeafood::create([
+            'seafood_id' => $keranjang->seafood->kode_seafood,
+            'rating' => $validated['rating'],
+            'review' =>  $validated['ulasan'],
+           ]);
         }
+        return redirect()->back()->with('success', 'Rating telah diperbarui!');
     }
 }
