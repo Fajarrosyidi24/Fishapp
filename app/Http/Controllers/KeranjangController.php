@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\AlamatPengirimanSeafood;
 use App\Models\AlamatTujuanSeafood;
+use App\Models\BarangSewa;
+use App\Models\ItemBarangSewa;
 use App\Models\Keranjang;
+use App\Models\KeranjangBarangSewa;
 use App\Models\Nelayan;
+use App\Models\PesananBarangSewa;
 use App\Models\PesananSeafood;
 use App\Models\Seafood;
 use Illuminate\Http\Request;
@@ -20,7 +24,14 @@ class KeranjangController extends Controller
             'user_id' => Auth::guard()->user()->id,
         ])->get();
         $total = $keranjang->sum('subtotal');
-        return view('pembeli.keranjang.index', compact('keranjang', 'total'));
+
+        //2
+        $keranjang2 = KeranjangBarangSewa::where([
+            'status' => 'dimasukan dalam keranjang',
+            'user_id' => Auth::guard()->user()->id,
+        ])->get();
+        $total2 = $keranjang2->sum('subtotal');
+        return view('pembeli.keranjang.index', compact('keranjang', 'total', 'keranjang2', 'total2'));
     }
 
     public function deleteItems($kodeBarangString)
@@ -32,38 +43,34 @@ class KeranjangController extends Controller
         return redirect()->back()->with('success', 'Item keranjang berhasil dihapus!');
     }
 
+    public function deleteItems2($kodeBarangString)
+    {
+        $kodeBarangArray = explode(',', $kodeBarangString);
+        foreach ($kodeBarangArray as $kode) {
+            KeranjangBarangSewa::where('kode_keranjang_sewa', $kode)->delete();
+        }
+        return redirect()->back()->with('success', 'Item keranjang berhasil dihapus!');
+    }
+
     public function processCheckoutseafood(Request $request)
     {
         $total = $request->input('total');
         $alamat = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->get();
-
         if ($alamat->isEmpty()) {
             return redirect()->route('alamat.pengiriman.pembeli')->with('error', 'Anda belum mengisikan alamat pengiriman, harap isikan alamat terlebih dahulu sebelum melakukan checkout');
         }
-
         $kodeSeafoodArray = explode(',', $request->input('items'));
-
-        //tabel keranjang dimana kode keranjangnya berasal dari $kodeSeafoodArray
         $keranjangs3 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get();
-        //mengambil data primary key dari masing masing tabel
         $kode_seafood = Seafood::filterkode($keranjangs3);
         $id_nelayan = Nelayan::filterkode($kode_seafood);
         $id_pengiriman = AlamatPengirimanSeafood::filterkode($id_nelayan);
-
-        ////mengambil data alamat pembeli, mengambil data city idnya saja untuk digunakan integrasi api
         $destination = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->first();
         $tujuan = $destination->cityid;
-
-        // mengambil data jumlah/total weigt seafood dari masing masing keranjang yang di ceklist
         $keranjangs1 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get()->toArray();
         $jumlahSeafood = Seafood::jumlah($keranjangs1);
-
-        //mengkombinasikan antara jumlah seafood serta cityid milik nelayan
         $alamat_pengiriman = AlamatPengirimanSeafood::alamat($jumlahSeafood);
         $cityids = AlamatPengirimanSeafood::cityids($alamat_pengiriman);
         $combinedData = Seafood::combinedData($jumlahSeafood, $cityids);
-
-        //menggroup data yang sudah dikombinasikan menjadi 1 (nelayanid, origin,destination, weight, serta opsi pengiriman yang berasal dari api)
         $aggregatedData = Seafood::aggregatedData($combinedData, $destination);
 
         $shippingCosts = KeranjangController::api($aggregatedData);
@@ -81,6 +88,30 @@ class KeranjangController extends Controller
         }
 
         return view('pembeli.keranjang.checkoutseafood', compact('groupedCosts', 'alamat', 'total', 'keranjangs3',));
+    }
+
+    public function processCheckoutbarang(Request $request)
+    {
+        $kodeBarangArray = explode(',', $request->input('items'));
+        $waktu = $request->input('time');
+        $keranjang = KeranjangBarangSewa::whereIn('kode_keranjang_sewa', $kodeBarangArray)->get();
+        KeranjangBarangSewa::whereIn('kode_keranjang_sewa', $kodeBarangArray)->update([
+            'status' => 'dipesan',
+        ]);
+        $kode_barang = BarangSewa::filterkode($keranjang);
+
+        $keranjangs1 = KeranjangBarangSewa::whereIn('kode_keranjang_sewa', $kodeBarangArray)->get()->toArray();
+        $jumlahBarang = BarangSewa::jumlah($keranjangs1);
+        $groupdata = BarangSewa::groupdata($jumlahBarang);
+        $pesanan = PesananBarangSewa::store($groupdata, $waktu);
+        foreach ($keranjang as $ke) {
+            $nelayanId = $ke->barang->nelayan_id;
+            ItemBarangSewa::create([
+                'keranjang_sewa_id' => $ke->kode_keranjang_sewa,
+                'tb_pesanan_sewa_id' => $pesanan[$nelayanId]
+            ]);
+        }
+        return redirect()->back()->with('status', 'dipesan');
     }
 
     public function groupedCosts($shippingCosts)

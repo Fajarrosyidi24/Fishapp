@@ -70,6 +70,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('keranjang')->group(function () {
         Route::get('/index', [KeranjangController::class, 'index'])->name('keranjang.pembeli');
         Route::post('/deleteitemkeranjang/{kodeBarangString}', [KeranjangController::class, 'deleteItems'])->name('deleteitemkeranjang');
+        Route::post('/deleteitemsewa/{kodeBarangString}', [KeranjangController::class, 'deleteItems2'])->name('deleteitemkeranjang2');
     });
 
     Route::prefix('alamat/user/pengiriman/seafood')->group(function (){
@@ -93,6 +94,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/seafood/{seafood}/rating', [SeafoodController::class, 'ratingpost'])->name('rating.store');
 
         Route::get('/barangsewa', [BarangsewaController::class, 'barangsewauser'])->name('pembeli.produk.barangsewa');
+        Route::get('/sewa/barang/{kode_barang}', [BarangsewaController::class, 'beli'])->name('sewabarang');
+        Route::get('/add-to-cart2/{productId}/{jumlah}/{subtotal}', [BarangsewaController::class, 'addchart'])->name('addchartbarang');
+        Route::post('/checkout/barang', [KeranjangController::class, 'processCheckoutbarang'])->name('checkout.route2');
     });
 
     Route::get('/pesanan/seafood/api/backend/return/{merchantOrderId}/{email}', [PesanController::class, 'returnUrl'])->name('pesanan.seafood.return');
