@@ -83,10 +83,18 @@
 
 @yield('content')
 
-
-<!-- Back to Top -->
-<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top">
+<!-- Tombol Back to Top -->
+<a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top" 
+   style="position: fixed; bottom: 160px; right: 20px; width: 60px; height: 60px; background-color: #00bcd4; color: white; border-radius: 50%; display: flex; justify-content: center; 
+   align-items: center; font-size: 24px; font-weight: bold; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); cursor: pointer; text-decoration: none; z-index: 999;">
     <i class="bi bi-arrow-up"></i>
+</a>
+
+<!-- Tombol Bantuan -->
+<a href="{{ route('bantuan') }}" title="Bantuan" 
+   style="position: fixed; bottom: 90px; right: 20px; width: 60px; height: 60px; background-color: #00bcd4; color: white; border-radius: 50%; display: flex; justify-content: center; 
+   align-items: center; font-size: 30px; font-weight: bold; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); cursor: pointer; text-decoration: none; z-index: 1000;">
+    <i class="bi bi-question-circle"></i>
 </a>
 
 @yield('foot')

@@ -24,6 +24,13 @@ class KeranjangController extends Controller
             'user_id' => Auth::guard()->user()->id,
         ])->get();
         $total = $keranjang->sum('subtotal');
+      
+//         $alamat = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->get();
+
+//         if ($alamat->isEmpty()) {
+//             return redirect()->route('alamat.pengiriman.pembeli')->with('error', 'Anda belum mengisikan alamat pengiriman, harap isikan alamat terlebih dahulu sebelum melakukan checkout');
+//         }
+//         return view('pembeli.keranjang.index', compact('keranjang', 'total','alamat'));
 
         //2
         $keranjang2 = KeranjangBarangSewa::where([
@@ -59,6 +66,8 @@ class KeranjangController extends Controller
         if ($alamat->isEmpty()) {
             return redirect()->route('alamat.pengiriman.pembeli')->with('error', 'Anda belum mengisikan alamat pengiriman, harap isikan alamat terlebih dahulu sebelum melakukan checkout');
         }
+
+//         $kodeSeafoodArray = explode(',', $request->input('selected_items'));
         $kodeSeafoodArray = explode(',', $request->input('items'));
         $keranjangs3 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get();
         $kode_seafood = Seafood::filterkode($keranjangs3);
@@ -66,6 +75,14 @@ class KeranjangController extends Controller
         $id_pengiriman = AlamatPengirimanSeafood::filterkode($id_nelayan);
         $destination = AlamatTujuanSeafood::where('user_id', Auth::guard()->user()->id)->first();
         $tujuan = $destination->cityid;
+
+//         $keranjangs1 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get()->toArray();
+//         $jumlahSeafood = Seafood::jumlah($keranjangs1);
+
+//         $alamat_pengiriman = AlamatPengirimanSeafood::alamat($jumlahSeafood);
+//         $cityids = AlamatPengirimanSeafood::cityids($alamat_pengiriman);
+//         $combinedData = Seafood::combinedData($jumlahSeafood, $cityids);
+      
         $keranjangs1 = Keranjang::whereIn('kode_keranjang', $kodeSeafoodArray)->get()->toArray();
         $jumlahSeafood = Seafood::jumlah($keranjangs1);
         $alamat_pengiriman = AlamatPengirimanSeafood::alamat($jumlahSeafood);
