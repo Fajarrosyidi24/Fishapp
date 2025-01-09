@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\BarangRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AlamatPengirimanSeafood;
+use App\Models\KeranjangBarangSewa;
 
 class BarangsewaController extends Controller
 {
@@ -60,7 +61,7 @@ class BarangsewaController extends Controller
 
     public function barangsewauser()
     {
-        $barang = BarangSewa::where('status', 'siap dipesan')->get();
+        $barang = BarangSewa::where('status', 'siap dijual')->get();
         return view('pembeli.produk.barangsewa', compact('barang'));
     }
 
@@ -88,5 +89,18 @@ class BarangsewaController extends Controller
     public function deletebarang($kode_barang){
         BarangSewa::deleteFromRequest($kode_barang);
         return redirect()->route('barangsewa.index')->with('success', 'Barang berhasil dihapus.');
+    }
+
+    public function beli($kode_barang)
+    {
+        $barang = BarangSewa::where('kode_barang', $kode_barang)->first();
+        $produklainnya = BarangSewa::where('status', 'siap dijual')->get();
+        return view('pembeli.produk.formpenyeaanbarang', compact('barang', 'produklainnya'));
+    }
+
+    public function addchart($productId, $jumlah, $subtotal)
+    {
+        KeranjangBarangSewa::createkeranjangbarang($productId, $jumlah, $subtotal);
+        return redirect()->back()->with('success', 'Barang Telah dimasukan Kedalam Keranjang');
     }
 }
