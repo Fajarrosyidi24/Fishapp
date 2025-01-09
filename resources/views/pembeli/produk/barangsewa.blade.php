@@ -118,7 +118,7 @@
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-sm btn-secondary"
                                     data-bs-dismiss="modal">Close</button>
-                                <a href="{{route('hubungi.penjual.seafood', ['id' =>$br->nelayan->detailProfile->no_telepon ])}}" class="btn btn-sm btn-primary text-white">
+                                <a href="{{ route('hubungi.penjual.seafood', ['id' => $br->nelayan->detailProfile->id]) }}" class="btn btn-sm btn-primary text-white">
                                     <i class="bi bi-telephone"></i> Hubungi Penjual
                                 </a>
 

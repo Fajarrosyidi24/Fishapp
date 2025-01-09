@@ -106,4 +106,64 @@ class BarangSewa extends Model
         }
         $barang->delete();
     }
+
+    public static function filterkode($keranjang)
+    {
+        $kodeBarang = [];
+        foreach ($keranjang as $ke) {
+            $barang = BarangSewa::where('kode_barang', $ke->barang_id)->first();
+            if ($barang) {
+                $kodeBarang[] = $barang->kode_barang;
+            }
+        }
+
+        return $kodeBarang;
+    }
+
+    public static function jumlah($keranjangs1)
+    {
+        $jumlahBarang = [];
+        foreach ($keranjangs1 as $keranjang) {
+            $barang_id = $keranjang['barang_id'];
+            $barang = BarangSewa::where('kode_barang', $barang_id)->first();
+            if ($barang) {
+                $nelayan_id = $barang->nelayan_id;
+                if (isset($jumlahBarang[$barang_id])) {
+                    $jumlahBarang[$barang_id]['jumlah'] += $keranjang['jumlah'];
+                } else {
+                    $jumlahBarang[$barang_id] = [
+                        'nelayan_id' => $nelayan_id,
+                        'jumlah' => $keranjang['jumlah'],
+                        'harga/jam' => $barang->harga->harga,
+                        'subtotal' => $barang->harga->harga * $keranjang['jumlah'],
+                    ];
+                }
+            }
+        }
+        return $jumlahBarang;
+    }
+
+    public static function groupdata($jumlahBarang){
+        $groupedBarang = [];
+        foreach ($jumlahBarang as $kodeBarang => $data) {
+            $nelayanId = $data['nelayan_id'];
+            if (!isset($groupedBarang[$nelayanId])) {
+                $groupedBarang[$nelayanId] = [
+                    'nelayan_id' => $nelayanId,
+                    'items' => [], // Menyimpan barang-barang dengan nelayan_id yang sama
+                    'total_jumlah' => 0,
+                    'total_subtotal' => 0,
+                ];
+            }
+
+            $groupedBarang[$nelayanId]['items'][$kodeBarang] = $data;
+
+            // Tambahkan jumlah dan subtotal ke total grup
+            $groupedBarang[$nelayanId]['total_jumlah'] += $data['jumlah'];
+            $groupedBarang[$nelayanId]['total_subtotal'] += $data['subtotal'];
+        }
+
+        return $groupedBarang;
+    }
+
 }
