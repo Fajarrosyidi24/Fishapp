@@ -124,4 +124,6 @@
            }
        });
 </script>
+
+//jajal
 @endsection
