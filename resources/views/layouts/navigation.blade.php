@@ -132,6 +132,26 @@
                                      class="dropdown-item {{ request()->routeIs('pesananseafood') ? 'active' : '' }}"
                                      class="dropdown-item">Pesanan Seafood</a></li>
 
+
+                       //         <li><a href="{{route('penyewaanalat')}}" class="dropdown-item {{ request()->routeIs('penyewaanalat') ? 'active' : '' }}" class="dropdown-item">Penyewaan Alat</a></li>
+                         //       <li><a href="{{route('alamat.pengiriman.pembeli')}}" class="dropdown-item">Alamat Pengiriman</a></li>
+                           //     <li><a href="{{route('guestarticle')}}" class="dropdown-item">Artikel</a></li>
+                             //   <li class="mt-1">
+                               //     <form action="{{ route('logout') }}" method="POST" class="dropdown-item p-0">
+                                 //       @csrf
+                                   //     <button type="submit" class="btn btn-danger w-100" style="font-size: 0.75rem; padding: 5px;">
+                                     //       {{ __('Log Out') }}
+                                       // </button>
+                                     //  </form>
+                                //   </li>
+                           //    </ul>
+                      //     </li>
+                //       </ul>
+            //   </div>
+       //    </div>
+    //   </div>
+   //</nav>
+<!-- Navbar End -->
                              <li><a href="{{ route('penyewaanalat') }}"
                                      class="dropdown-item {{ request()->routeIs('penyewaanalat') ? 'active' : '' }}"
                                      class="dropdown-item">Penyewaan Alat</a></li>

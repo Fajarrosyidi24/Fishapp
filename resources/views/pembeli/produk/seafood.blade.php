@@ -27,6 +27,68 @@
     <div class="container mb-3">
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4"> <!-- Grid responsif -->
             @foreach ($seafood as $se)
+<---
+    <!-- Produk Card -->
+    <div class="col">
+        <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}" class="text-decoration-none text-dark">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ asset('storage/fotoseafood/' . $se->foto) }}" class="card-img-top" alt="foto seafood"
+                    style="height: 150px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title fs-6">{{ $se->nama }}</h5>
+                    <!-- Total Penjualan -->
+                    <div class="mb-2">
+                        <small class="text-muted">
+                            <i class="bi bi-graph-up"></i> {{ $se->jumlah_terjual }} kali terjual
+                        </small>
+                        <div class="progress" style="height: 5px;"> <!-- Ukuran progress bar -->
+                            @php
+                                // Menghitung persentase jumlah terjual dibandingkan dengan stok
+                                $percentage = ($se->jumlah_terjual / $se->jumlah) * 100;
+                                $percentage = min($percentage, 100); // Membatasi agar tidak melebihi 100%
+                            @endphp
+                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ $percentage }}%;"
+                                aria-valuenow="{{ $se->jumlah_terjual }}" aria-valuemin="0" aria-valuemax="{{ $se->jumlah }}">
+                            </div>
+                        </div>
+                    </div>
+                    <p class="card-text fw-bold mb-1">Rp {{ number_format($se->harga->harga, 0, ',', '.') }} /KG</p>
+                    <p class="card-text mb-2">Tersedia {{ $se->jumlah }} KG</p>
+                    <!-- Rating Bintang -->
+                    <p class="card-text fw-bold mb-1">Rating Penjualan:</p>
+                    <div class="mb-2">
+                      @php
+    // Inisialisasi rating
+    $rating = 0;
+    $fullStars = 0;
+    $halfStar = false;
+
+    // Pastikan relasi rating ada sebelum menghitung rata-rata
+    if ($se->rating && $se->rating->count() > 0) {
+        $rating = $se->rating->avg('rating'); // Menghitung rata-rata rating
+        $fullStars = floor($rating); // Mengambil nilai bintang penuh
+        $halfStar = $rating - $fullStars >= 0.5; // Mengecek apakah ada bintang setengah
+    }
+@endphp
+                        <!-- Menampilkan bintang penuh -->
+                        @for ($i = 1; $i <= $fullStars; $i++)
+                            <i class="bi bi-star-fill text-warning"></i>
+                        @endfor
+                        <!-- Menampilkan bintang setengah jika ada -->
+                        @if ($halfStar)
+                            <i class="bi bi-star-half text-warning"></i>
+                        @endif
+                        <!-- Menampilkan bintang kosong -->
+                        @for ($i = $fullStars + ($halfStar ? 1 : 0); $i < 5; $i++)
+                            <i class="bi bi-star text-muted"></i>
+                        @endfor
+                    </div>
+                </div>
+            </div>
+        </a>
+    </div>
+@endforeach
+---->>
                 <!-- Produk Card -->
                 <div class="col">
                     <a href="{{ route('beliseafood', ['kode_seafood' => $se->kode_seafood]) }}"
